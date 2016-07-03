@@ -1,0 +1,10 @@
+beautifulsoup4
+ghp-import
+ipython
+jupyter
+nbconvert
+pelican
+markdown
+shovel
+typogrify
+
