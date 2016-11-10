@@ -1002,10 +1002,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="6207866a-3f43-4e46-a33b-8ecd4e39c4bf"&gt;&lt;/div&gt;
+&lt;div id="a82f58ba-78e2-4b52-b147-cac18c357668"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#6207866a-3f43-4e46-a33b-8ecd4e39c4bf');
+var element = $('#a82f58ba-78e2-4b52-b147-cac18c357668');
 
 (function(global) {
   function now() {
@@ -1362,8 +1362,6 @@ var element = $('#6207866a-3f43-4e46-a33b-8ecd4e39c4bf');
 
 &lt;p&gt;Docker also creates a network internal to each container (loopback) and you can launch a container that hooks directly in to the host network (&lt;code&gt;docker run --net=host&lt;/code&gt;). The default is to launch it on the docker0 network, though it is often useful to run it on the host network if, for example, it needs access to VPN connections and it isn't worth the effort to create further bridges. However, an interesting option is &lt;code&gt;--net=none&lt;/code&gt;. This tells Docker to not touch the networking of the container and allows us to create our own networking for the containers.&lt;/p&gt;
 &lt;h4&gt;Using NetNS with Docker to Model Your Home Network&lt;/h4&gt;
-&lt;p&gt;Our goal is to create three Docker containers and the following network topology:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="" src="/content/images/2016/01/Screen-Shot-2016-01-25-at-7-16-42-PM.png" /&gt;&lt;/p&gt;
 &lt;h6&gt;Preliminary setup&lt;/h6&gt;
 &lt;p&gt;This post will assume you are working from Ubuntu/Debian, though any Linux distribution will have these tools.&lt;/p&gt;
 &lt;p&gt;On Ubuntu, you have to create a directory &lt;code&gt;/var/run/netns&lt;/code&gt; in order to use netns:&lt;/p&gt;

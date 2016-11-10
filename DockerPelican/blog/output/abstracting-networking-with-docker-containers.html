@@ -85,8 +85,6 @@
 
 <p>Docker also creates a network internal to each container (loopback) and you can launch a container that hooks directly in to the host network (<code>docker run --net=host</code>). The default is to launch it on the docker0 network, though it is often useful to run it on the host network if, for example, it needs access to VPN connections and it isn't worth the effort to create further bridges. However, an interesting option is <code>--net=none</code>. This tells Docker to not touch the networking of the container and allows us to create our own networking for the containers.</p>
 <h4>Using NetNS with Docker to Model Your Home Network</h4>
-<p>Our goal is to create three Docker containers and the following network topology:</p>
-<p><img alt="" src="/content/images/2016/01/Screen-Shot-2016-01-25-at-7-16-42-PM.png" /></p>
 <h6>Preliminary setup</h6>
 <p>This post will assume you are working from Ubuntu/Debian, though any Linux distribution will have these tools.</p>
 <p>On Ubuntu, you have to create a directory <code>/var/run/netns</code> in order to use netns:</p>
