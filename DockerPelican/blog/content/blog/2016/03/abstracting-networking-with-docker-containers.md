@@ -46,9 +46,6 @@ Docker also creates a network internal to each container (loopback) and you can 
 
 #### Using NetNS with Docker to Model Your Home Network
 
-Our goal is to create three Docker containers and the following network topology:
-
-![](/content/images/2016/01/Screen-Shot-2016-01-25-at-7-16-42-PM.png)
 
 ###### Preliminary setup 
 This post will assume you are working from Ubuntu/Debian, though any Linux distribution will have these tools.
