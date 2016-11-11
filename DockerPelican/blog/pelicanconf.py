@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Tim Jones'
 SITENAME = u"doctimjones"
-SITEURL = 'http://doctimjones.org/'
+SITEURL = 'http://localhost:8000/'
 
 THEME = "./pelican-themes/octopress"
 PATH = 'content'

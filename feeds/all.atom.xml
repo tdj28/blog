@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/all.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://blog-tdj28.c9users.io/" rel="alternate"></link><link href="http://blog-tdj28.c9users.io/feeds/all.atom.xml" rel="self"></link><id>http://blog-tdj28.c9users.io/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://blog-tdj28.c9users.io/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:blog-tdj28.c9users.io,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -1002,10 +1002,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="a82f58ba-78e2-4b52-b147-cac18c357668"&gt;&lt;/div&gt;
+&lt;div id="42a3b091-3065-42f5-a072-7330026eeceb"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#a82f58ba-78e2-4b52-b147-cac18c357668');
+var element = $('#42a3b091-3065-42f5-a072-7330026eeceb');
 
 (function(global) {
   function now() {
@@ -1332,7 +1332,7 @@ var element = $('#a82f58ba-78e2-4b52-b147-cac18c357668');
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://doctimjones.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;h4&gt;Goal&lt;/h4&gt;
+</summary><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://blog-tdj28.c9users.io/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:blog-tdj28.c9users.io,2016-03-03:abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;h4&gt;Goal&lt;/h4&gt;
 &lt;p&gt;Network Namespace is a Linux tool that allows for the easy virtualization of network models. While it has plenty of &lt;a href="http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/"&gt;practical uses directly on the hardware&lt;/a&gt;, this will be a quick introduction to how it can be used to create more complex Docker networks that could be extended to modeling, say, the infrastructure of a data center or cloud provider.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://github.com/brandon-rhodes/fopnp/tree/m/playground"&gt;Brandon Rhodes created&lt;/a&gt; a great "playground" for his book &lt;a href="https://github.com/brandon-rhodes/fopnp"&gt;Foundations of Python Network Programming&lt;/a&gt;. Inspired by this example, we will create a small simple netns/docker example that is more bite-sized for those who aren't familiar with these tools. &lt;/p&gt;
 &lt;h4&gt;What is NetNS?&lt;/h4&gt;
