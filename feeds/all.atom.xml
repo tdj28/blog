@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://blog-tdj28.c9users.io/" rel="alternate"></link><link href="http://blog-tdj28.c9users.io/feeds/all.atom.xml" rel="self"></link><id>http://blog-tdj28.c9users.io/</id><updated>2017-01-20T18:23:00-05:00</updated><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://blog-tdj28.c9users.io/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:blog-tdj28.c9users.io,2017-01-20:/python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;p&gt;It is important to understand Python's use of operational chaining to avoid programming errors&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Problem&lt;/h4&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/all.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-20T18:23:00-05:00</updated><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-20:/python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;p&gt;It is important to understand Python's use of operational chaining to avoid programming errors&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Problem&lt;/h4&gt;
 &lt;p&gt;A colleague noticed this behavior:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;b&amp;#39; == 0
 False
@@ -67,7 +67,7 @@ False
              22 POP_TOP
              23 RETURN_VALUE
  ```&lt;/p&gt;
-&lt;p&gt;The final case is simply a typecasting problem.&lt;/p&gt;</content><category term="Python"></category></entry><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://blog-tdj28.c9users.io/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:blog-tdj28.c9users.io,2016-03-03:/integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">
+&lt;p&gt;The final case is simply a typecasting problem.&lt;/p&gt;</content><category term="Python"></category></entry><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:/integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;
 &lt;div class="input"&gt;</summary><content type="html">&lt;style type="text/css"&gt;/*!
 *
@@ -1074,10 +1074,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="f62d3caa-a27e-4894-8107-eba42848c5ab"&gt;&lt;/div&gt;
+&lt;div id="5f8e59e2-15e7-46fa-affe-f10be210744e"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#f62d3caa-a27e-4894-8107-eba42848c5ab');
+var element = $('#5f8e59e2-15e7-46fa-affe-f10be210744e');
 
 (function(global) {
   function now() {
@@ -1408,7 +1408,7 @@ var element = $('#f62d3caa-a27e-4894-8107-eba42848c5ab');
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</content><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://blog-tdj28.c9users.io/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:blog-tdj28.c9users.io,2016-03-03:/abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;p&gt;Docker comes with a default network, but you can make your own network of unlimited complexity.&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Goal&lt;/h4&gt;
+</content><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://doctimjones.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:/abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;p&gt;Docker comes with a default network, but you can make your own network of unlimited complexity.&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Goal&lt;/h4&gt;
 &lt;p&gt;Network Namespace is a Linux tool that allows for the easy virtualization of network models. While it has plenty of &lt;a href="http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/"&gt;practical uses directly on the hardware&lt;/a&gt;, this will be a quick introduction to how it can be used to create more complex Docker networks that could be extended to modeling, say, the infrastructure of a data center or cloud provider.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://github.com/brandon-rhodes/fopnp/tree/m/playground"&gt;Brandon Rhodes created&lt;/a&gt; a great "playground" for his book &lt;a href="https://github.com/brandon-rhodes/fopnp"&gt;Foundations of Python Network Programming&lt;/a&gt;. Inspired by this example, we will create a small simple netns/docker example that is more bite-sized for those who aren't familiar with these tools. &lt;/p&gt;
 &lt;h4&gt;What is NetNS?&lt;/h4&gt;
