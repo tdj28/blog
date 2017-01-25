@@ -3,4 +3,5 @@
  blog/pelicanconf.py.bak
  blog/plugins/
  blog/publishconf.py.bak
- venv
+ DockerPelican/venv
+
