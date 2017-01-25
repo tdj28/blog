@@ -73,10 +73,10 @@ TypeError: argument of type &#39;bool&#39; is not iterable
 <h4>Explanation</h4>
 <p>Parenthesis force Python to do something first. I often use parenthesis out of habit even when not needed just to be 100% clear.</p>
 <p>In the first instance above, Python is operator chaining. For <code>'a' in 'b' == 0</code>, it first loads a and b strings (STACK: b,a)
-it then DUP_TOP duplicates 'b' so that it doesn’t have to waste time to load it again for the second evaluation (STACK: b, b, a).<br>
-ROT_THREE lifts second and third stack item up and the top item down to third place, so now the stack is STACK: b, a, b. 
-COMPARE_OP acts on b,a … since it is not true, it jumps and just returns False. What is interesting is if you do <code>'a' in 'a' == 1</code>, 
-which after DUP_TOP has the stack (STACK: a,a,a); here <code>'a' in 'a'</code> is obviously true, but I think the first two 'a's are 
+it then DUP_TOP duplicates 'b' so that it doesn’t have to waste time to load it again for the second evaluation (STACK: b, b, a).  </p>
+<p>ROT_THREE lifts second and third stack item up and the top item down to third place, so now the stack is STACK: b, a, b. 
+COMPARE_OP acts on b,a … since it is not true, it jumps and just returns False. What is interesting is if you do <code>'a' in 'a' == 1</code>, </p>
+<p>which after DUP_TOP has the stack (STACK: a,a,a); here <code>'a' in 'a'</code> is obviously true, but I think the first two 'a's are 
 replaced with the result of that evaluation True which, being the top of the stack is popped off by JUMP_IF_FALSE_OR_POP 
 leaving the duplicated 'a' on the top of the stack, where then 1 is loaded so the stack is [1, a] and the == comparison is 
 applied which is indeed False. Thus <code>'a' in 'b' == 0</code> is effectively the same as <code>'a' in 'b' and 'b' == 0</code> which is false.</p>
@@ -90,9 +90,8 @@ False
 </pre></div>
 
 
-<p>```
-  7           0 LOAD_CONST               1 ('a')
-              3 LOAD_CONST               2 ('b')
+<div class="highlight"><pre><span></span>  7           0 LOAD_CONST               1 (&#39;a&#39;)
+              3 LOAD_CONST               2 (&#39;b&#39;)
               6 DUP_TOP
               7 ROT_THREE
               8 COMPARE_OP               6 (in)
@@ -102,19 +101,21 @@ False
              20 RETURN_VALUE
         &gt;&gt;   21 ROT_TWO
              22 POP_TOP
-             23 RETURN_VALUE</p>
-<p>'a' in 'b' and 'b' == 0
-15           0 LOAD_CONST               1 ('a')
-              3 LOAD_CONST               2 ('b')
+             23 RETURN_VALUE
+
+&#39;a&#39; in &#39;b&#39; and &#39;b&#39; == 0
+15           0 LOAD_CONST               1 (&#39;a&#39;)
+              3 LOAD_CONST               2 (&#39;b&#39;)
               6 COMPARE_OP               6 (in)
               9 JUMP_IF_FALSE_OR_POP    21
-             12 LOAD_CONST               2 ('b')
+             12 LOAD_CONST               2 (&#39;b&#39;)
              15 LOAD_CONST               3 (0)
              18 COMPARE_OP               2 (==)
-        &gt;&gt;   21 RETURN_VALUE</p>
-<p>'a' in 'a' == 0
-  9           0 LOAD_CONST               1 ('a')
-              3 LOAD_CONST               1 ('a')
+        &gt;&gt;   21 RETURN_VALUE
+
+&#39;a&#39; in &#39;a&#39; == 0
+  9           0 LOAD_CONST               1 (&#39;a&#39;)
+              3 LOAD_CONST               1 (&#39;a&#39;)
               6 DUP_TOP
               7 ROT_THREE
               8 COMPARE_OP               6 (in)
@@ -125,7 +126,9 @@ False
         &gt;&gt;   21 ROT_TWO
              22 POP_TOP
              23 RETURN_VALUE
- ```</p>
+</pre></div>
+
+
 <p>The final case is simply a typecasting problem.</p></div>
     <footer>
 <p class="meta">
