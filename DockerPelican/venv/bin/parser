@@ -1,0 +1,7 @@
+#!/Users/d7082791602/Git/blog/DockerPelican/venv/bin/python3.6
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from htmlparser import standalone
+
+standalone.main()

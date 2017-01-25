@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://blog-tdj28.c9users.io/" rel="alternate"></link><link href="http://blog-tdj28.c9users.io/feeds/math.atom.xml" rel="self"></link><id>http://blog-tdj28.c9users.io/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://blog-tdj28.c9users.io/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:blog-tdj28.c9users.io,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones - Math</title><link href="http://blog-tdj28.c9users.io/" rel="alternate"></link><link href="http://blog-tdj28.c9users.io/feeds/math.atom.xml" rel="self"></link><id>http://blog-tdj28.c9users.io/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://blog-tdj28.c9users.io/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:blog-tdj28.c9users.io,2016-03-03:/integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+&lt;div class="input"&gt;</summary><content type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -156,6 +158,7 @@ div.cell.selected.jupyter-soft-selected {
   }
 }
 div.inner_cell {
+  min-width: 0;
   /* Old browsers */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -176,11 +179,6 @@ div.inner_cell {
   box-flex: 1;
   /* Modern browsers */
   flex: 1;
-}
-@-moz-document url-prefix() {
-  div.inner_cell {
-    overflow-x: hidden;
-  }
 }
 /* input_area and input_prompt must match in top border and margin for alignment */
 div.input_area {
@@ -918,8 +916,10 @@ h6:hover .anchor-link {
 .highlight .mh { color: #666666 } /* Literal.Number.Hex */
 .highlight .mi { color: #666666 } /* Literal.Number.Integer */
 .highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
 .highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
 .highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
 .highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #BA2121 } /* Literal.String.Double */
 .highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
@@ -930,9 +930,11 @@ h6:hover .anchor-link {
 .highlight .s1 { color: #BA2121 } /* Literal.String.Single */
 .highlight .ss { color: #19177C } /* Literal.String.Symbol */
 .highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
 .highlight .vc { color: #19177C } /* Name.Variable.Class */
 .highlight .vg { color: #19177C } /* Name.Variable.Global */
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */&lt;/style&gt;
 &lt;style type="text/css"&gt;
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
@@ -993,7 +995,8 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_area"&gt;
+&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea "&gt;
 &lt;div class="bk-banner"&gt;
 &lt;a class="bk-logo bk-logo-small bk-logo-notebook" href="http://bokeh.pydata.org" target="_blank"&gt;&lt;/a&gt;
@@ -1001,11 +1004,12 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="42a3b091-3065-42f5-a072-7330026eeceb"&gt;&lt;/div&gt;
+&lt;div class="output_area"&gt;
+&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div id="f62d3caa-a27e-4894-8107-eba42848c5ab"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#42a3b091-3065-42f5-a072-7330026eeceb');
+var element = $('#f62d3caa-a27e-4894-8107-eba42848c5ab');
 
 (function(global) {
   function now() {
@@ -1091,7 +1095,8 @@ var element = $('#42a3b091-3065-42f5-a072-7330026eeceb');
 &lt;/script&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[4]:&lt;/div&gt;
+&lt;div class="output_area"&gt;
+&lt;div class="prompt output_prompt"&gt;Out[4]:&lt;/div&gt;
 &lt;div class="output_text output_subarea output_execute_result"&gt;
 &lt;pre&gt;'0.11.1'&lt;/pre&gt;
 &lt;/div&gt;
@@ -1196,7 +1201,8 @@ var element = $('#42a3b091-3065-42f5-a072-7330026eeceb');
 &lt;/div&gt;
 &lt;div class="output_wrapper"&gt;
 &lt;div class="output"&gt;
-&lt;div class="output_area"&gt;&lt;div class="prompt"&gt;&lt;/div&gt;
+&lt;div class="output_area"&gt;
+&lt;div class="prompt"&gt;&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea "&gt;
 &lt;div class="plotdiv" id="7e2469cc-6033-41e4-8875-f4b869de1cc7"&gt;&lt;/div&gt;
 &lt;script type="text/javascript"&gt;
@@ -1286,7 +1292,8 @@ var element = $('#42a3b091-3065-42f5-a072-7330026eeceb');
 &lt;/script&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="output_area"&gt;&lt;div class="prompt output_prompt"&gt;Out[9]:&lt;/div&gt;
+&lt;div class="output_area"&gt;
+&lt;div class="prompt output_prompt"&gt;Out[9]:&lt;/div&gt;
 &lt;div class="output_html rendered_html output_subarea output_execute_result"&gt;
 &lt;p&gt;&lt;code&gt;&lt;bokeh notebook handle for &amp;lt;strong&gt;In[9]&lt;/strong&gt;&gt;&lt;/code&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -1305,6 +1312,7 @@ var element = $('#42a3b091-3065-42f5-a072-7330026eeceb');
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var mathjaxscript = document.createElement('script');
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
@@ -1332,4 +1340,4 @@ var element = $('#42a3b091-3065-42f5-a072-7330026eeceb');
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry></feed>
+</content><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry></feed>

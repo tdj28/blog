@@ -1,7 +1,9 @@
 beautifulsoup4
 ghp-import
 ipython
+ipynb
 jupyter
+html_parser
 nbconvert
 pelican
 markdown
