@@ -58,7 +58,7 @@
 <time datetime="2017-01-20T18:23:00-05:00" pubdate>Fri 20 January 2017</time>    </p>
 </header>
 
-  <div class="entry-content"><h4>Problem</h4>
+  <div class="entry-content"><h4>A Python feature?</h4>
 <p>A colleague noticed this behavior:</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; &#39;a&#39; in &#39;b&#39; == 0
 False
@@ -69,28 +69,13 @@ TypeError: argument of type &#39;bool&#39; is not iterable
 </pre></div>
 
 
-<p>offering a bucket of doubloons to anyone who can explain it.</p>
+<p>offering a bucket of doubloons to anyone who can explain it. The final case is simply a typecasting problem, but the first two cases demonstrate Python's operating chaining behavior.</p>
 <h4>Explanation</h4>
-<p>Parenthesis force Python to do something first. I often use parenthesis out of habit even when not needed just to be 100% clear.</p>
-<p>In the first instance above, Python is operator chaining. For <code>'a' in 'b' == 0</code>, it first loads a and b strings (STACK: b,a)
-it then DUP_TOP duplicates 'b' so that it doesn’t have to waste time to load it again for the second evaluation (STACK: b, b, a).  </p>
-<p>ROT_THREE lifts second and third stack item up and the top item down to third place, so now the stack is STACK: b, a, b. 
-COMPARE_OP acts on b,a … since it is not true, it jumps and just returns False. What is interesting is if you do <code>'a' in 'a' == 1</code>, </p>
-<p>which after DUP_TOP has the stack (STACK: a,a,a); here <code>'a' in 'a'</code> is obviously true, but I think the first two 'a's are 
-replaced with the result of that evaluation True which, being the top of the stack is popped off by JUMP_IF_FALSE_OR_POP 
-leaving the duplicated 'a' on the top of the stack, where then 1 is loaded so the stack is [1, a] and the == comparison is 
-applied which is indeed False. Thus <code>'a' in 'b' == 0</code> is effectively the same as <code>'a' in 'b' and 'b' == 0</code> which is false.</p>
+<h5>Using the Dis Module to dig deeper</h5>
 <p>Using the dis module, we find:</p>
-<div class="highlight"><pre><span></span>&gt;&gt;&gt; &#39;a&#39; in &#39;a&#39;
-True
-&gt;&gt;&gt; &#39;a&#39; in &#39;a&#39; and &#39;a&#39; == True
-False
-&gt;&gt;&gt; &#39;a&#39; in &#39;a&#39; == True
-False
-</pre></div>
+<div class="highlight"><pre><span></span>&#39;a&#39; in &#39;b&#39; == 0
 
-
-<div class="highlight"><pre><span></span>  7           0 LOAD_CONST               1 (&#39;a&#39;)
+  7           0 LOAD_CONST               1 (&#39;a&#39;)
               3 LOAD_CONST               2 (&#39;b&#39;)
               6 DUP_TOP
               7 ROT_THREE
@@ -129,7 +114,45 @@ False
 </pre></div>
 
 
-<p>The final case is simply a typecasting problem.</p></div>
+<h5>In words</h5>
+<p>Parenthesis essential forces Python to do 'something' first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python's operation chaining isn't the desired behavior. When we put <code>'a' in 'b'</code> inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to <code>True</code> or <code>False</code>, and then the <code>== 0</code> comparison acts as a Boolean comparison, giving expected behavior. </p>
+<p>In the first instance above, however, Python is operator chaining. For <code>'a' in 'b' == 0</code>, it first loads a and b strings such that the stack is</p>
+<div class="highlight"><pre><span></span>[ b, a ]
+</pre></div>
+
+
+<p>it then <code>DUP_TOP</code> duplicates <code>b</code> so that it doesn’t have to waste time to load it again for the second evaluation, resulting in the stack:</p>
+<div class="highlight"><pre><span></span>[ b, b, a ]
+</pre></div>
+
+
+<p><code>ROT_THREE</code> lifts second and third stack item up and the top item down to third place, so now the stack is now: </p>
+<div class="highlight"><pre><span></span>[ b, a, b ]
+</pre></div>
+
+
+<p><code>COMPARE_OP</code> acts on <code>[ b, a]</code>, and since it is not true, <code>JUMP_IF_FALSE_OR_POP</code> forces it to jump and just returns False. What is interesting is if you do <code>'a' in 'a' == 1</code>, 
+which after <code>DUP_TOP</code> gives us the stack:</p>
+<div class="highlight"><pre><span></span>[ a, a, a ]
+</pre></div>
+
+
+<p>Here <code>'a' in 'a'</code> is obviously true, and these two entries of the stack are replaced with the result of that evaluation, which is <code>True</code>. This, now being the top of the stack, is popped off by <code>JUMP_IF_FALSE_OR_POP</code> 
+leaving the duplicated 'a' on the top of the stack, where then <code>1</code> is loaded so the stack is now:</p>
+<div class="highlight"><pre><span></span>[1, a]
+</pre></div>
+
+
+<p>and the <code>==</code> comparison is applied which is indeed False. 
+Thus <code>'a' in 'a' == 0</code> is chained as <code>'a' in 'a' and 'a' == 0</code> and will be false. Similarly, <code>'a' in 'b' == 0</code> is effectively the same as <code>'a' in 'b' and 'b' == 0</code> which is false.</p>
+<p>The following behavior, then, makes sense:</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; &#39;a&#39; in &#39;a&#39;
+True
+&gt;&gt;&gt; &#39;a&#39; in &#39;a&#39; and &#39;a&#39; == True
+False
+&gt;&gt;&gt; &#39;a&#39; in &#39;a&#39; == True
+False
+</pre></div></div>
     <footer>
 <p class="meta">
   <span class="byline author vcard">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones - Computer Science</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/computer-science.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-20T18:23:00-05:00</updated><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-20:/python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;p&gt;It is important to understand Python's use of operational chaining to avoid programming errors&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Problem&lt;/h4&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones - Computer Science</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/computer-science.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-20T18:23:00-05:00</updated><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-20:/python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;p&gt;It is important to understand Python's use of operational chaining to avoid programming errors&lt;/p&gt;</summary><content type="html">&lt;h4&gt;A Python feature?&lt;/h4&gt;
 &lt;p&gt;A colleague noticed this behavior:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;b&amp;#39; == 0
 False
@@ -10,28 +10,13 @@ TypeError: argument of type &amp;#39;bool&amp;#39; is not iterable
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;offering a bucket of doubloons to anyone who can explain it.&lt;/p&gt;
+&lt;p&gt;offering a bucket of doubloons to anyone who can explain it. The final case is simply a typecasting problem, but the first two cases demonstrate Python's operating chaining behavior.&lt;/p&gt;
 &lt;h4&gt;Explanation&lt;/h4&gt;
-&lt;p&gt;Parenthesis force Python to do something first. I often use parenthesis out of habit even when not needed just to be 100% clear.&lt;/p&gt;
-&lt;p&gt;In the first instance above, Python is operator chaining. For &lt;code&gt;'a' in 'b' == 0&lt;/code&gt;, it first loads a and b strings (STACK: b,a)
-it then DUP_TOP duplicates 'b' so that it doesn’t have to waste time to load it again for the second evaluation (STACK: b, b, a).  &lt;/p&gt;
-&lt;p&gt;ROT_THREE lifts second and third stack item up and the top item down to third place, so now the stack is STACK: b, a, b. 
-COMPARE_OP acts on b,a … since it is not true, it jumps and just returns False. What is interesting is if you do &lt;code&gt;'a' in 'a' == 1&lt;/code&gt;, &lt;/p&gt;
-&lt;p&gt;which after DUP_TOP has the stack (STACK: a,a,a); here &lt;code&gt;'a' in 'a'&lt;/code&gt; is obviously true, but I think the first two 'a's are 
-replaced with the result of that evaluation True which, being the top of the stack is popped off by JUMP_IF_FALSE_OR_POP 
-leaving the duplicated 'a' on the top of the stack, where then 1 is loaded so the stack is [1, a] and the == comparison is 
-applied which is indeed False. Thus &lt;code&gt;'a' in 'b' == 0&lt;/code&gt; is effectively the same as &lt;code&gt;'a' in 'b' and 'b' == 0&lt;/code&gt; which is false.&lt;/p&gt;
+&lt;h5&gt;Using the Dis Module to dig deeper&lt;/h5&gt;
 &lt;p&gt;Using the dis module, we find:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39;
-True
-&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39; and &amp;#39;a&amp;#39; == True
-False
-&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39; == True
-False
-&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;#39;a&amp;#39; in &amp;#39;b&amp;#39; == 0
 
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;  7           0 LOAD_CONST               1 (&amp;#39;a&amp;#39;)
+  7           0 LOAD_CONST               1 (&amp;#39;a&amp;#39;)
               3 LOAD_CONST               2 (&amp;#39;b&amp;#39;)
               6 DUP_TOP
               7 ROT_THREE
@@ -70,4 +55,42 @@ False
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;The final case is simply a typecasting problem.&lt;/p&gt;</content><category term="Python"></category></entry></feed>
+&lt;h5&gt;In words&lt;/h5&gt;
+&lt;p&gt;Parenthesis essential forces Python to do 'something' first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python's operation chaining isn't the desired behavior. When we put &lt;code&gt;'a' in 'b'&lt;/code&gt; inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to &lt;code&gt;True&lt;/code&gt; or &lt;code&gt;False&lt;/code&gt;, and then the &lt;code&gt;== 0&lt;/code&gt; comparison acts as a Boolean comparison, giving expected behavior. &lt;/p&gt;
+&lt;p&gt;In the first instance above, however, Python is operator chaining. For &lt;code&gt;'a' in 'b' == 0&lt;/code&gt;, it first loads a and b strings such that the stack is&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ b, a ]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;it then &lt;code&gt;DUP_TOP&lt;/code&gt; duplicates &lt;code&gt;b&lt;/code&gt; so that it doesn’t have to waste time to load it again for the second evaluation, resulting in the stack:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ b, b, a ]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;ROT_THREE&lt;/code&gt; lifts second and third stack item up and the top item down to third place, so now the stack is now: &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ b, a, b ]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;COMPARE_OP&lt;/code&gt; acts on &lt;code&gt;[ b, a]&lt;/code&gt;, and since it is not true, &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt; forces it to jump and just returns False. What is interesting is if you do &lt;code&gt;'a' in 'a' == 1&lt;/code&gt;, 
+which after &lt;code&gt;DUP_TOP&lt;/code&gt; gives us the stack:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ a, a, a ]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Here &lt;code&gt;'a' in 'a'&lt;/code&gt; is obviously true, and these two entries of the stack are replaced with the result of that evaluation, which is &lt;code&gt;True&lt;/code&gt;. This, now being the top of the stack, is popped off by &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt; 
+leaving the duplicated 'a' on the top of the stack, where then &lt;code&gt;1&lt;/code&gt; is loaded so the stack is now:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[1, a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and the &lt;code&gt;==&lt;/code&gt; comparison is applied which is indeed False. 
+Thus &lt;code&gt;'a' in 'a' == 0&lt;/code&gt; is chained as &lt;code&gt;'a' in 'a' and 'a' == 0&lt;/code&gt; and will be false. Similarly, &lt;code&gt;'a' in 'b' == 0&lt;/code&gt; is effectively the same as &lt;code&gt;'a' in 'b' and 'b' == 0&lt;/code&gt; which is false.&lt;/p&gt;
+&lt;p&gt;The following behavior, then, makes sense:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39;
+True
+&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39; and &amp;#39;a&amp;#39; == True
+False
+&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39; == True
+False
+&lt;/pre&gt;&lt;/div&gt;</content><category term="Python"></category></entry></feed>
