@@ -1,5 +1,609 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones - DevOps</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/devops.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2016-03-03T00:23:00-05:00</updated><entry><title>Abstracting Networking with Docker Containers</title><link href="http://doctimjones.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:/abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;p&gt;Docker comes with a default network, but you can make your own network of unlimited complexity.&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Goal&lt;/h4&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones - DevOps</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/devops.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-28T17:00:00-05:00</updated><entry><title>AWS Virtual Machines, cook thyself! Part I</title><link href="http://doctimjones.org/aws-virtual-machines-cook-thyself-part-i.html" rel="alternate"></link><published>2017-01-28T17:00:00-05:00</published><updated>2017-01-28T17:00:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-28:/aws-virtual-machines-cook-thyself-part-i.html</id><summary type="html">&lt;p&gt;AWS tools enable the creation of self-cooking boxes, using chef-solo, and Cloudformation to automate deployment.&lt;/p&gt;</summary><content type="html">&lt;h3&gt;Motivation&lt;/h3&gt;
+&lt;p&gt;Cloudformation offers a nice solution to orchestrating infrastructure deployment, but has its limitations. Its built in method for deployment scripts, "User Data", is difficult to maintain and unwieldy for more complicated systems. This walkthrough tutorial shows you how you can use chef, AWS KMS, and AWS Cloudformation together to get the best of both worlds--full automation with Cloudformation coupled with Chef's configuration management. &lt;/p&gt;
+&lt;p&gt;In Part I, we create a chef cookbook to install the Cloud 9 IDE development package on a server.&lt;/p&gt;
+&lt;p&gt;In Part II, we do the same thing using Puppet.&lt;/p&gt;
+&lt;p&gt;In Part III, we demonstrate how to use Cloudformation to have boxes spin up in AWS and automatically cook themselves using either of these provisioning methods.&lt;/p&gt;
+&lt;h5&gt;(why not use Opsworks instead)?&lt;/h5&gt;
+&lt;p&gt;Opsworks is limiting in some ways that many, including myself, feel does not permit the full use of Chef. This solution cuts out Opsworks as the middle-man, so to speak, and leverages the full power of chef-solo automatically.&lt;/p&gt;
+&lt;h2&gt;Part I: Quick Chef Walkthrough&lt;/h2&gt;
+&lt;h3&gt;Yet another chef tutorial&lt;/h3&gt;
+&lt;p&gt;You can of course skip this step if you are familiar with Chef to a great enough degree, but in the spirit of making this a self-contained walkthrough, we will start from the ground up.&lt;/p&gt;
+&lt;h4&gt;Getting started&lt;/h4&gt;
+&lt;h5&gt;Installing ChefDK&lt;/h5&gt;
+&lt;p&gt;It is widely considered best practice to use &lt;a href="https://downloads.chef.io/chefdk"&gt;ChefDK&lt;/a&gt;, and this walkthrough uses ChefDK exclusively.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;On Mac, install &lt;a href="http://brew.sh/"&gt;HomeBrew&lt;/a&gt; and run &lt;code&gt;brew cask install chefdk&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;On Linux, &lt;a href="https://downloads.chef.io/chefdk"&gt;download a package&lt;/a&gt; corresponding to your distro and install accordingly.&lt;/li&gt;
+&lt;li&gt;On Windows: Run Linux as a Virtual Machine, get Docker for Windows, or &lt;em&gt;try&lt;/em&gt; using Bash on Windows, but this walkthrough doesn't support Windows-based development. &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5&gt;Initiating your cookbook&lt;/h5&gt;
+&lt;p&gt;Let's start with the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chef generate cookbook c9_ide_chef
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This command generates a template for a cookbook. Note that we use and underline in the name instead of a hyphen as hyphens can be problematic for chef in some circumstances. We now have a folder with the following content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;├── .gitignore
+├── .kitchen.yml
+├── Berksfile
+├── README.md
+├── chefignore
+├── metadata.rb
+├── recipes
+│   └── default.rb
+├── spec
+│   ├── spec_helper.rb
+│   └── unit
+│       └── recipes
+│           └── default_spec.rb
+└── test
+    └── smoke
+        └── default
+            └── default_test.rb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It also  creates a &lt;code&gt;.delivery&lt;/code&gt; and a &lt;code&gt;.git&lt;/code&gt; folder whose contents are omitted here for clarity. &lt;/p&gt;
+&lt;p&gt;The second command creates an attribute folder which we can populate with default attributes for our cookbook, and the third line creates a default template for a "message of the day" to be displayed when first logging in. &lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;.git&lt;/code&gt; directory is useful and we will use it as the basis for a new repo in github repo. &lt;/p&gt;
+&lt;h5&gt;Pushing to GitHub&lt;/h5&gt;
+&lt;p&gt;Now that we have the skeleton for our cookbook, we should start pushing to GitHub for version-control. On GitHub, create a public repo called c9_ide. Then run the following commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git add .
+git commit -m &amp;quot;First commit&amp;quot;
+git remote add origin git@github.com:YOUR_GITHUB_USERNAME/c9_ide_chef.git
+git push -u origin master
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now the stage is set and we are ready to make the cookbook actually do something.&lt;/p&gt;
+&lt;h4&gt;Create the core configuration&lt;/h4&gt;
+&lt;h5&gt;Creating a story for the cookbook&lt;/h5&gt;
+&lt;p&gt;So far we've seen how to set up the cookbook, but we don't quite know what we are going to do with it. Now is a good time to set up some goals for our cookbook:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It should update all packages before doing anything else&lt;/li&gt;
+&lt;li&gt;It should create a message of the day that gives basic information about the server to a user logging in&lt;/li&gt;
+&lt;li&gt;It should install basic security packages and other utilities&lt;/li&gt;
+&lt;li&gt;It should install the packages needed to run Cloud 9 IDE&lt;/li&gt;
+&lt;li&gt;It should pull and install Cloud 9 IDE&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h6&gt;Updating all packages&lt;/h6&gt;
+&lt;p&gt;Just for fun, we are going to make our cookbook work for both Debian and RHEL variations of Linux. Under the recipes folder, let's create a recipe file called &lt;code&gt;update.rb&lt;/code&gt; and give it contents:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# Update system to start with
+case node[&amp;#39;platform&amp;#39;]
+
+
+when &amp;#39;debian&amp;#39;, &amp;#39;ubuntu&amp;#39;
+
+    execute &amp;#39;AptUpdateUpgrade&amp;#39; do
+        command &amp;quot;apt-get update &amp;amp;&amp;amp; DEBIAN_FRONTEND=noninteractive apt-get upgrade -y&amp;quot;
+    end
+
+when &amp;#39;redhat&amp;#39;, &amp;#39;centos&amp;#39;, &amp;#39;fedora&amp;#39;
+
+     # Update all packages
+    execute &amp;#39;UpdateYum&amp;#39; do
+        command &amp;quot;yum -y update&amp;quot;
+    end
+
+    # Add Fedora&amp;#39;s Extra Packages for Enterprise Linux
+    execute &amp;#39;GetEPELRepo&amp;#39; do
+        command &amp;quot;rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm&amp;quot;
+        not_if &amp;quot;rpm -qa | grep -qx &amp;#39;epel-release-7-9.noarch&amp;#39;&amp;quot;
+    end
+
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;in the &lt;code&gt;default.rb&lt;/code&gt; recipe, add the line:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;include_recipe &amp;#39;c9_ide::update&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;That's it for now! Before we go any further, let's test this. Chef has automatically added some basis for testing to your repo. Let's start with kitchen. This assumes you have &lt;a href="https://www.virtualbox.org/wiki/Downloads"&gt;VirtualBox&lt;/a&gt; and &lt;a href="https://www.vagrantup.com/"&gt;Vagrant&lt;/a&gt; installed (if you don't, install them). At the base directory, run:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kitchen create
+kitchen converge
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The first command creates the virtual machines for us to work with, and teh second command cooks Chef inside of them. It is a very convenient way to do a full test of your code before pushing to github. The converge command may take quite a while as we are updating all packages on the systems and doing it for two VMs, and Ubuntu one and a CentOS one. If all goes well, the final output looks like:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Chef Client finished, 1/1 resources updated in 02 minutes 21 seconds
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h6&gt;Creating a C9 User&lt;/h6&gt;
+&lt;p&gt;It is rarely a good idea to run a program as root. As such, our next step is to create a user for running the Cloud 9 IDE. We start by creating a data bag. First, install knife-solo and &lt;a href="https://github.com/thbishop/knife-solo_data_bag"&gt;knife-solo data bag&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chef gem install knife-solo
+chef gem install knife-solo_data_bag
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This is not entirely necessary, but that tool can be useful in other ways for making chef solo cookbooks. Then we can generate a databag and databag item:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkdir data_bags
+export EDITOR=&amp;quot;vi&amp;quot;
+knife solo data bag create users c9ide
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In the editor that pops up, paste the following content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{
+  &amp;quot;id&amp;quot;: &amp;quot;c9ide&amp;quot;,
+  &amp;quot;comment&amp;quot;: &amp;quot;c9ide User&amp;quot;,
+  &amp;quot;ssh_keys&amp;quot;: [
+    &amp;quot;&amp;quot;
+  ],
+  &amp;quot;home&amp;quot;: &amp;quot;/home/c9ide&amp;quot;,
+  &amp;quot;ssh_keygen&amp;quot;: false
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next, back to &lt;code&gt;recipe/default.rb&lt;/code&gt;, we can invoke the external chef recipe "users" to have this user installed on our system:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;include_recipe &amp;#39;user::data_bag&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To create an attributes file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chef generate attribute default
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and in &lt;code&gt;attributes/default.rb&lt;/code&gt; add the line:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;default[&amp;#39;users&amp;#39;] = &amp;#39;c9ide&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This of course shows the fantastic power and utility of Chef since we can call upon a wide range of libraries already created by the chef community. Now we need to tell Chef that we are using an external library, so in our &lt;code&gt;metadata.rb&lt;/code&gt; file at the top level we add the line at the end:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;depends          &amp;#39;user&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;At the same level there is a Berksfile with the content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;source &amp;#39;https://supermarket.chef.io&amp;#39;
+
+metadata
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;which tells chef to check this &lt;code&gt;metadata.rb&lt;/code&gt; file for dependencies (such as the user dependency we just added) that we need to pull and make available during cooking. We'll show how this is done manually a bit later, but for now &lt;code&gt;kitchen converge&lt;/code&gt; takes care of that.&lt;/p&gt;
+&lt;p&gt;Now run &lt;code&gt;kitchen converge&lt;/code&gt; one more time, and you should see that the user is created. &lt;/p&gt;
+&lt;p&gt;Let's create a quick smoke test item, add:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;describe user(&amp;#39;c9ide&amp;#39;) do
+    it { should exist }
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;to &lt;code&gt;test/default/default_test.rb&lt;/code&gt; and run &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kitchen verify
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;if all went well you will see:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; User c9ide
+     ✔  should exist
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now is a good time to push to github:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git add .
+git commit -m &amp;quot;Adds update and users&amp;quot;
+git push origin master
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h6&gt;Installing MOTD&lt;/h6&gt;
+&lt;p&gt;First, let's generate a blank template file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chef generate template motd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;fill with content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;motd-attributes&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;message&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="x"&gt;The hostname of this node is &lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;hostname&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="x"&gt;The IP address of this node is &lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ipaddress&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and create a recipe file &lt;code&gt;recipes/motd.rb&lt;/code&gt; with contents:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;template &amp;#39;/etc/motd&amp;#39; do
+      source &amp;#39;motd.erb&amp;#39;
+      mode &amp;#39;0644&amp;#39;
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and finally add this line to the &lt;code&gt;attributes/default.rb&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;default[&amp;#39;motd-attributes&amp;#39;][&amp;#39;message&amp;#39;] = &amp;quot;A Cloud 9 IDE server&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We add the following tests at &lt;code&gt;test/smoke/default/motd_test.rb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;describe directory(&amp;#39;/etc/motd&amp;#39;) do  # describe this directory
+    its(:content) { should match /A Cloud 9 IDE server/ }
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We run &lt;code&gt;kitchen converge&lt;/code&gt; and &lt;code&gt;kitchen verify&lt;/code&gt; again to make sure the recipe is fine, and then push to github as before.&lt;/p&gt;
+&lt;h6&gt;Installing Packages&lt;/h6&gt;
+&lt;p&gt;We are getting close to installing the Cloud9 IDE. Before doing so, we need to install some packages. Some of these packages are for security purposes, or convenience in administration, while others are needed for the Cloud 9 IDE system.&lt;/p&gt;
+&lt;p&gt;Create a file &lt;code&gt;recipe/packages.rb&lt;/code&gt; with content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;case node[&amp;#39;platform&amp;#39;]
+when &amp;#39;debian&amp;#39;, &amp;#39;ubuntu&amp;#39;
+
+    req_packages = [&amp;#39;fail2ban&amp;#39;,
+                    &amp;#39;gcc&amp;#39;,
+                    &amp;#39;g++&amp;#39;,
+                    &amp;#39;git&amp;#39;,
+                    &amp;#39;htop&amp;#39;,
+                    &amp;#39;make&amp;#39;,
+                    &amp;#39;nodejs&amp;#39;,
+                    &amp;#39;nmap&amp;#39;,
+                    &amp;#39;npm&amp;#39;,
+                    &amp;#39;sysstat&amp;#39;,
+                    &amp;#39;unattended-upgrades&amp;#39;,
+                    &amp;#39;apt-listchanges&amp;#39;]
+
+    req_packages.each do |packs|
+      Chef::Log.info(&amp;quot;Installing: &amp;quot; + packs)
+      package packs do
+        action :install
+      end
+    end
+
+    template &amp;#39;/etc/apt/apt.conf.d/50unattended-upgrades&amp;#39; do
+        owner &amp;#39;root&amp;#39;
+        group &amp;#39;root&amp;#39;
+        mode &amp;#39;0644&amp;#39;
+        source &amp;#39;50unattended-upgrades.erb&amp;#39;
+    end
+
+    template &amp;#39;/etc/apt/apt.conf.d/20auto-upgrades&amp;#39; do
+        owner &amp;#39;root&amp;#39;
+        group &amp;#39;root&amp;#39;
+        mode &amp;#39;0644&amp;#39;
+        source &amp;#39;20auto-upgrades.erb&amp;#39;
+    end
+
+when &amp;#39;redhat&amp;#39;, &amp;#39;centos&amp;#39;, &amp;#39;fedora&amp;#39;
+
+    req_packages = [&amp;#39;fail2ban&amp;#39;,
+                    &amp;#39;gcc-c++&amp;#39;,
+                    &amp;#39;git&amp;#39;,
+                    &amp;#39;glibc-static&amp;#39;,
+                    &amp;#39;htop&amp;#39;,
+                    &amp;#39;make&amp;#39;,
+                    &amp;#39;nodejs&amp;#39;,
+                    &amp;#39;nmap&amp;#39;,
+                    &amp;#39;npm&amp;#39;,
+                    &amp;#39;sysstat&amp;#39;,
+                    &amp;#39;yum-cron&amp;#39;]
+
+    req_packages.each do |packs|
+      Chef::Log.info(&amp;quot;Installing: &amp;quot; + packs)
+      package packs do
+        action :install
+      end
+    end
+
+    template &amp;#39;/etc/yum/yum-cron.conf&amp;#39; do
+        owner &amp;#39;root&amp;#39;
+        group &amp;#39;root&amp;#39;
+        mode &amp;#39;0644&amp;#39;
+        source &amp;#39;yum-cron.conf.erb&amp;#39;
+    end
+
+    execute &amp;#39;systemctl enable yum-cron&amp;#39; do
+    end
+
+    execute &amp;#39;systemctl start yum-cron&amp;#39; do
+    end
+
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Notice that we have sneaked in automated security updates as well. For that, we require the following templates:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;templates/50unattended-upgrades.erb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="x"&gt;// Automatically upgrade packages from these (origin, archive) pairs&lt;/span&gt;
+&lt;span class="x"&gt;Unattended-Upgrade::Allowed-Origins {&lt;/span&gt;
+&lt;span class="x"&gt;  &lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;origins&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;].&lt;/span&gt;&lt;span class="n"&gt;each&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;origin&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="x"&gt;  &amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;;&lt;/span&gt;
+&lt;span class="x"&gt;  &lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%&lt;/span&gt; &lt;span class="k"&gt;end&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="x"&gt;};&lt;/span&gt;
+
+&lt;span class="x"&gt;// List of packages to not update&lt;/span&gt;
+&lt;span class="x"&gt;Unattended-Upgrade::Package-Blacklist {&lt;/span&gt;
+&lt;span class="x"&gt;  &amp;quot;apache2&amp;quot;;&lt;/span&gt;
+&lt;span class="x"&gt;  &amp;quot;nginx&amp;quot;;&lt;/span&gt;
+&lt;span class="x"&gt;//  &amp;quot;libc6-dev&amp;quot;;&lt;/span&gt;
+&lt;span class="x"&gt;//  &amp;quot;libc6-i686&amp;quot;;&lt;/span&gt;
+&lt;span class="x"&gt;};&lt;/span&gt;
+
+&lt;span class="x"&gt;// Send email to this address for problems or packages upgrades&lt;/span&gt;
+&lt;span class="x"&gt;// If empty or unset then no email is sent, make sure that you&lt;/span&gt;
+&lt;span class="x"&gt;// have a working mail setup on your system. The package &amp;#39;mailx&amp;#39;&lt;/span&gt;
+&lt;span class="x"&gt;// must be installed or anything that provides /usr/bin/mail.&lt;/span&gt;
+&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;send_email&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;// &amp;quot;&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;Unattended-Upgrade::Mail &amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;email_address&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;;&lt;/span&gt;
+
+&lt;span class="x"&gt;// Do automatic removal of new unused dependencies after the upgrade&lt;/span&gt;
+&lt;span class="x"&gt;// (equivalent to apt-get autoremove)&lt;/span&gt;
+&lt;span class="x"&gt;Unattended-Upgrade::Remove-Unused-Dependencies &amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;auto_remove&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;false&amp;quot;&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;;&lt;/span&gt;
+
+&lt;span class="x"&gt;// Automatically reboot *WITHOUT CONFIRMATION* if a&lt;/span&gt;
+&lt;span class="x"&gt;// the file /var/run/reboot-required is found after the upgrade&lt;/span&gt;
+&lt;span class="x"&gt;Unattended-Upgrade::Automatic-Reboot &amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt; &lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;auto_reboot&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;false&amp;quot;&lt;/span&gt; &lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;templates/20auto-upgrades.erb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="x"&gt;APT::Periodic::Update-Package-Lists &amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;update_package_lists_interval&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;;&lt;/span&gt;
+&lt;span class="x"&gt;APT::Periodic::Unattended-Upgrade &amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;%=&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;][&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;upgrade_interval&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="cp"&gt;%&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;templates/yum-cron.conf.erb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;update_cmd = security
+apply_updates = yes
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;default[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;update_package_lists_interval&amp;#39;] = &amp;quot;1&amp;quot;
+default[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;upgrade_interval&amp;#39;] = &amp;quot;1&amp;quot;
+default[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;origins&amp;#39;] = [&amp;#39;&lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;distro_id&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt; &lt;span class="cp"&gt;${&lt;/span&gt;&lt;span class="n"&gt;distro_codename&lt;/span&gt;&lt;span class="cp"&gt;}&lt;/span&gt;-security&amp;#39;]
+default[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;send_email&amp;#39;] = false
+default[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;email_address&amp;#39;] = &amp;quot;test@example.com&amp;quot;
+default[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;auto_remove&amp;#39;] = false
+default[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;auto_reboot&amp;#39;] = false
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and of course, our inspec test in &lt;code&gt;test/smoke/default/packages_test.rb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;if os[:family] == &amp;#39;debian&amp;#39;
+    req_packages = [&amp;#39;fail2ban&amp;#39;,
+                    &amp;#39;gcc&amp;#39;,
+                    &amp;#39;g++&amp;#39;,
+                    &amp;#39;git&amp;#39;,
+                    &amp;#39;htop&amp;#39;,
+                    &amp;#39;make&amp;#39;,
+                    &amp;#39;nodejs&amp;#39;,
+                    &amp;#39;nmap&amp;#39;,
+                    &amp;#39;npm&amp;#39;,
+                    &amp;#39;sysstat&amp;#39;,
+                    &amp;#39;unattended-upgrades&amp;#39;,
+                    &amp;#39;apt-listchanges&amp;#39;]
+
+    req_packages.each do |packs|
+      describe package(packs) do
+        it { should be_installed }
+      end
+    end
+
+else
+
+    req_packages = [&amp;#39;fail2ban&amp;#39;,
+                    &amp;#39;gcc-c++&amp;#39;,
+                    &amp;#39;git&amp;#39;,
+                    &amp;#39;glibc-static&amp;#39;,
+                    &amp;#39;htop&amp;#39;,
+                    &amp;#39;make&amp;#39;,
+                    &amp;#39;nodejs&amp;#39;,
+                    &amp;#39;nmap&amp;#39;,
+                    &amp;#39;npm&amp;#39;,
+                    &amp;#39;sysstat&amp;#39;,
+                    &amp;#39;yum-cron&amp;#39;]
+
+    req_packages.each do |packs|
+      describe package(packs) do
+        it { should be_installed }
+      end
+    end
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h6&gt;Installing Cloud 9 IDE&lt;/h6&gt;
+&lt;p&gt;Chef has a built-in git resource that we can use to pull the Cloud 9 IDE code.&lt;/p&gt;
+&lt;p&gt;The test for this section will be rather brief:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;describe directory(&amp;#39;/home/c9ide/core/README.md&amp;#39;) do  # describe this directory
+    its(:content) { should match /^Cloud9/ }
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and the reason is that we can really verify whether or not this section succeeded in the next section on running via supervisor.&lt;/p&gt;
+&lt;p&gt;The code for this section, in &lt;code&gt;/recipes/c9ide.rb&lt;/code&gt;, is:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git &amp;quot;/home/c9ide/core&amp;quot; do
+   repository &amp;#39;https://github.com/c9/core.git&amp;#39;
+   reference &amp;#39;master&amp;#39;
+   action :sync
+end
+
+case node[&amp;#39;platform&amp;#39;]
+when &amp;#39;debian&amp;#39;, &amp;#39;ubuntu&amp;#39;
+    bash &amp;#39;create nodejs link&amp;#39; do
+        code &amp;lt;&amp;lt;-EOH
+        ln -s /usr/bin/nodejs /usr/bin/node
+        EOH
+        not_if { ::File.exist?(&amp;#39;/usr/bin/node&amp;#39;) }
+    end
+end
+
+bash &amp;#39;install_cloud9ide&amp;#39; do
+   cwd &amp;#39;/home/c9ide/core/&amp;#39;
+   user &amp;#39;root&amp;#39;
+   code &amp;lt;&amp;lt;-EOH
+     scripts/install-sdk.sh
+     EOH
+   environment &amp;#39;PREFIX&amp;#39; =&amp;gt; &amp;#39;/usr/local&amp;#39;
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h6&gt;Installing Supervisor&lt;/h6&gt;
+&lt;p&gt;Finally, we want to leave our server running Cloud 9 IDE after provisioning it. Supervisor is a fantastic way to do so, though of course not the only way and perhaps not even the best way, but it is a convenient and production-ready solution (though this development kit version of Cloud 9 IDE is not production material and is meant for development purposes).&lt;/p&gt;
+&lt;p&gt;In &lt;code&gt;recipes/supervisor.rb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;package &amp;#39;supervisor&amp;#39; do
+    action :install
+end
+
+case node[&amp;#39;platform&amp;#39;]
+when &amp;#39;debian&amp;#39;, &amp;#39;ubuntu&amp;#39;
+
+    cookbook_file &amp;#39;/etc/supervisor/conf.d/cloud9ide.conf&amp;#39; do
+      source &amp;#39;c9ide.conf&amp;#39;
+      owner &amp;#39;root&amp;#39;
+      group &amp;#39;root&amp;#39;
+      mode &amp;#39;0755&amp;#39;
+      action :create
+    end
+
+    execute &amp;#39;start supervisor&amp;#39; do
+      command &amp;#39;service supervisor start&amp;#39;
+    end
+
+    execute &amp;#39;reload supervisor&amp;#39; do
+      command &amp;#39;supervisorctl update&amp;#39;
+    end
+
+when &amp;#39;redhat&amp;#39;, &amp;#39;centos&amp;#39;, &amp;#39;fedora&amp;#39;
+
+    cookbook_file &amp;#39;/etc/supervisord.d/cloud9ide.ini&amp;#39; do
+      source &amp;#39;c9ide.conf&amp;#39;
+      owner &amp;#39;root&amp;#39;
+      group &amp;#39;root&amp;#39;
+      mode &amp;#39;0755&amp;#39;
+      action :create
+    end
+
+    execute &amp;#39;start supervisor&amp;#39; do
+      command &amp;#39;service supervisord start&amp;#39;
+    end
+
+    execute &amp;#39;reload supervisor&amp;#39; do
+      command &amp;#39;supervisorctl update&amp;#39;
+    end
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and finally add this to the &lt;code&gt;c9ide_test.rb&lt;/code&gt; test file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;describe port(9999) do
+  it { should be_listening }
+end
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h5&gt;Putting it all together&lt;/h5&gt;
+&lt;p&gt;The default recipe should now look like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;include_recipe &amp;#39;c9_ide::update&amp;#39;
+include_recipe &amp;#39;user::data_bag&amp;#39;
+include_recipe &amp;#39;c9_ide::motd&amp;#39;
+include_recipe &amp;#39;c9_ide::packages&amp;#39;
+include_recipe &amp;#39;c9_ide::cloud9ide&amp;#39;
+include_recipe &amp;#39;c9_ide::supervisor&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;we run a final &lt;code&gt;kitchen converge&lt;/code&gt;; if all goes well, we follow up with a final &lt;code&gt;kitchen verify&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;-----&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Starting&lt;/span&gt; &lt;span class="n"&gt;Kitchen&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v1&lt;/span&gt;&lt;span class="mf"&gt;.14.2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;-----&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Setting&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ubuntu&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1604&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;...&lt;/span&gt;
+       &lt;span class="n"&gt;Finished&lt;/span&gt; &lt;span class="n"&gt;setting&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ubuntu&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1604&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="n"&gt;m0&lt;/span&gt;&lt;span class="mf"&gt;.00&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+&lt;span class="o"&gt;-----&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Verifying&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ubuntu&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1604&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;...&lt;/span&gt;
+       &lt;span class="n"&gt;Loaded&lt;/span&gt;
+
+&lt;span class="nl"&gt;Target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  &lt;span class="nl"&gt;ssh&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//vagrant@127.0.0.1:2222&lt;/span&gt;
+
+
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;c9ide&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;core&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;README&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;md&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;match&lt;/span&gt; &lt;span class="o"&gt;/^&lt;/span&gt;&lt;span class="n"&gt;Cloud9&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+  &lt;span class="n"&gt;Port&lt;/span&gt; &lt;span class="mi"&gt;9999&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;listening&lt;/span&gt;
+  &lt;span class="n"&gt;User&lt;/span&gt; &lt;span class="n"&gt;c9ide&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;exist&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;motd&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;match&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="n"&gt;Cloud&lt;/span&gt; &lt;span class="mi"&gt;9&lt;/span&gt; &lt;span class="n"&gt;IDE&lt;/span&gt; &lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;fail2ban&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;gcc&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;g&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;htop&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;nodejs&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;nmap&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;npm&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;sysstat&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;unattended&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;upgrades&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;listchanges&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+
+&lt;span class="n"&gt;Test&lt;/span&gt; &lt;span class="nl"&gt;Summary&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;16&lt;/span&gt; &lt;span class="n"&gt;successful&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="n"&gt;failures&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="n"&gt;skipped&lt;/span&gt;
+       &lt;span class="n"&gt;Finished&lt;/span&gt; &lt;span class="n"&gt;verifying&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ubuntu&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1604&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="n"&gt;m1&lt;/span&gt;&lt;span class="mf"&gt;.28&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+&lt;span class="o"&gt;-----&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Setting&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;centos&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;72&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;...&lt;/span&gt;
+       &lt;span class="n"&gt;Finished&lt;/span&gt; &lt;span class="n"&gt;setting&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;centos&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;72&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="n"&gt;m0&lt;/span&gt;&lt;span class="mf"&gt;.00&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+&lt;span class="o"&gt;-----&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Verifying&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;centos&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;72&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;...&lt;/span&gt;
+       &lt;span class="n"&gt;Loaded&lt;/span&gt;
+
+&lt;span class="nl"&gt;Target&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  &lt;span class="nl"&gt;ssh&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//vagrant@127.0.0.1:2200&lt;/span&gt;
+
+
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;c9ide&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;core&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;README&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;md&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;match&lt;/span&gt; &lt;span class="o"&gt;/^&lt;/span&gt;&lt;span class="n"&gt;Cloud9&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+  &lt;span class="n"&gt;Port&lt;/span&gt; &lt;span class="mi"&gt;9999&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;listening&lt;/span&gt;
+  &lt;span class="n"&gt;User&lt;/span&gt; &lt;span class="n"&gt;c9ide&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;exist&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;motd&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;match&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="n"&gt;Cloud&lt;/span&gt; &lt;span class="mi"&gt;9&lt;/span&gt; &lt;span class="n"&gt;IDE&lt;/span&gt; &lt;span class="n"&gt;server&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;fail2ban&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;gcc&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;glibc&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;htop&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;nodejs&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;nmap&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;npm&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;sysstat&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+  &lt;span class="n"&gt;System&lt;/span&gt; &lt;span class="n"&gt;Package&lt;/span&gt;
+     &lt;span class="err"&gt;✔&lt;/span&gt;  &lt;span class="n"&gt;yum&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;cron&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt;
+
+&lt;span class="n"&gt;Test&lt;/span&gt; &lt;span class="nl"&gt;Summary&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt; &lt;span class="n"&gt;successful&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="n"&gt;failures&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="n"&gt;skipped&lt;/span&gt;
+       &lt;span class="n"&gt;Finished&lt;/span&gt; &lt;span class="n"&gt;verifying&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="k"&gt;default&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;centos&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;72&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="n"&gt;m13&lt;/span&gt;&lt;span class="mf"&gt;.80&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;
+&lt;span class="o"&gt;-----&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Kitchen&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;finished&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="n"&gt;m16&lt;/span&gt;&lt;span class="mf"&gt;.47&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Congratulations, you have a basic working chef recipe for installing Cloud 9 IDE, tested and provisioned on both major families of Linux.&lt;/p&gt;
+&lt;h3&gt;Source Code&lt;/h3&gt;
+&lt;p&gt;You can find the source code for this recipe on my github account &lt;a href="https://github.com/doctimjones/c9_ide_chef/tree/PartI"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;Future Steps&lt;/h3&gt;
+&lt;p&gt;We took some shortcuts and avoided some best practices for convenience here. Ideally we would like some unit tests and to pull in more community recipes. For example, the supervisor chef cookbook could be used here instead of dealing with that in a platform case. &lt;/p&gt;
+&lt;p&gt;In the forthcoming Part II, we will use Puppet, a widely used alternative to Chef, to provision a server that runs the Cloud 9 IDE SDK as we have here with Chef.&lt;/p&gt;</content><category term="AWS"></category><category term="Chef"></category><category term="Cloudformation"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://doctimjones.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:/abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;p&gt;Docker comes with a default network, but you can make your own network of unlimited complexity.&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Goal&lt;/h4&gt;
 &lt;p&gt;Network Namespace is a Linux tool that allows for the easy virtualization of network models. While it has plenty of &lt;a href="http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/"&gt;practical uses directly on the hardware&lt;/a&gt;, this will be a quick introduction to how it can be used to create more complex Docker networks that could be extended to modeling, say, the infrastructure of a data center or cloud provider.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://github.com/brandon-rhodes/fopnp/tree/m/playground"&gt;Brandon Rhodes created&lt;/a&gt; a great "playground" for his book &lt;a href="https://github.com/brandon-rhodes/fopnp"&gt;Foundations of Python Network Programming&lt;/a&gt;. Inspired by this example, we will create a small simple netns/docker example that is more bite-sized for those who aren't familiar with these tools. &lt;/p&gt;
 &lt;h4&gt;What is NetNS?&lt;/h4&gt;
