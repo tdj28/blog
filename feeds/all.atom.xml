@@ -2015,10 +2015,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="71d6659c-31d2-47f5-80c2-a545645b5e99"&gt;&lt;/div&gt;
+&lt;div id="2eb9f9ba-6d24-4f16-a4a4-7145f7d7a937"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#71d6659c-31d2-47f5-80c2-a545645b5e99');
+var element = $('#2eb9f9ba-6d24-4f16-a4a4-7145f7d7a937');
 
 (function(global) {
   function now() {
