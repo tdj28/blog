@@ -231,10 +231,9 @@ are subject to random variations in behavior (though those variations are pertur
 to an otherwise systematic behavior). Here, we take a quick bite-sized look at an example.&lt;/p&gt;
 &lt;h4&gt;An example&lt;/h4&gt;
 &lt;p&gt;Take a look at the system defined by&lt;/p&gt;
-&lt;p style="text-align: center;"&gt;
-$\frac{dx}{dt} = u$
-&lt;/p&gt;
-
+&lt;p&gt;&lt;center&gt;
+&lt;span class="math"&gt;\(\frac{dx}{dt} = u\)&lt;/span&gt;
+&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(x(0) = 1\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;where we seek to minimize the function&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)&lt;/span&gt;.&lt;/p&gt;
@@ -2018,10 +2017,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="9397c5d4-6529-43a7-ae32-f2889e2ddf4a"&gt;&lt;/div&gt;
+&lt;div id="4f3e54ad-8d04-4871-860a-729d6a9cf90e"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#9397c5d4-6529-43a7-ae32-f2889e2ddf4a');
+var element = $('#4f3e54ad-8d04-4871-860a-729d6a9cf90e');
 
 (function(global) {
   function now() {
