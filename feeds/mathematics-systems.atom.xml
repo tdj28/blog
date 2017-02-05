@@ -14,6 +14,9 @@ to an otherwise systematic behavior). Here, we take a quick bite-sized look at a
 &lt;p&gt;&lt;center&gt;
 &lt;span class="math"&gt;\(\frac{dx}{dt} = u\)&lt;/span&gt;
 &lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+[ \frac{dx}{dt} = u ]
+&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(x(0) = 1\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;where we seek to minimize the function&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)&lt;/span&gt;.&lt;/p&gt;
