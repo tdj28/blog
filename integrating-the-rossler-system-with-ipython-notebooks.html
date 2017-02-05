@@ -292,147 +292,9 @@ function getMousePos(canvas, evt){
 
             }
 
-
-               function animate2(myRect){
-                var canvas = document.getElementById("myCanvas2");
-                var context = canvas.getContext("2d");
-                context.canvas.width  = window.innerWidth;
-                // update
-                var date = new Date();
-                var time = date.getTime();
-                var amplitude = 200;
-                var period = 16000; // in ms
-                var centerX = canvas.width / 2 - myRect.width / 2;
-                var nextX = amplitude * Math.sin(time * 2 * Math.PI / period) + centerX;
-                var nextXX = amplitude * Math.cos(time * 2 * Math.PI / period) + centerX;
-                myRect.x = nextX;
-
-                // clear
-                context.clearRect(0, 0, canvas.width, canvas.height);
-
-                // draw
-                context.beginPath();
-                context.rect(myRect.x, myRect.y, myRect.width, myRect.height);
-                context.fillStyle = "rgba(155,100,255,0.2)";
-                context.fill();
-                context.closePath;
-                context.beginPath();
-                context.rect(nextXX, myRect.y, myRect.width, myRect.height);
-                context.fillStyle = "rgba(0,255,0,0.2)";
-                context.fill();
-                context.closePath();
-          //      context.lineWidth = myRect.borderWidth;
-          //      context.strokeStyle = "black";
-          //      context.stroke();
-
-                // request new frame
-                requestAnimFrame(function(){
-                    animate2(myRect);
-                });
-            }
-
-   function animate3(myRect3){
-                var canvas = document.getElementById("myCanvas3");
-
-                var context = canvas.getContext("2d");
-                context.canvas.width  = window.innerWidth;
-      // clear
-              context.clearRect(0, 0, canvas.width, canvas.height);
-
-                var date = new Date();
-                var time = date.getTime();
-                var amplitude = 80;
-                var period = 16000; // in ms
-                var centerX = canvas.width / 2 - myRect3.width / 2;
-                var nextX = amplitude * Math.sin(time * 2 * Math.PI / period) + centerX;
-                var nextXX = amplitude * Math.cos(time * 2 * Math.PI / period) + centerX;
-                myRect3.x = nextX;
-
-                // clear
-                context.clearRect(0, 0, canvas.width, canvas.height);
-
-                // draw
-                context.beginPath();
-                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
-                context.fillStyle = "rgba(255,150,105,0.1)";
-                context.fill();
-                context.closePath;
-
-
-                myRect3.x = nextXX;
-                context.beginPath();
-                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
-                context.fillStyle = "rgba(205,165,255,0.1)";
-                context.fill();
-                context.closePath;
-
-                requestAnimFrame(function(){
-                   animate3(myRect3);
-                });
-            }
-
- function animate4(myRect3){
-                var canvas = document.getElementById("myCanvas4");
-
-                var context = canvas.getContext("2d");
-                context.canvas.width  = window.innerWidth;
-      // clear
-              context.clearRect(0, 0, canvas.width, canvas.height);
-
-                var date = new Date();
-                var time = date.getTime();
-                var amplitude = 80;
-                var period = 16000; // in ms
-                var centerX = canvas.width / 2 - myRect3.width / 2;
-                var nextX = amplitude * Math.sin(time * 2 * Math.PI / period) + centerX;
-                var nextXX = amplitude * Math.cos(time * 2 * Math.PI / period) + centerX;
-                myRect3.x = nextX;
-
-                // clear
-                context.clearRect(0, 0, canvas.width, canvas.height);
-
-                // draw
-                context.beginPath();
-                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
-                context.fillStyle = "rgba(255,150,105,0.1)";
-                context.fill();
-                context.closePath;
-
-
-                myRect3.x = nextXX;
-                context.beginPath();
-                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
-                context.fillStyle = "rgba(205,165,255,0.1)";
-                context.fill();
-                context.closePath;
-
-                requestAnimFrame(function(){
-                   animate4(myRect3);
-                });
-            }
-
-
     window.onload = function(){
 
-      var canvas = document.getElementById("myCanvas");
-      var context = canvas.getContext("2d");
-      canvas.width  = window.innerWidth;
 
-
-                var myRect = {
-                    x: 250,
-                    y: 0,
-                    width: 100,
-                    height: 10,
-                    borderWidth: 5
-                };
-               var myRect3 = {
-                    x: 250,
-                    y: 0,
-                    width: 100,
-                    height: 10,
-                    borderWidth: 5
-                };
 
                 var myRectangle = {
                     x: 700,
@@ -441,24 +303,6 @@ function getMousePos(canvas, evt){
                     height: 1
 
                 };
-
-               var myRectangle2 = {
-                    x: 500,
-                    y: 15,
-                    width: 10,
-                    height: 10,
-                    borderWidth: 2
-                };
-
-                  var myRectangle3 = {
-                    x: 110,
-                    y: 35,
-                    width: 10,
-                    height: 10,
-                    borderWidth: 2
-
-                };
-
 
                   var myStar = {
                      x: 500,
@@ -483,9 +327,6 @@ function getMousePos(canvas, evt){
       var pend = { j1x: 230, j1y: 45, j1vx:0, j1vy:-1, j2x: 220, j2vx:0, j2y:65, j2vy:0};
 
       animate(myRectangle,myStar,myPlanet,mousePos,pend);
-      animate2(myRect);
-     animate3(myRect3);
-     animate4(myRect3);
 
 
             };
@@ -1506,10 +1347,10 @@ h6:hover .anchor-link {
 </div>
 <div class="output_area">
 <div class="prompt"></div>
-<div id="129abb94-be63-4f41-aa0b-9724cff8950c"></div>
+<div id="cf9ea1b1-8ff2-468e-bbb0-d6da4d4bbe01"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#129abb94-be63-4f41-aa0b-9724cff8950c');
+var element = $('#cf9ea1b1-8ff2-468e-bbb0-d6da4d4bbe01');
 
 (function(global) {
   function now() {
