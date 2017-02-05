@@ -97,6 +97,7 @@ function getMousePos(canvas, evt){
                 canvas.width  = window.innerWidth;
                 var terrain = document.getElementById("terCanvas");
                 var terCtx = terrain.getContext("2d");
+                terrain.width = canvas.width
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -127,7 +128,7 @@ function getMousePos(canvas, evt){
 
                 terCtx.beginPath();
                 terCtx.globalCompositeOperation='destination-over';
-                terCtx.rect(myRectangle.x+500, myRectangle.y, 1, 1);
+                terCtx.rect(myRectangle.x+100, myRectangle.y, 1, 1);
                 terCtx.closePath();
                 terCtx.fillStyle = "rgba(235,200,5,0.2)";
                 terCtx.fill();
@@ -416,8 +417,6 @@ function getMousePos(canvas, evt){
       var canvas = document.getElementById("myCanvas");
       var context = canvas.getContext("2d");
       canvas.width  = window.innerWidth;
-      var terrain = document.getElementById("terCanvas");
-      var terCtx = terrain.getContext("2d");
 
 
                 var myRect = {
