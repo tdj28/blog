@@ -413,9 +413,14 @@ function getMousePos(canvas, evt){
 
 
     window.onload = function(){
-    var canvas = document.getElementById('myCanvas');
-    var context = canvas.getContext('2d');
-    context.canvas.width  = window.innerWidth;
+
+      var canvas = document.getElementById("myCanvas");
+      var context = canvas.getContext("2d");
+      canvas.width  = window.innerWidth;
+      var terrain = document.getElementById("terCanvas");
+      var terCtx = terrain.getContext("2d");
+      terrain.width  = window.innerWidth;
+  
 
                 var myRect = {
                     x: 250,
@@ -489,7 +494,7 @@ function getMousePos(canvas, evt){
             };
 
         </script>
-        <canvas id="terCanvas" width="2000" height="100"></canvas>
+        <canvas id="terCanvas" height="100"></canvas>
         <canvas id="myCanvas" height="100" style="top:0; margin:-105px 0px 15px 0px;"></canvas>    <div id="main">
 <h2><a href="http://doctimjones.org/abstracting-networking-with-docker-containers.html">Abstracting Networking with Docker Containers</a></h2>
 <h5><i class="icon-feather"></i> Thu 03 March 2016
