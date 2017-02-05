@@ -97,6 +97,7 @@ function getMousePos(canvas, evt){
                 canvas.width  = window.innerWidth;
                 var terrain = document.getElementById("terCanvas");
                 var terCtx = terrain.getContext("2d");
+                terrain.width  = window.innerWidth;
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -489,7 +490,7 @@ function getMousePos(canvas, evt){
 
         </script>
         <canvas id="terCanvas" height="100"></canvas>
-        <canvas id="myCanvas" height="100" style="top:0; margin:-100px 0px 15px 0px;"></canvas>    <div id="main">
+        <canvas id="myCanvas" height="100" style="top:0; margin:-105px 0px 15px 0px;"></canvas>    <div id="main">
 <h2><a href="http://doctimjones.org/aws-virtual-machines-cook-thyself-part-i.html">AWS Virtual Machines, cook thyself! Part I</a></h2>
 <h5><i class="icon-feather"></i> Sat 28 January 2017 </h5>
 AWS tools enable the creation of self-cooking boxes, using chef-solo, and Cloudformation to automate deployment.
