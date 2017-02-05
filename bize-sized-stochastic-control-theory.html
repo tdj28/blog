@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Bize sized stochastic control theory &mdash; doctimjones</title>
+  <meta name="author" content="Tim Jones">
+
+
+
+
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link href="http://doctimjones.org/favicon.png" rel="icon">
+
+  <link href="http://doctimjones.org/theme/css/main.css" media="screen, projection"
+        rel="stylesheet" type="text/css">
+
+  <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic"
+        rel="stylesheet" type="text/css">
+  <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic"
+        rel="stylesheet" type="text/css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script></head>
+
+<body>
+  <header role="banner"><hgroup>
+  <h1><a href="http://doctimjones.org/">doctimjones</a></h1>
+</hgroup></header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+</ul>
+
+
+<ul class="main-navigation">
+      <li >
+        <a href="http://doctimjones.org/category/computer-science.html">Computer science</a>
+      </li>
+      <li >
+        <a href="http://doctimjones.org/category/data-science.html">Data science</a>
+      </li>
+      <li >
+        <a href="http://doctimjones.org/category/devops.html">Devops</a>
+      </li>
+      <li >
+        <a href="http://doctimjones.org/category/math.html">Math</a>
+      </li>
+      <li class="active">
+        <a href="http://doctimjones.org/category/mathematics-systems.html">Mathematics, systems</a>
+      </li>
+</ul></nav>
+  <div id="main">
+    <div id="content">
+<div>
+  <article class="hentry" role="article">
+<header>
+      <h1 class="entry-title">Bize sized stochastic control theory</h1>
+    <p class="meta">
+<time datetime="2017-01-31T20:27:00-05:00" pubdate>Tue 31 January 2017</time>    </p>
+</header>
+
+  <div class="entry-content"><h3>Theory vs. on the ground</h3>
+<p><em>Deterministic</em> and <em>stochastic</em> control theory both approach the same general problem of
+preventing unwanted behaviors of a system by controlling input variables. The deterministic
+variation assumes everything is known or at least knowable and predictable in such a way that
+given a snapshot of a system, with the proper analysis and with the proper system (i.e. a
+system which <em>can</em> be controlled, doesn't have catastrophe points) we can control it in
+perpetuity. <strong>Stochastic</strong> control theory essentially expands control theory to deal with
+systems which have real-world behavior-that is, systems which do not behave ideally and
+are subject to random variations in behavior (though those variations are perturbations
+to an otherwise systematic behavior). Here, we take a quick bite-sized look at an example.</p>
+<h4>An example</h4>
+<p>Take a look at the system defined by</p>
+<p><span class="math">\(\frac{dx}{dt} = u\)</span></p>
+<p><span class="math">\(x(0) = 1\)</span></p>
+<p>where we seek to minimize the function</p>
+<p><span class="math">\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)</span>.</p>
+<h5>What does it correspond to?</h5>
+<p>Firstly, it is important to understand that <span class="math">\(u\)</span> is not necessarily a constant. In fact, if <span class="math">\(J\)</span> is
+somehow an expression of some idealized behavior, (e.g. minimize polution output), then choosing
+<span class="math">\(u\)</span> to be a constant would be a very bad idea as <span class="math">\(J \rightarrow \infty\)</span>. </p>
+<h5>Finding u</h5>
+<p>So let's now try to find a <span class="math">\(u\)</span> that would minimize <span class="math">\(J\)</span>. First, re-write <span class="math">\(J\)</span> as</p>
+<p><span class="math">\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t) \right] dt\)</span></p>
+<p>and then we note that</p>
+<p><span class="math">\(\int^{T}_0 \left[ x^2(t) + u^2(t) \right] dt = x^2(0) - x^2(T) + \int^{T}_0 \left[ x(t) + \dot{x}(t) \right]^2 dt\)</span></p>
+<p>Let's find the minima of this with respect to <span class="math">\(d/d(\dot{x})\)</span>, setting the result to zero, to find that</p>
+<p><span class="math">\(x(t) = - \dot{x}(t)\)</span></p>
+<p>We can look at this as an open loop control, such that we solve to find that </p>
+<p><span class="math">\(u(t) = -e^{-t}\)</span></p>
+<p>and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
+and use </p>
+<p><span class="math">\(\dot{x}{t} = -x(t)\)</span>, </p>
+<p>e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter <span class="math">\(x\)</span> at time <span class="math">\(t\)</span> as dictated by the relation:</p>
+<p><span class="math">\(\delta x = -x(t) \delta t\)</span>. </p>
+<h5>What is the difference?</h5>
+<p>For a deterministic system, the exponent we found for <span class="math">\(u\)</span> seems like a great solution <strong>if</strong> it can be
+designed into the system. But what happens if we have stochastic noise?</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' && location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' }, Macros: {} }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+    <footer>
+<p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">
+        Tim Jones
+    </span>
+  </span>
+<time datetime="2017-01-31T20:27:00-05:00" pubdate>Tue 31 January 2017</time>  <span class="categories">
+    <a class='category' href='http://doctimjones.org/category/mathematics-systems.html'>Mathematics, Systems</a>
+  </span>
+  <span class="categories">
+    <a class="category" href="http://doctimjones.org/tag/control-theory.html">Control Theory</a>,    <a class="category" href="http://doctimjones.org/tag/stochastic.html">Stochastic</a>,    <a class="category" href="http://doctimjones.org/tag/python.html">Python</a>  </span>
+</p><div class="sharing">
+</div>    </footer>
+  </article>
+
+</div>
+<aside class="sidebar">
+  <section>
+    <h1>Recent Posts</h1>
+    <ul id="recent_posts">
+      <li class="post">
+          <a href="http://doctimjones.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html">Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/bize-sized-stochastic-control-theory.html">Bize sized stochastic control theory</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/aws-virtual-machines-cook-thyself-part-i.html">AWS Virtual Machines, cook thyself! Part I</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html">Python uses operational chaining for boolean comparisons</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html">Integrating the Rossler System with iPython Notebooks</a>
+      </li>
+    </ul>
+  </section>
+  <section>
+      
+    <h1>Categories</h1>
+    <ul id="recent_posts">
+        <li><a href="http://doctimjones.org/category/computer-science.html">Computer Science</a></li>
+        <li><a href="http://doctimjones.org/category/data-science.html">Data Science</a></li>
+        <li><a href="http://doctimjones.org/category/devops.html">DevOps</a></li>
+        <li><a href="http://doctimjones.org/category/math.html">Math</a></li>
+        <li><a href="http://doctimjones.org/category/mathematics-systems.html">Mathematics, Systems</a></li>
+    </ul>
+  </section>
+ 
+
+  <section>
+  <h1>Tags</h1>
+    <a href="http://doctimjones.org/tag/devops.html">DevOps</a>,    <a href="http://doctimjones.org/tag/python.html">Python</a>,    <a href="http://doctimjones.org/tag/data-science.html">Data Science</a>,    <a href="http://doctimjones.org/tag/docker.html">Docker</a>,    <a href="http://doctimjones.org/tag/spark.html">Spark</a>,    <a href="http://doctimjones.org/tag/cloud-9-ide.html">Cloud 9 IDE</a>,    <a href="http://doctimjones.org/tag/jupyter.html">Jupyter</a>,    <a href="http://doctimjones.org/tag/pandas.html">Pandas</a>,    <a href="http://doctimjones.org/tag/google-compute.html">Google Compute</a>,    <a href="http://doctimjones.org/tag/ssh.html">SSH</a>,    <a href="http://doctimjones.org/tag/control-theory.html">Control Theory</a>,    <a href="http://doctimjones.org/tag/stochastic.html">Stochastic</a>,    <a href="http://doctimjones.org/tag/aws.html">AWS</a>,    <a href="http://doctimjones.org/tag/chef.html">Chef</a>,    <a href="http://doctimjones.org/tag/cloudformation.html">Cloudformation</a>,    <a href="http://doctimjones.org/tag/math.html">Math</a>,    <a href="http://doctimjones.org/tag/physics.html">Physics</a>,    <a href="http://doctimjones.org/tag/thesis.html">Thesis</a>,    <a href="http://doctimjones.org/tag/linux.html">Linux</a>,    <a href="http://doctimjones.org/tag/networking.html">Networking</a>  </section>
+
+
+    <section>
+        <h1>Social</h1>
+        <ul>
+            <li><a href="https://twitter.com/doctimjones" target="_blank">Twitter</a></li>
+            <li><a href="https://www.linkedin.com/in/timothy-jones-3a60814b" target="_blank">Linked In</a></li>
+        </ul>
+    </section>
+    <section>
+        <h1>Blogroll</h1>
+        <ul>
+            <li><a href="http://getpelican.com/" target="_blank">Pelican</a></li>
+            <li><a href="http://python.org/" target="_blank">Python.org</a></li>
+            <li><a href="http://jinja.pocoo.org/" target="_blank">Jinja2</a></li>
+        </ul>
+    </section>
+
+</aside>    </div>
+  </div>
+  <footer role="contentinfo"><p>
+    Copyright &copy;  2016&ndash;2017  Tim Jones &mdash;
+  <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
+</p></footer>
+  <script src="http://doctimjones.org/theme/js/modernizr-2.0.js"></script>
+  <script src="http://doctimjones.org/theme/js/ender.js"></script>
+  <script src="http://doctimjones.org/theme/js/octopress.js" type="text/javascript"></script>
+</body>
+</html>

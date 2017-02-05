@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/mathematics-systems.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-31T20:27:00-05:00</updated><entry><title>Bize sized stochastic control theory</title><link href="http://doctimjones.org/bize-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bize-sized-stochastic-control-theory.html</id><summary type="html">&lt;h3&gt;Theory vs. on the ground&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;Deterministic&lt;/em&gt; and &lt;em&gt;stochastic&lt;/em&gt; control theory both approach the same general problem of
+preventing unwanted behaviors of a system by controlling input variables. The deterministic
+variation assumes everything is known or at least knowable and predictable in such a way that
+given a snapshot of a system, with the proper analysis and with the proper system (i.e. a
+system which &lt;em&gt;can&lt;/em&gt; be controlled, doesn't have catastrophe points) we can control it in
+perpetuity. &lt;strong&gt;Stochastic&lt;/strong&gt; control theory essentially expands control theory to deal with
+systems which have real-world behavior-that is, systems which do not behave ideally and
+are subject to random variations in behavior (though those variations are perturbations
+to an otherwise systematic behavior). Here, we take a quick bite-sized look at an example.&lt;/p&gt;
+&lt;h4&gt;An example&lt;/h4&gt;
+&lt;p&gt;Take a look at the system defined by&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\frac{dx}{dt} = u\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x(0) = 1\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where we seek to minimize the function&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h5&gt;What does it correspond to?&lt;/h5&gt;
+&lt;p&gt;Firstly, it is important to understand that &lt;span class="math"&gt;\(u\)&lt;/span&gt; is not necessarily a constant. In fact, if &lt;span class="math"&gt;\(J\)&lt;/span&gt; is
+somehow an expression of some idealized behavior, (e.g. minimize polution output), then choosing
+&lt;span class="math"&gt;\(u\)&lt;/span&gt; to be a constant would be a very bad idea as &lt;span class="math"&gt;\(J \rightarrow \infty\)&lt;/span&gt;. &lt;/p&gt;
+&lt;h5&gt;Finding u&lt;/h5&gt;
+&lt;p&gt;So let's now try to find a &lt;span class="math"&gt;\(u\)&lt;/span&gt; that would minimize &lt;span class="math"&gt;\(J\)&lt;/span&gt;. First, re-write &lt;span class="math"&gt;\(J\)&lt;/span&gt; as&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t) \right] dt\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and then we note that&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\int^{T}_0 \left[ x^2(t) + u^2(t) \right] dt = x^2(0) - x^2(T) + \int^{T}_0 \left[ x(t) + \dot{x}(t) \right]^2 dt\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Let's find the minima of this with respect to &lt;span class="math"&gt;\(d/d(\dot{x})\)&lt;/span&gt;, setting the result to zero, to find that&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x(t) = - \dot{x}(t)\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;We can look at this as an open loop control, such that we solve to find that &lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(u(t) = -e^{-t}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
+and use &lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\dot{x}{t} = -x(t)\)&lt;/span&gt;, &lt;/p&gt;
+&lt;p&gt;e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter &lt;span class="math"&gt;\(x\)&lt;/span&gt; at time &lt;span class="math"&gt;\(t\)&lt;/span&gt; as dictated by the relation:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\delta x = -x(t) \delta t\)&lt;/span&gt;. &lt;/p&gt;
+&lt;h5&gt;What is the difference?&lt;/h5&gt;
+&lt;p&gt;For a deterministic system, the exponent we found for &lt;span class="math"&gt;\(u\)&lt;/span&gt; seems like a great solution &lt;strong&gt;if&lt;/strong&gt; it can be
+designed into the system. But what happens if we have stochastic noise?&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' }, Macros: {} }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="Control Theory"></category><category term="Stochastic"></category><category term="Python"></category></entry></feed>

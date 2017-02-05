@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones - Math</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/math.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:/integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">
-&lt;div class="cell border-box-sizing code_cell rendered"&gt;
-&lt;div class="input"&gt;</summary><content type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/math.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -1006,10 +1004,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="056d5713-a107-43e3-84ff-ca3c77b8e00c"&gt;&lt;/div&gt;
+&lt;div id="891b739e-6ae3-41cb-a4b2-29c0b0e8c99f"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#056d5713-a107-43e3-84ff-ca3c77b8e00c');
+var element = $('#891b739e-6ae3-41cb-a4b2-29c0b0e8c99f');
 
 (function(global) {
   function now() {
@@ -1340,4 +1338,4 @@ var element = $('#056d5713-a107-43e3-84ff-ca3c77b8e00c');
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</content><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry></feed>
+</summary><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry></feed>

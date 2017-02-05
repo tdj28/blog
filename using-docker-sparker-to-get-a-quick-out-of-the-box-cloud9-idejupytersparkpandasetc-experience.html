@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience &mdash; doctimjones</title>
+  <meta name="author" content="Tim Jones">
+
+
+
+
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link href="http://doctimjones.org/favicon.png" rel="icon">
+
+  <link href="http://doctimjones.org/theme/css/main.css" media="screen, projection"
+        rel="stylesheet" type="text/css">
+
+  <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic"
+        rel="stylesheet" type="text/css">
+  <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic"
+        rel="stylesheet" type="text/css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script></head>
+
+<body>
+  <header role="banner"><hgroup>
+  <h1><a href="http://doctimjones.org/">doctimjones</a></h1>
+</hgroup></header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+</ul>
+
+
+<ul class="main-navigation">
+      <li >
+        <a href="http://doctimjones.org/category/computer-science.html">Computer science</a>
+      </li>
+      <li class="active">
+        <a href="http://doctimjones.org/category/data-science.html">Data science</a>
+      </li>
+      <li >
+        <a href="http://doctimjones.org/category/devops.html">Devops</a>
+      </li>
+      <li >
+        <a href="http://doctimjones.org/category/math.html">Math</a>
+      </li>
+      <li >
+        <a href="http://doctimjones.org/category/mathematics-systems.html">Mathematics, systems</a>
+      </li>
+</ul></nav>
+  <div id="main">
+    <div id="content">
+<div>
+  <article class="hentry" role="article">
+<header>
+      <h1 class="entry-title">Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</h1>
+    <p class="meta">
+<time datetime="2017-02-04T23:27:00-05:00" pubdate>Sat 04 February 2017</time>    </p>
+</header>
+
+  <div class="entry-content"><h3>Background</h3>
+<p>Jupiter notebooks (iPython notebooks) is a
+convenient and powerful tools for research.
+Setting up an entire workstation with all
+the right packages, and extras such as Spark,
+can be a steep hill to climb. This entry
+shows you how to use docker-sparker to
+quickly get a workstation up and running
+so that you can focus on the more interesting
+task of research. This workstation will come packed
+With many great Python tools and a Cloud 9 IDE interface.</p>
+<h3>Getting up and running</h3>
+<h4>Quick overview</h4>
+<p>First you will need to <a href="https://docs.docker.com/engine/installation/">install Docker</a>
+on your workstation. That is pretty easy to do.
+You will also need to <a href="https://docs.docker.com/compose/install/">install docker-compose</a>.
+I would highly recommend you install docker-compose
+from the official installation instructions <a href="https://docs.docker.com/compose/install/">here</a>.</p>
+<p>If this is good enough to get you started, then you can
+skip the next section.</p>
+<h4>Working remote-install example: Google Compute Engine</h4>
+<p>In this example we will demonstrate how to install
+Docker on a Google cloud VM. We will take it step by step.
+We will create a Linux VM in Google's Compute Engine cloud,
+run the docker-sparker container on it, and use ssh tunnel
+to securely connect to our notebook. The result will be that
+can do powerful computations on light laptops, e.g. the
+Macbook 12" by treating your workstation as a front end
+interface for your more powerful backend server which is
+hosted in the cloud.</p>
+<h5>Starting your VM</h5>
+<blockquote>
+<p>Warning! If you follow these steps, you will get a charge from Google, launching a virtual machine in Google's cloud is a paid service. You can use docker-sparker without paying, of course, if your laptop is powerful enough (you have 2gb of RAM free).</p>
+</blockquote>
+<ul>
+<li>Navigate to the <a href="https://cloud.google.com/compute/">Google Compute Engine Console</a>. You'll want to
+be logged into your Google Account. The VM you launch
+will be tied to your Google Account such that you can ssh
+into it from your webrowser by being logged into your account.</li>
+<li>Click on "View My Console" (you may have to go through some sign up processes first).</li>
+</ul>
+<p><img alt="view console" src="assets/JupyterHowTo-a9b80.png" /></p>
+<ul>
+<li>Select "Create Instance":</li>
+</ul>
+<p><img alt="create instance" src="assets/JupyterHowTo-876fe.png" /></p>
+<ul>
+<li>In the next menu, you can customize what size of VM you'd like:</li>
+</ul>
+<p><img alt="view console" src="assets/JupyterHowTo-4ac03.png" /></p>
+<p>The great thing here is that Google will give you a price
+estimate so you can select various configurations of vCPU/RAM.
+For this project, two CPUs should be enough for many purposes.
+It is vCPU that drives the cost, and you can customize and
+increase the RAM size without greatly increasing the cost.
+* The default disk size of 10GB and standard disk is not
+recommended, I'd suggest upgrading to 15GB SSD if you
+anticipate having larger data sets. Click on the "change"
+button in the Boot disk section and select Ubuntu 16.04
+and change the disk type to SSD and the size to what you
+feel will work best for you:</p>
+<p><img alt="disk size" src="assets/JupyterHowTo-b5163.png" /></p>
+<ul>
+<li>Finally, hit create to create your new VM. The meter starts
+running and your billing will begin.</li>
+</ul>
+<p><img alt="select create" src="assets/JupyterHowTo-fa523.png" /></p>
+<ul>
+<li>You will be taken to a VM dashboard:</li>
+</ul>
+<p><img alt="vm menu" src="assets/JupyterHowTo-8cfa1.png" /></p>
+<p>Click on SSH and a window will pop up with a built-in ssh
+terminal:</p>
+<p><img alt="ssh terminal" src="assets/JupyterHowTo-1d081.png" /></p>
+<ul>
+<li>Now we can install Docker! First, let's update our
+system:</li>
+</ul>
+<div class="highlight"><pre><span></span>sudo apt-get update
+sudo apt-get upgrade
+</pre></div>
+
+
+<ul>
+<li>Next follow the official Docker advised steps to install
+Docker in Ubuntu 16.04: <a href="https://docs.docker.com/engine/installation/linux/ubuntu/">here</a></li>
+<li>And then for Docker compose: <a href="https://docs.docker.com/compose/install/">here</a></li>
+</ul>
+<p>We are ready to join the main instructions for installing docker-sparker, but first a note about connecting to your Cloud 9 IDE and Jupyter notebook from your cloud VM. You can do this in two ways. You can manipulate the firewall for your VM
+and allow ports 9999 and 18888 to be open to your IP address.
+If you share your IP address with others, I do not suggest
+you go that route. The alternative is to SSH tunnel into
+your instance to allow a secure connection. If you are on a
+Linux or Mac workstation, you are in great luck and ssh
+is easy to get access to. If you are using Windows, you'll
+need to install an SSH client of your choice or if you have
+Windows 10 Pro, Linux Userspace for Windows is an option for
+ssh out of the box.</p>
+<p>Opening a terminal, you would create a key pair, if you don't
+already have one:</p>
+<div class="highlight"><pre><span></span>ssh-keygen -t rsa
+</pre></div>
+
+
+<p>and follow those prompts. You will then want to copy the
+contents of your public key (you can easily see that from
+the comand line by running <code>cat ~/.ssh/id_rsa.pub</code>) and
+place that inside a file on the VM server located at
+<code>~/.ssh/authorized_keys</code>:</p>
+<p><img alt="authorized keys" src="assets/JupyterHowTo-b2eaa.png" /></p>
+<p><code>nano ~/.ssh/authorized_keys</code> and scroll down to the
+bottom to make a new line and paste your <code>id_rsa.pub</code>
+contents and then <code>Cntrl-x</code> to save. One last thing
+before we are ready to go: get the ip address of your
+VM. This is not going to be guaranteed to be static
+unless you pay a little extra for a static IP, but you'll
+find that it doesn't change very much. From the VM ssh
+window run <code>curl ifconfig.io</code> and that is your new IP.
+Let's say your IP is 8.8.8.8 (it own't be but just for
+the sake of the walkthrough we will pretend it is).
+Then, from you workstation, launch a tunnel into your VM</p>
+<div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="o">-</span><span class="n">L</span> <span class="mi">9999</span><span class="o">:</span><span class="nl">localhost</span><span class="p">:</span><span class="mi">9999</span> <span class="o">-</span><span class="n">L</span> <span class="mi">18888</span><span class="o">:</span><span class="nl">localhost</span><span class="p">:</span><span class="mi">18888</span> <span class="n">username</span><span class="mf">@8.8.8.8</span>
+</pre></div>
+
+
+<p>where username is the username of your workstation that
+can be found on the left of the <code>@</code> symbol in your ssh
+window command prompt line (the part blurred below):</p>
+<p><img alt="get username" src="assets/JupyterHowTo-b1678.png" /></p>
+<p>What this does is <em>tunnel</em> the ports that docker-sparker will
+be using to serve Cloud 9 IDE (9999) and Jupyter notebook
+(18888) through your SSH connection such that you can access
+the ports at <em>localhost</em> rather than remotely. That is,
+instead of pointing your browser at:</p>
+<p><a href="">http://YOUR.VM.IP:18888</a></p>
+<p>you will point to</p>
+<p><a href="http://localhost:18888">http://localhost:18888</a></p>
+<p>which will point to the port tunneled locally.</p>
+<h4>Getting docker-sparker up and running</h4>
+<ul>
+<li>Install git on the machine you want to be running
+docker-sparker on. On a linux machine:</li>
+</ul>
+<div class="highlight"><pre><span></span>sudo apt-get install git
+</pre></div>
+
+
+<ul>
+<li>Clone the docker-sparker repo:</li>
+</ul>
+<div class="highlight"><pre><span></span>git clone https://github.com/doctimjones/docker-sparker.git
+</pre></div>
+
+
+<ul>
+<li>Move into the workstation directory:</li>
+</ul>
+<div class="highlight"><pre><span></span>cd docker-sparker/workstation-container
+</pre></div>
+
+
+<ul>
+<li>Modify the <code>docker-compose.yaml</code> file as you'd like,
+in particular, you'll want to point it to a workspace.
+If you use the default, create a <code>scratch</code> folder
+(<code>mdkir ~/scratch</code>):</li>
+</ul>
+<div class="highlight"><pre><span></span>version: &#39;2&#39;
+services:
+  workstation:
+    build:
+      context: ../workstation-container/
+    ports:
+     - &quot;127.0.0.1:9999:9999&quot;
+     - &quot;127.0.0.1:18888:8888&quot;
+    depends_on:
+     - spark-base
+    image: workstation-container
+    volumes:
+     - $HOME/scratch:/usr/local/develop
+     - $HOME/.ssh:/root/.ssh
+     - $HOME/.aws:/root/.aws
+     - $HOME/.config:/root/.config
+     - $HOME/.gitconfig:/root/.gitconfig
+  spark-base:
+    build:
+      context: ../base-container/
+</pre></div>
+
+
+<p>If you are using an ssh tunnel to connect or running it on
+your local workstation, the ports configuration in the above
+yaml works fine; if you are going to be connecting remotely
+and opening firewall ports, then remove the "127.0.0.1:"
+prefix on the ports entries.</p>
+<blockquote>
+<p>Docker and UFW warning: If you are using UFW to set your
+firewall on your machine on Ubuntu 16.04, Docker will override
+UFW and leave ports 9999 and 18888 open to the world even if you
+block them with UFW. You can fix this behavior by creating
+the file <code>/etc/docker/daemon.json</code> with contents <code>{
+    "iptables": false
+}</code> and restarting Docker and UFW.</p>
+</blockquote>
+<ul>
+<li>Run <code>docker-compose up -d</code>. This will take quite a bit of time
+to build, possibly up to an hour or more depending on your system
+capacity.</li>
+</ul>
+<p>Once it has successfully built the containers and started them,
+you can now access your Cloud 9 IDE at:</p>
+<p><a href="http://localhost:9999">http://localhost:9999</a></p>
+<p>and your Jupyter notebook at</p>
+<p><a href="httpd://localhost:18888">http://localhost:18888</a>.</p>
+<p>If you are using a remote host, simply replace <code>localhost</code> in
+the links above with that hosts FQDN or IP Address.</p>
+<p>You should see a Cloud 9 IDE at <a href="http://localhost:9999">http://localhost:9999</a>:</p>
+<p><img alt="cloud9" src="assets/JupyterHowTo-33389.png" /></p>
+<p>and a Jupyter notebook at <a href="httpd://localhost:18888">http://localhost:18888</a>:</p>
+<p><img alt="jupyter" src="assets/JupyterHowTo-22dfd.png" /></p>
+<p>Now do some great development and research!</p></div>
+    <footer>
+<p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">
+        Tim Jones
+    </span>
+  </span>
+<time datetime="2017-02-04T23:27:00-05:00" pubdate>Sat 04 February 2017</time>  <span class="categories">
+    <a class='category' href='http://doctimjones.org/category/data-science.html'>Data Science</a>
+  </span>
+  <span class="categories">
+    <a class="category" href="http://doctimjones.org/tag/devops.html">DevOps</a>,    <a class="category" href="http://doctimjones.org/tag/python.html">Python</a>,    <a class="category" href="http://doctimjones.org/tag/data-science.html">Data Science</a>,    <a class="category" href="http://doctimjones.org/tag/docker.html">Docker</a>,    <a class="category" href="http://doctimjones.org/tag/spark.html">Spark</a>,    <a class="category" href="http://doctimjones.org/tag/cloud-9-ide.html">Cloud 9 IDE</a>,    <a class="category" href="http://doctimjones.org/tag/jupyter.html">Jupyter</a>,    <a class="category" href="http://doctimjones.org/tag/pandas.html">Pandas</a>,    <a class="category" href="http://doctimjones.org/tag/google-compute.html">Google Compute</a>,    <a class="category" href="http://doctimjones.org/tag/ssh.html">SSH</a>  </span>
+</p><div class="sharing">
+</div>    </footer>
+  </article>
+
+</div>
+<aside class="sidebar">
+  <section>
+    <h1>Recent Posts</h1>
+    <ul id="recent_posts">
+      <li class="post">
+          <a href="http://doctimjones.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html">Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/bize-sized-stochastic-control-theory.html">Bize sized stochastic control theory</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/aws-virtual-machines-cook-thyself-part-i.html">AWS Virtual Machines, cook thyself! Part I</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html">Python uses operational chaining for boolean comparisons</a>
+      </li>
+      <li class="post">
+          <a href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html">Integrating the Rossler System with iPython Notebooks</a>
+      </li>
+    </ul>
+  </section>
+  <section>
+      
+    <h1>Categories</h1>
+    <ul id="recent_posts">
+        <li><a href="http://doctimjones.org/category/computer-science.html">Computer Science</a></li>
+        <li><a href="http://doctimjones.org/category/data-science.html">Data Science</a></li>
+        <li><a href="http://doctimjones.org/category/devops.html">DevOps</a></li>
+        <li><a href="http://doctimjones.org/category/math.html">Math</a></li>
+        <li><a href="http://doctimjones.org/category/mathematics-systems.html">Mathematics, Systems</a></li>
+    </ul>
+  </section>
+ 
+
+  <section>
+  <h1>Tags</h1>
+    <a href="http://doctimjones.org/tag/devops.html">DevOps</a>,    <a href="http://doctimjones.org/tag/python.html">Python</a>,    <a href="http://doctimjones.org/tag/data-science.html">Data Science</a>,    <a href="http://doctimjones.org/tag/docker.html">Docker</a>,    <a href="http://doctimjones.org/tag/spark.html">Spark</a>,    <a href="http://doctimjones.org/tag/cloud-9-ide.html">Cloud 9 IDE</a>,    <a href="http://doctimjones.org/tag/jupyter.html">Jupyter</a>,    <a href="http://doctimjones.org/tag/pandas.html">Pandas</a>,    <a href="http://doctimjones.org/tag/google-compute.html">Google Compute</a>,    <a href="http://doctimjones.org/tag/ssh.html">SSH</a>,    <a href="http://doctimjones.org/tag/control-theory.html">Control Theory</a>,    <a href="http://doctimjones.org/tag/stochastic.html">Stochastic</a>,    <a href="http://doctimjones.org/tag/aws.html">AWS</a>,    <a href="http://doctimjones.org/tag/chef.html">Chef</a>,    <a href="http://doctimjones.org/tag/cloudformation.html">Cloudformation</a>,    <a href="http://doctimjones.org/tag/math.html">Math</a>,    <a href="http://doctimjones.org/tag/physics.html">Physics</a>,    <a href="http://doctimjones.org/tag/thesis.html">Thesis</a>,    <a href="http://doctimjones.org/tag/linux.html">Linux</a>,    <a href="http://doctimjones.org/tag/networking.html">Networking</a>  </section>
+
+
+    <section>
+        <h1>Social</h1>
+        <ul>
+            <li><a href="https://twitter.com/doctimjones" target="_blank">Twitter</a></li>
+            <li><a href="https://www.linkedin.com/in/timothy-jones-3a60814b" target="_blank">Linked In</a></li>
+        </ul>
+    </section>
+    <section>
+        <h1>Blogroll</h1>
+        <ul>
+            <li><a href="http://getpelican.com/" target="_blank">Pelican</a></li>
+            <li><a href="http://python.org/" target="_blank">Python.org</a></li>
+            <li><a href="http://jinja.pocoo.org/" target="_blank">Jinja2</a></li>
+        </ul>
+    </section>
+
+</aside>    </div>
+  </div>
+  <footer role="contentinfo"><p>
+    Copyright &copy;  2016&ndash;2017  Tim Jones &mdash;
+  <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
+</p></footer>
+  <script src="http://doctimjones.org/theme/js/modernizr-2.0.js"></script>
+  <script src="http://doctimjones.org/theme/js/ender.js"></script>
+  <script src="http://doctimjones.org/theme/js/octopress.js" type="text/javascript"></script>
+</body>
+</html>

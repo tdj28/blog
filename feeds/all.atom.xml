@@ -1,5 +1,318 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/all.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-28T17:00:00-05:00</updated><entry><title>AWS Virtual Machines, cook thyself! Part I</title><link href="http://doctimjones.org/aws-virtual-machines-cook-thyself-part-i.html" rel="alternate"></link><published>2017-01-28T17:00:00-05:00</published><updated>2017-01-28T17:00:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-28:/aws-virtual-machines-cook-thyself-part-i.html</id><summary type="html">&lt;p&gt;AWS tools enable the creation of self-cooking boxes, using chef-solo, and Cloudformation to automate deployment.&lt;/p&gt;</summary><content type="html">&lt;h3&gt;Motivation&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/all.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-02-04T23:27:00-05:00</updated><entry><title>Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</title><link href="http://doctimjones.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html" rel="alternate"></link><published>2017-02-04T23:27:00-05:00</published><updated>2017-02-04T23:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-04:using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html</id><summary type="html">&lt;h3&gt;Background&lt;/h3&gt;
+&lt;p&gt;Jupiter notebooks (iPython notebooks) is a
+convenient and powerful tools for research.
+Setting up an entire workstation with all
+the right packages, and extras such as Spark,
+can be a steep hill to climb. This entry
+shows you how to use docker-sparker to
+quickly get a workstation up and running
+so that you can focus on the more interesting
+task of research. This workstation will come packed
+With many great Python tools and a Cloud 9 IDE interface.&lt;/p&gt;
+&lt;h3&gt;Getting up and running&lt;/h3&gt;
+&lt;h4&gt;Quick overview&lt;/h4&gt;
+&lt;p&gt;First you will need to &lt;a href="https://docs.docker.com/engine/installation/"&gt;install Docker&lt;/a&gt;
+on your workstation. That is pretty easy to do.
+You will also need to &lt;a href="https://docs.docker.com/compose/install/"&gt;install docker-compose&lt;/a&gt;.
+I would highly recommend you install docker-compose
+from the official installation instructions &lt;a href="https://docs.docker.com/compose/install/"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If this is good enough to get you started, then you can
+skip the next section.&lt;/p&gt;
+&lt;h4&gt;Working remote-install example: Google Compute Engine&lt;/h4&gt;
+&lt;p&gt;In this example we will demonstrate how to install
+Docker on a Google cloud VM. We will take it step by step.
+We will create a Linux VM in Google's Compute Engine cloud,
+run the docker-sparker container on it, and use ssh tunnel
+to securely connect to our notebook. The result will be that
+can do powerful computations on light laptops, e.g. the
+Macbook 12" by treating your workstation as a front end
+interface for your more powerful backend server which is
+hosted in the cloud.&lt;/p&gt;
+&lt;h5&gt;Starting your VM&lt;/h5&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Warning! If you follow these steps, you will get a charge from Google, launching a virtual machine in Google's cloud is a paid service. You can use docker-sparker without paying, of course, if your laptop is powerful enough (you have 2gb of RAM free).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Navigate to the &lt;a href="https://cloud.google.com/compute/"&gt;Google Compute Engine Console&lt;/a&gt;. You'll want to
+be logged into your Google Account. The VM you launch
+will be tied to your Google Account such that you can ssh
+into it from your webrowser by being logged into your account.&lt;/li&gt;
+&lt;li&gt;Click on "View My Console" (you may have to go through some sign up processes first).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="view console" src="assets/JupyterHowTo-a9b80.png" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Select "Create Instance":&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="create instance" src="assets/JupyterHowTo-876fe.png" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In the next menu, you can customize what size of VM you'd like:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="view console" src="assets/JupyterHowTo-4ac03.png" /&gt;&lt;/p&gt;
+&lt;p&gt;The great thing here is that Google will give you a price
+estimate so you can select various configurations of vCPU/RAM.
+For this project, two CPUs should be enough for many purposes.
+It is vCPU that drives the cost, and you can customize and
+increase the RAM size without greatly increasing the cost.
+* The default disk size of 10GB and standard disk is not
+recommended, I'd suggest upgrading to 15GB SSD if you
+anticipate having larger data sets. Click on the "change"
+button in the Boot disk section and select Ubuntu 16.04
+and change the disk type to SSD and the size to what you
+feel will work best for you:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="disk size" src="assets/JupyterHowTo-b5163.png" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Finally, hit create to create your new VM. The meter starts
+running and your billing will begin.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="select create" src="assets/JupyterHowTo-fa523.png" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You will be taken to a VM dashboard:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="vm menu" src="assets/JupyterHowTo-8cfa1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Click on SSH and a window will pop up with a built-in ssh
+terminal:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="ssh terminal" src="assets/JupyterHowTo-1d081.png" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Now we can install Docker! First, let's update our
+system:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get update
+sudo apt-get upgrade
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Next follow the official Docker advised steps to install
+Docker in Ubuntu 16.04: &lt;a href="https://docs.docker.com/engine/installation/linux/ubuntu/"&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;And then for Docker compose: &lt;a href="https://docs.docker.com/compose/install/"&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We are ready to join the main instructions for installing docker-sparker, but first a note about connecting to your Cloud 9 IDE and Jupyter notebook from your cloud VM. You can do this in two ways. You can manipulate the firewall for your VM
+and allow ports 9999 and 18888 to be open to your IP address.
+If you share your IP address with others, I do not suggest
+you go that route. The alternative is to SSH tunnel into
+your instance to allow a secure connection. If you are on a
+Linux or Mac workstation, you are in great luck and ssh
+is easy to get access to. If you are using Windows, you'll
+need to install an SSH client of your choice or if you have
+Windows 10 Pro, Linux Userspace for Windows is an option for
+ssh out of the box.&lt;/p&gt;
+&lt;p&gt;Opening a terminal, you would create a key pair, if you don't
+already have one:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ssh-keygen -t rsa
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and follow those prompts. You will then want to copy the
+contents of your public key (you can easily see that from
+the comand line by running &lt;code&gt;cat ~/.ssh/id_rsa.pub&lt;/code&gt;) and
+place that inside a file on the VM server located at
+&lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="authorized keys" src="assets/JupyterHowTo-b2eaa.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;nano ~/.ssh/authorized_keys&lt;/code&gt; and scroll down to the
+bottom to make a new line and paste your &lt;code&gt;id_rsa.pub&lt;/code&gt;
+contents and then &lt;code&gt;Cntrl-x&lt;/code&gt; to save. One last thing
+before we are ready to go: get the ip address of your
+VM. This is not going to be guaranteed to be static
+unless you pay a little extra for a static IP, but you'll
+find that it doesn't change very much. From the VM ssh
+window run &lt;code&gt;curl ifconfig.io&lt;/code&gt; and that is your new IP.
+Let's say your IP is 8.8.8.8 (it own't be but just for
+the sake of the walkthrough we will pretend it is).
+Then, from you workstation, launch a tunnel into your VM&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;L&lt;/span&gt; &lt;span class="mi"&gt;9999&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nl"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;9999&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;L&lt;/span&gt; &lt;span class="mi"&gt;18888&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nl"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;18888&lt;/span&gt; &lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="mf"&gt;@8.8.8.8&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;where username is the username of your workstation that
+can be found on the left of the &lt;code&gt;@&lt;/code&gt; symbol in your ssh
+window command prompt line (the part blurred below):&lt;/p&gt;
+&lt;p&gt;&lt;img alt="get username" src="assets/JupyterHowTo-b1678.png" /&gt;&lt;/p&gt;
+&lt;p&gt;What this does is &lt;em&gt;tunnel&lt;/em&gt; the ports that docker-sparker will
+be using to serve Cloud 9 IDE (9999) and Jupyter notebook
+(18888) through your SSH connection such that you can access
+the ports at &lt;em&gt;localhost&lt;/em&gt; rather than remotely. That is,
+instead of pointing your browser at:&lt;/p&gt;
+&lt;p&gt;&lt;a href=""&gt;http://YOUR.VM.IP:18888&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;you will point to&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;which will point to the port tunneled locally.&lt;/p&gt;
+&lt;h4&gt;Getting docker-sparker up and running&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Install git on the machine you want to be running
+docker-sparker on. On a linux machine:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install git
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Clone the docker-sparker repo:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/doctimjones/docker-sparker.git
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Move into the workstation directory:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cd docker-sparker/workstation-container
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Modify the &lt;code&gt;docker-compose.yaml&lt;/code&gt; file as you'd like,
+in particular, you'll want to point it to a workspace.
+If you use the default, create a &lt;code&gt;scratch&lt;/code&gt; folder
+(&lt;code&gt;mdkir ~/scratch&lt;/code&gt;):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;version: &amp;#39;2&amp;#39;
+services:
+  workstation:
+    build:
+      context: ../workstation-container/
+    ports:
+     - &amp;quot;127.0.0.1:9999:9999&amp;quot;
+     - &amp;quot;127.0.0.1:18888:8888&amp;quot;
+    depends_on:
+     - spark-base
+    image: workstation-container
+    volumes:
+     - $HOME/scratch:/usr/local/develop
+     - $HOME/.ssh:/root/.ssh
+     - $HOME/.aws:/root/.aws
+     - $HOME/.config:/root/.config
+     - $HOME/.gitconfig:/root/.gitconfig
+  spark-base:
+    build:
+      context: ../base-container/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If you are using an ssh tunnel to connect or running it on
+your local workstation, the ports configuration in the above
+yaml works fine; if you are going to be connecting remotely
+and opening firewall ports, then remove the "127.0.0.1:"
+prefix on the ports entries.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Docker and UFW warning: If you are using UFW to set your
+firewall on your machine on Ubuntu 16.04, Docker will override
+UFW and leave ports 9999 and 18888 open to the world even if you
+block them with UFW. You can fix this behavior by creating
+the file &lt;code&gt;/etc/docker/daemon.json&lt;/code&gt; with contents &lt;code&gt;{
+    "iptables": false
+}&lt;/code&gt; and restarting Docker and UFW.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Run &lt;code&gt;docker-compose up -d&lt;/code&gt;. This will take quite a bit of time
+to build, possibly up to an hour or more depending on your system
+capacity.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Once it has successfully built the containers and started them,
+you can now access your Cloud 9 IDE at:&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://localhost:9999"&gt;http://localhost:9999&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;and your Jupyter notebook at&lt;/p&gt;
+&lt;p&gt;&lt;a href="httpd://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you are using a remote host, simply replace &lt;code&gt;localhost&lt;/code&gt; in
+the links above with that hosts FQDN or IP Address.&lt;/p&gt;
+&lt;p&gt;You should see a Cloud 9 IDE at &lt;a href="http://localhost:9999"&gt;http://localhost:9999&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="cloud9" src="assets/JupyterHowTo-33389.png" /&gt;&lt;/p&gt;
+&lt;p&gt;and a Jupyter notebook at &lt;a href="httpd://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="jupyter" src="assets/JupyterHowTo-22dfd.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry><entry><title>Bize sized stochastic control theory</title><link href="http://doctimjones.org/bize-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bize-sized-stochastic-control-theory.html</id><summary type="html">&lt;h3&gt;Theory vs. on the ground&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;Deterministic&lt;/em&gt; and &lt;em&gt;stochastic&lt;/em&gt; control theory both approach the same general problem of
+preventing unwanted behaviors of a system by controlling input variables. The deterministic
+variation assumes everything is known or at least knowable and predictable in such a way that
+given a snapshot of a system, with the proper analysis and with the proper system (i.e. a
+system which &lt;em&gt;can&lt;/em&gt; be controlled, doesn't have catastrophe points) we can control it in
+perpetuity. &lt;strong&gt;Stochastic&lt;/strong&gt; control theory essentially expands control theory to deal with
+systems which have real-world behavior-that is, systems which do not behave ideally and
+are subject to random variations in behavior (though those variations are perturbations
+to an otherwise systematic behavior). Here, we take a quick bite-sized look at an example.&lt;/p&gt;
+&lt;h4&gt;An example&lt;/h4&gt;
+&lt;p&gt;Take a look at the system defined by&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\frac{dx}{dt} = u\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x(0) = 1\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where we seek to minimize the function&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h5&gt;What does it correspond to?&lt;/h5&gt;
+&lt;p&gt;Firstly, it is important to understand that &lt;span class="math"&gt;\(u\)&lt;/span&gt; is not necessarily a constant. In fact, if &lt;span class="math"&gt;\(J\)&lt;/span&gt; is
+somehow an expression of some idealized behavior, (e.g. minimize polution output), then choosing
+&lt;span class="math"&gt;\(u\)&lt;/span&gt; to be a constant would be a very bad idea as &lt;span class="math"&gt;\(J \rightarrow \infty\)&lt;/span&gt;. &lt;/p&gt;
+&lt;h5&gt;Finding u&lt;/h5&gt;
+&lt;p&gt;So let's now try to find a &lt;span class="math"&gt;\(u\)&lt;/span&gt; that would minimize &lt;span class="math"&gt;\(J\)&lt;/span&gt;. First, re-write &lt;span class="math"&gt;\(J\)&lt;/span&gt; as&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t) \right] dt\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and then we note that&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\int^{T}_0 \left[ x^2(t) + u^2(t) \right] dt = x^2(0) - x^2(T) + \int^{T}_0 \left[ x(t) + \dot{x}(t) \right]^2 dt\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Let's find the minima of this with respect to &lt;span class="math"&gt;\(d/d(\dot{x})\)&lt;/span&gt;, setting the result to zero, to find that&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(x(t) = - \dot{x}(t)\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;We can look at this as an open loop control, such that we solve to find that &lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(u(t) = -e^{-t}\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
+and use &lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\dot{x}{t} = -x(t)\)&lt;/span&gt;, &lt;/p&gt;
+&lt;p&gt;e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter &lt;span class="math"&gt;\(x\)&lt;/span&gt; at time &lt;span class="math"&gt;\(t\)&lt;/span&gt; as dictated by the relation:&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(\delta x = -x(t) \delta t\)&lt;/span&gt;. &lt;/p&gt;
+&lt;h5&gt;What is the difference?&lt;/h5&gt;
+&lt;p&gt;For a deterministic system, the exponent we found for &lt;span class="math"&gt;\(u\)&lt;/span&gt; seems like a great solution &lt;strong&gt;if&lt;/strong&gt; it can be
+designed into the system. But what happens if we have stochastic noise?&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' }, Macros: {} }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="Control Theory"></category><category term="Stochastic"></category><category term="Python"></category></entry><entry><title>AWS Virtual Machines, cook thyself! Part I</title><link href="http://doctimjones.org/aws-virtual-machines-cook-thyself-part-i.html" rel="alternate"></link><published>2017-01-28T17:00:00-05:00</published><updated>2017-01-28T17:00:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-28:aws-virtual-machines-cook-thyself-part-i.html</id><summary type="html">&lt;h3&gt;Motivation&lt;/h3&gt;
 &lt;p&gt;Cloudformation offers a nice solution to orchestrating infrastructure deployment, but has its limitations. Its built in method for deployment scripts, "User Data", is difficult to maintain and unwieldy for more complicated systems. This walkthrough tutorial shows you how you can use chef, AWS KMS, and AWS Cloudformation together to get the best of both worlds--full automation with Cloudformation coupled with Chef's configuration management. &lt;/p&gt;
 &lt;p&gt;In Part I, we create a chef cookbook to install the Cloud 9 IDE development package on a server.&lt;/p&gt;
 &lt;p&gt;In Part II, we do the same thing using Puppet.&lt;/p&gt;
@@ -603,7 +916,7 @@ include_recipe &amp;#39;c9_ide::supervisor&amp;#39;
 &lt;p&gt;You can find the source code for this recipe on my github account &lt;a href="https://github.com/doctimjones/c9_ide_chef/tree/PartI"&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;h3&gt;Future Steps&lt;/h3&gt;
 &lt;p&gt;We took some shortcuts and avoided some best practices for convenience here. Ideally we would like some unit tests and to pull in more community recipes. For example, the supervisor chef cookbook could be used here instead of dealing with that in a platform case. &lt;/p&gt;
-&lt;p&gt;In the forthcoming Part II, we will use Puppet, a widely used alternative to Chef, to provision a server that runs the Cloud 9 IDE SDK as we have here with Chef.&lt;/p&gt;</content><category term="AWS"></category><category term="Chef"></category><category term="Cloudformation"></category></entry><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-20:/python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;p&gt;It is important to understand Python's use of operational chaining to avoid programming errors&lt;/p&gt;</summary><content type="html">&lt;h4&gt;A Python feature?&lt;/h4&gt;
+&lt;p&gt;In the forthcoming Part II, we will use Puppet, a widely used alternative to Chef, to provision a server that runs the Cloud 9 IDE SDK as we have here with Chef.&lt;/p&gt;</summary><category term="AWS"></category><category term="Chef"></category><category term="Cloudformation"></category></entry><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-20:python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;h4&gt;A Python feature?&lt;/h4&gt;
 &lt;p&gt;A colleague noticed this behavior:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;b&amp;#39; == 0
 False
@@ -697,9 +1010,7 @@ True
 False
 &amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39; == True
 False
-&lt;/pre&gt;&lt;/div&gt;</content><category term="Python"></category></entry><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:/integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">
-&lt;div class="cell border-box-sizing code_cell rendered"&gt;
-&lt;div class="input"&gt;</summary><content type="html">&lt;style type="text/css"&gt;/*!
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Python"></category></entry><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -1704,10 +2015,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="056d5713-a107-43e3-84ff-ca3c77b8e00c"&gt;&lt;/div&gt;
+&lt;div id="891b739e-6ae3-41cb-a4b2-29c0b0e8c99f"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#056d5713-a107-43e3-84ff-ca3c77b8e00c');
+var element = $('#891b739e-6ae3-41cb-a4b2-29c0b0e8c99f');
 
 (function(global) {
   function now() {
@@ -2038,7 +2349,7 @@ var element = $('#056d5713-a107-43e3-84ff-ca3c77b8e00c');
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</content><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://doctimjones.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:/abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;p&gt;Docker comes with a default network, but you can make your own network of unlimited complexity.&lt;/p&gt;</summary><content type="html">&lt;h4&gt;Goal&lt;/h4&gt;
+</summary><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://doctimjones.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;h4&gt;Goal&lt;/h4&gt;
 &lt;p&gt;Network Namespace is a Linux tool that allows for the easy virtualization of network models. While it has plenty of &lt;a href="http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/"&gt;practical uses directly on the hardware&lt;/a&gt;, this will be a quick introduction to how it can be used to create more complex Docker networks that could be extended to modeling, say, the infrastructure of a data center or cloud provider.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://github.com/brandon-rhodes/fopnp/tree/m/playground"&gt;Brandon Rhodes created&lt;/a&gt; a great "playground" for his book &lt;a href="https://github.com/brandon-rhodes/fopnp"&gt;Foundations of Python Network Programming&lt;/a&gt;. Inspired by this example, we will create a small simple netns/docker example that is more bite-sized for those who aren't familiar with these tools. &lt;/p&gt;
 &lt;h4&gt;What is NetNS?&lt;/h4&gt;
@@ -2197,4 +2508,4 @@ ip netns exec levelc ifconfig veth1c 192.168.1.1/24 up
 # ip netns exec levelc ip route list
 
 192.168.1.0/24 dev veth1c  proto kernel  scope link  src 192.168.1.1 
-&lt;/pre&gt;&lt;/div&gt;</content><category term="DevOps"></category><category term="Docker"></category><category term="Linux"></category><category term="Networking"></category></entry></feed>
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="DevOps"></category><category term="Docker"></category><category term="Linux"></category><category term="Networking"></category></entry></feed>
