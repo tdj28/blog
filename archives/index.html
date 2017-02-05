@@ -90,7 +90,7 @@ function getMousePos(canvas, evt){
     };
 }
 
-      function animate(myRectangle,myStar,myPlanet,mousePos,pend,terCtx){
+      function animate(myRectangle,myStar,myPlanet,mousePos,pend){
 
                 var canvas = document.getElementById("myCanvas");
                 var context = canvas.getContext("2d");
@@ -98,7 +98,7 @@ function getMousePos(canvas, evt){
                 var terrain = document.getElementById("terCanvas");
                 var terCtx = terrain.getContext("2d");
                 terCtx.canvas.width = window.innerWidth;
-                
+
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -319,7 +319,7 @@ function getMousePos(canvas, evt){
 
       var mousePos ={x:400,y:60};
       var pend = { j1x: 230, j1y: 45, j1vx:0, j1vy:-1, j2x: 220, j2vx:0, j2y:65, j2vy:0};
-      animate(myRectangle,myStar,myPlanet,mousePos,pend,terCtx);
+      animate(myRectangle,myStar,myPlanet,mousePos,pend);
             };
 
         </script>
