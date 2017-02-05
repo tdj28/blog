@@ -42,7 +42,7 @@
   var theta2= -Math.PI/2;
   var dtheta1;
   var dtheta2;
-  var pivot={x:218, y:34};
+  var pivot={x:218, y:14};
   var g=9.8;
   var L1=0.25;
   var L2=0.15;
@@ -138,7 +138,7 @@ function getMousePos(canvas, evt){
 
                if(mousePos.x > (canvas.width-40) || mousePos.x < 40 || mousePos.y > (canvas.height-10) || mousePos.y < 10){
                          mousePos.x = 400;
-                         mousePos.y = 60;
+                         mousePos.y = 30;
                    }
 
                  context.beginPath();
