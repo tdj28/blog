@@ -109,7 +109,7 @@ function getMousePos(canvas, evt){
                 context.font = "24px sans-serif";
                 context.fillText("Ph.D., Physics", 5, 65);
                 context.font = "10px sans-serif";
-                context.fillText("Random walk, N-Body (with breaking at borders)-mouse = 3rd body", 5, 15);
+                context.fillText("Random walk, N-Body (with breaking at borders)-mouse = 3rd body", 5, 5);
                // flag=flag + 1;
                // }
                 var randomnumber=Math.floor(Math.random()*3);
@@ -127,7 +127,7 @@ function getMousePos(canvas, evt){
 
                 terCtx.beginPath();
                 terCtx.globalCompositeOperation='destination-over';
-                terCtx.rect(myRectangle.x+100, myRectangle.y, 1, 1);
+                terCtx.rect(myRectangle.x+500, myRectangle.y, 1, 1);
                 terCtx.closePath();
                 terCtx.fillStyle = "rgba(235,200,5,0.2)";
                 terCtx.fill();
