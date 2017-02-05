@@ -212,11 +212,11 @@ capacity.&lt;/li&gt;
 you can now access your Cloud 9 IDE at:&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://localhost:9999"&gt;http://localhost:9999&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;and your Jupyter notebook at&lt;/p&gt;
-&lt;p&gt;&lt;a href="httpd://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;If you are using a remote host, simply replace &lt;code&gt;localhost&lt;/code&gt; in
 the links above with that hosts FQDN or IP Address.&lt;/p&gt;
 &lt;p&gt;You should see a Cloud 9 IDE at &lt;a href="http://localhost:9999"&gt;http://localhost:9999&lt;/a&gt;:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="cloud9" src="assets/JupyterHowTo-33389.png" /&gt;&lt;/p&gt;
-&lt;p&gt;and a Jupyter notebook at &lt;a href="httpd://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;and a Jupyter notebook at &lt;a href="http://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="jupyter" src="assets/JupyterHowTo-22dfd.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry></feed>
