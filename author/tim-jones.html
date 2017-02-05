@@ -152,8 +152,8 @@ function getMousePos(canvas, evt){
                  var sprad = Math.sqrt((myStar.x-myPlanet.x)*(myStar.x-myPlanet.x) + (myStar.y-myPlanet.y)*(myStar.y-myPlanet.y));
                  var mrad = Math.sqrt((mousePos.x-myPlanet.x)*(mousePos.x-myPlanet.x) + (mousePos.y-myPlanet.y)*(mousePos.y-myPlanet.y));
 
-                 var pnextspeedx = myPlanet.speedx + 130*(myStar.x-myPlanet.x)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  160*(mousePos.x-myPlanet.x)/( (mrad*mrad + 5)*Math.sqrt(mrad*mrad + 5));
-	               var pnextspeedy = myPlanet.speedy + 130*(myStar.y-myPlanet.y)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  160*(mousePos.y-myPlanet.y)/( (mrad*mrad +5 )*Math.sqrt(mrad*mrad +5));
+                 var pnextspeedx = myPlanet.speedx + 230*(myStar.x-myPlanet.x)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  260*(mousePos.x-myPlanet.x)/( (mrad*mrad + 5)*Math.sqrt(mrad*mrad + 5));
+	               var pnextspeedy = myPlanet.speedy + 230*(myStar.y-myPlanet.y)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  260*(mousePos.y-myPlanet.y)/( (mrad*mrad +5 )*Math.sqrt(mrad*mrad +5));
 
                  myPlanet.speedx =  pnextspeedx;
                  myPlanet.speedy =  pnextspeedy;
