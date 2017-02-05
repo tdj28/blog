@@ -133,13 +133,13 @@ function getMousePos(canvas, evt){
 
 
                 //Star-Planet
-              //  canvas.addEventListener('mousemove', function(evt){
-              //  mousePos = getMousePos(canvas, evt);  }, false);
+                canvas.addEventListener('mousemove', function(evt){
+                mousePos = getMousePos(canvas, evt);  }, false);
 
-              //  if(mousePos.x > (canvas.width-40) || mousePos.x < 40 || mousePos.y > (canvas.height-10) || mousePos.y < 10){
-              //           mousePos.x = 400;
-              //           mousePos.y = 60;
-              //     }
+               if(mousePos.x > (canvas.width-40) || mousePos.x < 40 || mousePos.y > (canvas.height-10) || mousePos.y < 10){
+                         mousePos.x = 400;
+                         mousePos.y = 60;
+                   }
 
                  context.beginPath();
                  context.globalCompositeOperation='lighter';

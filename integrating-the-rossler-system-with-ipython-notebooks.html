@@ -133,13 +133,13 @@ function getMousePos(canvas, evt){
 
 
                 //Star-Planet
-              //  canvas.addEventListener('mousemove', function(evt){
-              //  mousePos = getMousePos(canvas, evt);  }, false);
+                canvas.addEventListener('mousemove', function(evt){
+                mousePos = getMousePos(canvas, evt);  }, false);
 
-              //  if(mousePos.x > (canvas.width-40) || mousePos.x < 40 || mousePos.y > (canvas.height-10) || mousePos.y < 10){
-              //           mousePos.x = 400;
-              //           mousePos.y = 60;
-              //     }
+               if(mousePos.x > (canvas.width-40) || mousePos.x < 40 || mousePos.y > (canvas.height-10) || mousePos.y < 10){
+                         mousePos.x = 400;
+                         mousePos.y = 60;
+                   }
 
                  context.beginPath();
                  context.globalCompositeOperation='lighter';
@@ -1338,10 +1338,10 @@ h6:hover .anchor-link {
 </div>
 <div class="output_area">
 <div class="prompt"></div>
-<div id="67dbafc5-f0d8-4d8d-9435-a7b602cd20bb"></div>
+<div id="607903f3-d6c6-48bc-9daa-66faca75655e"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#67dbafc5-f0d8-4d8d-9435-a7b602cd20bb');
+var element = $('#607903f3-d6c6-48bc-9daa-66faca75655e');
 
 (function(global) {
   function now() {
