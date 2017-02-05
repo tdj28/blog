@@ -12,32 +12,31 @@ are subject to random variations in behavior (though those variations are pertur
 to an otherwise systematic behavior). Here, we take a quick bite-sized look at an example.&lt;/p&gt;
 &lt;h4&gt;An example&lt;/h4&gt;
 &lt;p&gt;Take a look at the system defined by&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;/p&gt;
 &lt;div class="math"&gt;$$\frac{dx}{dt} = u$$&lt;/div&gt;
 &lt;div class="math"&gt;$$x(0) = 1$$&lt;/div&gt;
-&lt;p&gt;
-&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;where we seek to minimize the function&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)&lt;/span&gt;.&lt;/p&gt;
+&lt;div class="math"&gt;$$J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt$$&lt;/div&gt;
+&lt;p&gt;.&lt;/p&gt;
 &lt;h5&gt;What does it correspond to?&lt;/h5&gt;
 &lt;p&gt;Firstly, it is important to understand that &lt;span class="math"&gt;\(u\)&lt;/span&gt; is not necessarily a constant. In fact, if &lt;span class="math"&gt;\(J\)&lt;/span&gt; is
 somehow an expression of some idealized behavior, (e.g. minimize polution output), then choosing
 &lt;span class="math"&gt;\(u\)&lt;/span&gt; to be a constant would be a very bad idea as &lt;span class="math"&gt;\(J \rightarrow \infty\)&lt;/span&gt;.&lt;/p&gt;
 &lt;h5&gt;Finding u&lt;/h5&gt;
 &lt;p&gt;So let's now try to find a &lt;span class="math"&gt;\(u\)&lt;/span&gt; that would minimize &lt;span class="math"&gt;\(J\)&lt;/span&gt;. First, re-write &lt;span class="math"&gt;\(J\)&lt;/span&gt; as&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t) \right] dt\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="math"&gt;$$J = \int^{\infty}_0 \left[ x^2(t) + u^2(t) \right] dt$$&lt;/div&gt;
 &lt;p&gt;and then we note that&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\int^{T}_0 \left[ x^2(t) + u^2(t) \right] dt = x^2(0) - x^2(T) + \int^{T}_0 \left[ x(t) + \dot{x}(t) \right]^2 dt\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="math"&gt;$$\int^{T}_0 \left[ x^2(t) + u^2(t) \right] dt = x^2(0) - x^2(T) + \int^{T}_0 \left[ x(t) + \dot{x}(t) \right]^2 dt$$&lt;/div&gt;
 &lt;p&gt;Let's find the minima of this with respect to &lt;span class="math"&gt;\(d/d(\dot{x})\)&lt;/span&gt;, setting the result to zero, to find that&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(x(t) = - \dot{x}(t)\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="math"&gt;$$x(t) = - \dot{x}(t)$$&lt;/div&gt;
 &lt;p&gt;We can look at this as an open loop control, such that we solve to find that&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(u(t) = -e^{-t}\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="math"&gt;$$u(t) = -e^{-t}$$&lt;/div&gt;
 &lt;p&gt;and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
 and use&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\dot{x}{t} = -x(t)\)&lt;/span&gt;,&lt;/p&gt;
+&lt;div class="math"&gt;$$\dot{x}{t} = -x(t)$$&lt;/div&gt;
+&lt;p&gt;,&lt;/p&gt;
 &lt;p&gt;e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter &lt;span class="math"&gt;\(x\)&lt;/span&gt; at time &lt;span class="math"&gt;\(t\)&lt;/span&gt; as dictated by the relation:&lt;/p&gt;
-&lt;p&gt;&lt;span class="math"&gt;\(\delta x = -x(t) \delta t\)&lt;/span&gt;.&lt;/p&gt;
+&lt;div class="math"&gt;$$\delta x = -x(t) \delta t$$&lt;/div&gt;
+&lt;p&gt;.&lt;/p&gt;
 &lt;h5&gt;What is the difference?&lt;/h5&gt;
 &lt;p&gt;For a deterministic system, the exponent we found for &lt;span class="math"&gt;\(u\)&lt;/span&gt; seems like a great solution &lt;strong&gt;if&lt;/strong&gt; it can be
 designed into the system. But what happens if we have stochastic noise?&lt;/p&gt;
