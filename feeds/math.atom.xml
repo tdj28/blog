@@ -1004,10 +1004,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="0e7f7714-87ab-4cac-aaff-9f1a4627a488"&gt;&lt;/div&gt;
+&lt;div id="e14ee1eb-4a8f-47f8-b37e-460fca89a970"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#0e7f7714-87ab-4cac-aaff-9f1a4627a488');
+var element = $('#e14ee1eb-4a8f-47f8-b37e-460fca89a970');
 
 (function(global) {
   function now() {
@@ -1394,17 +1394,6 @@ var element = $('#0e7f7714-87ab-4cac-aaff-9f1a4627a488');
   }(this));
 &lt;/script&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="cell border-box-sizing code_cell rendered"&gt;
-&lt;div class="input"&gt;
-&lt;div class="prompt input_prompt"&gt;In [ ]:&lt;/div&gt;
-&lt;div class="inner_cell"&gt;
-&lt;div class="input_area"&gt;
-&lt;div class=" highlight hl-ipython3"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; 
-&lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
