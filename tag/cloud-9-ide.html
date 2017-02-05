@@ -95,16 +95,11 @@ function getMousePos(canvas, evt){
                 var canvas = document.getElementById("myCanvas");
                 var context = canvas.getContext("2d");
                 canvas.width  = window.innerWidth;
-                var terrain = document.getElementById("terCanvas");
-                var terCtx = terrain.getContext("2d");
-                terrain.width = canvas.width
+
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
-                               // update
-              //  if(flag<1){
                 context.fillStyle = "rgba(50,50,50,1)";
-
                 context.font = "34px sans-serif";
                 context.fillText("Timothy Jones", 5, 35);
                 context.font = "24px sans-serif";
@@ -155,7 +150,7 @@ function getMousePos(canvas, evt){
                  var mrad = Math.sqrt((mousePos.x-myPlanet.x)*(mousePos.x-myPlanet.x) + (mousePos.y-myPlanet.y)*(mousePos.y-myPlanet.y));
 
                  var pnextspeedx = myPlanet.speedx + 130*(myStar.x-myPlanet.x)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  160*(mousePos.x-myPlanet.x)/( (mrad*mrad + 5)*Math.sqrt(mrad*mrad + 5));
-	         var pnextspeedy = myPlanet.speedy + 130*(myStar.y-myPlanet.y)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  160*(mousePos.y-myPlanet.y)/( (mrad*mrad +5 )*Math.sqrt(mrad*mrad +5));
+	               var pnextspeedy = myPlanet.speedy + 130*(myStar.y-myPlanet.y)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  160*(mousePos.y-myPlanet.y)/( (mrad*mrad +5 )*Math.sqrt(mrad*mrad +5));
 
                  myPlanet.speedx =  pnextspeedx;
                  myPlanet.speedy =  pnextspeedy;
@@ -175,21 +170,21 @@ function getMousePos(canvas, evt){
                  context.fill();
                  context.closePath();
 
-                  context.beginPath();
-                 context.globalCompositeOperation='source-over';
-                 context.arc(myPlanet.x,myPlanet.y,2, 0, Math.PI*2, true);
-                 context.fillStyle = "rgba(0,255,0,1)";
-                 context.fill();
-                 context.closePath();
+               context.beginPath();
+               context.globalCompositeOperation='source-over';
+               context.arc(myPlanet.x,myPlanet.y,2, 0, Math.PI*2, true);
+               context.fillStyle = "rgba(0,255,0,1)";
+               context.fill();
+               context.closePath();
 
-                  terCtx.beginPath();
+                terCtx.beginPath();
                 terCtx.globalCompositeOperation='destination-over';
                 terCtx.arc(myPlanet.x,myPlanet.y,2, 0, Math.PI*2, true);
                 terCtx.closePath();
-                terCtx.fillStyle = "rgba(215,255,255,0.2)";
+                terCtx.fillStyle = "rgba(215,255,255,0.4)";
                 terCtx.fill();
 
-                   context.beginPath();
+                 context.beginPath();
                  context.globalCompositeOperation='source-over';
                  context.arc(mousePos.x,mousePos.y,7, 0, Math.PI*2, true);
                  context.fillStyle = "rgba(0,0,255,0.6)";
@@ -250,7 +245,7 @@ function getMousePos(canvas, evt){
                 terCtx.globalCompositeOperation='destination-over';
                 terCtx.rect(pend.j2x, pend.j2y, 1, 1);
                 terCtx.closePath();
-                terCtx.fillStyle = "rgba(153,220,5,0.15)";
+                terCtx.fillStyle = "rgba(153,220,5,0.45)";
                 terCtx.fill();
 
                   //CORE
@@ -294,41 +289,36 @@ function getMousePos(canvas, evt){
 
     window.onload = function(){
 
+      var terrain = document.getElementById("terCanvas");
+      var terCtx = terrain.getContext("2d");
+      terrain.width = canvas.width
 
+      var myRectangle = {
+          x: 700,
+          y: 50,
+          width: 1,
+          height: 1
 
-                var myRectangle = {
-                    x: 700,
-                    y: 50,
-                    width: 1,
-                    height: 1
+      };
+      var myStar = {
+           x: 500,
+           y: 50,
+           rad: 3,
+           speedx: 0,
+           speedy: 0
 
-                };
-
-                  var myStar = {
-                     x: 500,
-                     y: 50,
-                     rad: 3,
-                     speedx: 0,
-                     speedy: 0
-
-                 };
-
-
-                var myPlanet = {
-                    x:520,
-                    y:20,
-                    rad: 3,
-                    speedx: -1,
-                    speedy: -1
-};
+       };
+      var myPlanet = {
+          x:520,
+          y:20,
+          rad: 3,
+          speedx: -1,
+          speedy: -1
+      };
 
       var mousePos ={x:400,y:60};
-
       var pend = { j1x: 230, j1y: 45, j1vx:0, j1vy:-1, j2x: 220, j2vx:0, j2y:65, j2vy:0};
-
       animate(myRectangle,myStar,myPlanet,mousePos,pend);
-
-
             };
 
         </script>
