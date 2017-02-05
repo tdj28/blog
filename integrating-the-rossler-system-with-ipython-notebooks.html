@@ -94,9 +94,10 @@ function getMousePos(canvas, evt){
 
                 var canvas = document.getElementById("myCanvas");
                 var context = canvas.getContext("2d");
-
+                context.canvas.width  = window.innerWidth;
                 var terrain = document.getElementById("terCanvas");
                 var terCtx = terrain.getContext("2d");
+                terCtx.terrain.width = window.innerWidth;
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -295,7 +296,7 @@ function getMousePos(canvas, evt){
                function animate2(myRect){
                 var canvas = document.getElementById("myCanvas2");
                 var context = canvas.getContext("2d");
-
+                context.canvas.width  = window.innerWidth;
                 // update
                 var date = new Date();
                 var time = date.getTime();
@@ -334,7 +335,7 @@ function getMousePos(canvas, evt){
                 var canvas = document.getElementById("myCanvas3");
 
                 var context = canvas.getContext("2d");
-
+                context.canvas.width  = window.innerWidth;
       // clear
               context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -374,7 +375,7 @@ function getMousePos(canvas, evt){
                 var canvas = document.getElementById("myCanvas4");
 
                 var context = canvas.getContext("2d");
-
+                context.canvas.width  = window.innerWidth;
       // clear
               context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -414,7 +415,7 @@ function getMousePos(canvas, evt){
     window.onload = function(){
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
-
+    context.canvas.width  = window.innerWidth;
 
                 var myRect = {
                     x: 250,
@@ -1502,10 +1503,10 @@ h6:hover .anchor-link {
 </div>
 <div class="output_area">
 <div class="prompt"></div>
-<div id="449bad16-0a15-4805-be0c-425d67789fd5"></div>
+<div id="272c9af0-d04b-4517-a07b-6ce35ef896b1"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#449bad16-0a15-4805-be0c-425d67789fd5');
+var element = $('#272c9af0-d04b-4517-a07b-6ce35ef896b1');
 
 (function(global) {
   function now() {
