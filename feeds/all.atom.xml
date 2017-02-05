@@ -219,7 +219,8 @@ the links above with that hosts FQDN or IP Address.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="cloud9" src="assets/JupyterHowTo-33389.png" /&gt;&lt;/p&gt;
 &lt;p&gt;and a Jupyter notebook at &lt;a href="http://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="jupyter" src="assets/JupyterHowTo-22dfd.png" /&gt;&lt;/p&gt;
-&lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry><entry><title>Bize sized stochastic control theory</title><link href="http://doctimjones.org/bize-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bize-sized-stochastic-control-theory.html</id><summary type="html">&lt;h3&gt;Theory vs. on the ground&lt;/h3&gt;
+&lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry><entry><title>Bize sized stochastic control theory</title><link href="http://doctimjones.org/bize-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bize-sized-stochastic-control-theory.html</id><summary type="html">&lt;p&gt;WORK IN PROGRESS...&lt;/p&gt;
+&lt;h3&gt;Theory vs. on the ground&lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;Deterministic&lt;/em&gt; and &lt;em&gt;stochastic&lt;/em&gt; control theory both approach the same general problem of
 preventing unwanted behaviors of a system by controlling input variables. The deterministic
 variation assumes everything is known or at least knowable and predictable in such a way that
@@ -2019,10 +2020,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="885f9c16-843f-41eb-bbe3-b02d15a62957"&gt;&lt;/div&gt;
+&lt;div id="cea53af7-6468-48f1-b968-3519d3e9da18"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#885f9c16-843f-41eb-bbe3-b02d15a62957');
+var element = $('#cea53af7-6468-48f1-b968-3519d3e9da18');
 
 (function(global) {
   function now() {
