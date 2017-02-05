@@ -44,14 +44,17 @@ are subject to random variations in behavior (though those variations are pertur
 to an otherwise systematic behavior). Here, we take a quick bite-sized look at an example.</p>
 <h4>An example</h4>
 <p>Take a look at the system defined by</p>
-<p><span class="math">\(\frac{dx}{dt} = u\)</span></p>
+<p style="text-align: center;">
+$\frac{dx}{dt} = u$
+</p>
+
 <p><span class="math">\(x(0) = 1\)</span></p>
 <p>where we seek to minimize the function</p>
 <p><span class="math">\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)</span>.</p>
 <h5>What does it correspond to?</h5>
 <p>Firstly, it is important to understand that <span class="math">\(u\)</span> is not necessarily a constant. In fact, if <span class="math">\(J\)</span> is
 somehow an expression of some idealized behavior, (e.g. minimize polution output), then choosing
-<span class="math">\(u\)</span> to be a constant would be a very bad idea as <span class="math">\(J \rightarrow \infty\)</span>. </p>
+<span class="math">\(u\)</span> to be a constant would be a very bad idea as <span class="math">\(J \rightarrow \infty\)</span>.</p>
 <h5>Finding u</h5>
 <p>So let's now try to find a <span class="math">\(u\)</span> that would minimize <span class="math">\(J\)</span>. First, re-write <span class="math">\(J\)</span> as</p>
 <p><span class="math">\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t) \right] dt\)</span></p>
@@ -59,13 +62,13 @@ somehow an expression of some idealized behavior, (e.g. minimize polution output
 <p><span class="math">\(\int^{T}_0 \left[ x^2(t) + u^2(t) \right] dt = x^2(0) - x^2(T) + \int^{T}_0 \left[ x(t) + \dot{x}(t) \right]^2 dt\)</span></p>
 <p>Let's find the minima of this with respect to <span class="math">\(d/d(\dot{x})\)</span>, setting the result to zero, to find that</p>
 <p><span class="math">\(x(t) = - \dot{x}(t)\)</span></p>
-<p>We can look at this as an open loop control, such that we solve to find that </p>
+<p>We can look at this as an open loop control, such that we solve to find that</p>
 <p><span class="math">\(u(t) = -e^{-t}\)</span></p>
 <p>and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
-and use </p>
-<p><span class="math">\(\dot{x}{t} = -x(t)\)</span>, </p>
+and use</p>
+<p><span class="math">\(\dot{x}{t} = -x(t)\)</span>,</p>
 <p>e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter <span class="math">\(x\)</span> at time <span class="math">\(t\)</span> as dictated by the relation:</p>
-<p><span class="math">\(\delta x = -x(t) \delta t\)</span>. </p>
+<p><span class="math">\(\delta x = -x(t) \delta t\)</span>.</p>
 <h5>What is the difference?</h5>
 <p>For a deterministic system, the exponent we found for <span class="math">\(u\)</span> seems like a great solution <strong>if</strong> it can be
 designed into the system. But what happens if we have stochastic noise?</p>
