@@ -2019,10 +2019,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="e4c34470-e8b5-497e-bd99-7e6f3fa33a2a"&gt;&lt;/div&gt;
+&lt;div id="4bbd79c7-ebb9-4fa8-ab0a-7f3fc2e47dc3"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#e4c34470-e8b5-497e-bd99-7e6f3fa33a2a');
+var element = $('#4bbd79c7-ebb9-4fa8-ab0a-7f3fc2e47dc3');
 
 (function(global) {
   function now() {
