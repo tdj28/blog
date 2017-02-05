@@ -24,7 +24,476 @@
     <li><a href="https://twitter.com/timjonestweets">Twitter</a></li>
     <li><a href="https://www.linkedin.com/in/timothy-jones-3a60814b">Linked In</a></li>
 </ul>    </div>
-</div>    <div id="main">
+</div>
+
+ <script src="/theme/css/numeric-1.2.6.min.js"></script>
+<script>
+  var signflow=1;
+  var timez=0.0;
+  var signflow3=1;
+  var flag=0;
+  var m1=0.8;
+  var m2=0.6;
+  var omega1=0.0;
+  var omega2=0.0;
+  var domega1;
+  var domega2;
+  var theta1= Math.PI/3;
+  var theta2= -Math.PI/2;
+  var dtheta1;
+  var dtheta2;
+  var pivot={x:218, y:34};
+  var g=9.8;
+  var L1=0.25;
+  var L2=0.15;
+  var x = 0;
+  window.requestAnimFrame = (function(callback){
+                return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function(callback){
+                    window.setTimeout(callback, 1000 / 60);
+                };
+            })();
+
+
+  function writeMessage(canvas, message){
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = '18pt Calibri';
+    context.fillStyle = 'black';
+    context.fillText(message, 10, 25);
+}
+
+function getMousePos(canvas, evt){
+    // get canvas position
+    var obj = canvas;
+    var top = 0;
+    var left = 0;
+    while (obj && obj.tagName != 'BODY') {
+        top += obj.offsetTop;
+        left += obj.offsetLeft;
+        obj = obj.offsetParent;
+    }
+
+
+
+
+    var mouseX = evt.clientX - left + window.pageXOffset;
+    var mouseY = evt.clientY - top + window.pageYOffset;
+    return {
+        x: mouseX,
+        y: mouseY
+    };
+}
+
+      function animate(myRectangle,myStar,myPlanet,mousePos,pend){
+
+                var canvas = document.getElementById("myCanvas");
+                var context = canvas.getContext("2d");
+
+                var terrain = document.getElementById("terCanvas");
+                var terCtx = terrain.getContext("2d");
+              // clear
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                               // update
+              //  if(flag<1){
+                context.fillStyle = "rgba(50,50,50,1)";
+
+                context.font = "34px sans-serif";
+                context.fillText("Timothy Jones", 5, 35);
+                context.font = "24px sans-serif";
+                context.fillText("Ph.D., Physics", 5, 65);
+                context.font = "10px sans-serif";
+                context.fillText("Random walk, N-Body (with breaking at borders)-mouse = 3rd body", 535, 15);
+               // flag=flag + 1;
+               // }
+                var randomnumber=Math.floor(Math.random()*3);
+                var randy = randomnumber-1;
+                var randomnumber2=Math.floor(Math.random()*3);
+                var randy2 = randomnumber2-1;
+                myRectangle.x = myRectangle.x + randy;
+                myRectangle.y = myRectangle.y + randy2;
+
+                if(myRectangle.x>canvas.width){myRectangle.x=0.0;}
+                if(myRectangle.y>canvas.height){myRectangle.y=0.0;}
+                if(myRectangle.x<0){myRectangle.x=canvas.width;}
+                if(myRectangle.y<0){myRectangle.y=canvas.height;}
+
+
+                terCtx.beginPath();
+                terCtx.globalCompositeOperation='destination-over';
+                terCtx.rect(myRectangle.x+100, myRectangle.y, 1, 1);
+                terCtx.closePath();
+                terCtx.fillStyle = "rgba(235,200,5,0.2)";
+                terCtx.fill();
+
+
+                //Star-Planet
+                canvas.addEventListener('mousemove', function(evt){
+                mousePos = getMousePos(canvas, evt);  }, false);
+
+                if(mousePos.x > (canvas.width-40) || mousePos.x < 40 || mousePos.y > (canvas.height-10) || mousePos.y < 10){
+                         mousePos.x = 400;
+                         mousePos.y = 60;
+                   }
+
+                 context.beginPath();
+                 context.globalCompositeOperation='lighter';
+                 context.arc(myPlanet.x,myPlanet.y,3, 0, Math.PI*2, true);
+                 context.fillStyle = "rgba(255,255,255,0.5)";
+                 context.fill();
+                 context.closePath();
+
+
+                 var sprad = Math.sqrt((myStar.x-myPlanet.x)*(myStar.x-myPlanet.x) + (myStar.y-myPlanet.y)*(myStar.y-myPlanet.y));
+                 var mrad = Math.sqrt((mousePos.x-myPlanet.x)*(mousePos.x-myPlanet.x) + (mousePos.y-myPlanet.y)*(mousePos.y-myPlanet.y));
+
+                 var pnextspeedx = myPlanet.speedx + 130*(myStar.x-myPlanet.x)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  160*(mousePos.x-myPlanet.x)/( (mrad*mrad + 5)*Math.sqrt(mrad*mrad + 5));
+	         var pnextspeedy = myPlanet.speedy + 130*(myStar.y-myPlanet.y)/( (sprad*sprad + 5)*Math.sqrt(sprad*sprad + 5)) +  160*(mousePos.y-myPlanet.y)/( (mrad*mrad +5 )*Math.sqrt(mrad*mrad +5));
+
+                 myPlanet.speedx =  pnextspeedx;
+                 myPlanet.speedy =  pnextspeedy;
+
+                 myPlanet.x = myPlanet.x + 0.1*pnextspeedx;
+                 myPlanet.y = myPlanet.y + 0.1*pnextspeedy;
+
+                if(myPlanet.x>canvas.width){myPlanet.x=myPlanet.x-1;myPlanet.speedx=-0.9*myPlanet.speedx;}
+                if(myPlanet.y>canvas.height){myPlanet.y=myPlanet.y-1;myPlanet.speedy=-0.9*myPlanet.speedy;}
+                if(myPlanet.x<0){myPlanet.x=0;myPlanet.speedx=-0.9*myPlanet.speedx;}
+                if(myPlanet.y<0){myPlanet.y=0;myPlanet.speedy=-0.9*myPlanet.speedy;}
+
+                 context.beginPath();
+                 context.globalCompositeOperation='source-over';
+                 context.arc(myStar.x,myStar.y,myStar.rad, 0, Math.PI*2, true);
+                 context.fillStyle = "rgba(255,55,10,0.6)";
+                 context.fill();
+                 context.closePath();
+
+                  context.beginPath();
+                 context.globalCompositeOperation='source-over';
+                 context.arc(myPlanet.x,myPlanet.y,2, 0, Math.PI*2, true);
+                 context.fillStyle = "rgba(0,255,0,1)";
+                 context.fill();
+                 context.closePath();
+
+                  terCtx.beginPath();
+                terCtx.globalCompositeOperation='destination-over';
+                terCtx.arc(myPlanet.x,myPlanet.y,2, 0, Math.PI*2, true);
+                terCtx.closePath();
+                terCtx.fillStyle = "rgba(215,255,255,0.2)";
+                terCtx.fill();
+
+                   context.beginPath();
+                 context.globalCompositeOperation='source-over';
+                 context.arc(mousePos.x,mousePos.y,7, 0, Math.PI*2, true);
+                 context.fillStyle = "rgba(0,0,255,0.6)";
+                 context.fill();
+                 context.closePath();
+
+
+                // Double pendulum
+
+
+                // var pend = { j1x: 230, j1y: 45, j1vx:0, j1vy:-1, j2x: 220, j2vx:0, j2y:65, j2vy:0};
+
+
+                 f = function(t,x) {
+          return [x[2],x[3],-g*(2*m1+m2)*Math.sin(x[0])-m2*g*Math.sin(x[0]-2*x[1])-2*Math.sin(x[0]-x[1])*m2*(x[3]*x[3]*L2 + x[2]*x[2]*L1*Math.cos(x[0]-x[1]))/(  L1*(2*m1 +m2 -m2*Math.cos(2*x[0] - 2*x[1]))),
+             2*Math.sin(x[0]-x[1])*(x[2]*x[2]*L1*(m1+m2)+g*(m1+m2)*Math.cos(x[0])+x[3]*x[3]*L2*m2*Math.cos(x[0]-x[1]))/(  L2*(2*m1 +m2 -m2*Math.cos(2*x[0] - 2*x[1])))];
+          }
+
+
+           //            θ1' = ω1
+//            θ2' = ω2
+//            ω1' =  	 −g (2 m1 + m2) sin θ1 − m2 g sin(θ1 − 2 θ2) − 2 sin(θ1 − θ2) m2 (ω22 L2 + ω12 L1 cos(θ1 − θ2))
+//            L1 (2 m1 + m2 − m2 cos(2 θ1 − 2 θ2))
+//            ω2' =  	 2 sin(θ1−θ2) (ω12 L1 (m1 + m2) + g(m1 + m2) cos θ1 + ω22 L2 m2 cos(θ1 − θ2))
+//            L2 (2 m1 + m2 − m2 cos(2 θ1 − 2 θ2))
+
+
+                //Anything more than 3 iterations gets noticed, 1e-4 tolerance is about best can do
+                //without ruining the feel of live simulation, see below for fix to avoid
+                //energy buildup
+
+                sol= numeric.dopri(x,x+0.1,[theta1,theta2,omega1,omega2],f,1e-4,3);
+
+                theta1 = sol.y[1][0];
+                theta2 = sol.y[1][1];
+                omega1 = sol.y[1][2];
+                omega2 = sol.y[1][3];
+
+               //can't tax browser too much with numerics, so to avoid energy gain, max out omega1/omega2
+               //an ugly solution, but user experience comes first here, and any other solution would ruin illusion of live run
+               //obviously chaos-lab version will need to have better options
+               //this version is more a proof-of-concept than an academic exercise
+               if(omega1>15){omega1=8;}
+               if(omega1<-15){omega1=-8;}
+               if(omega2>30){omega2=20;}
+               if(omega2<-30){omega2=-20;}
+
+               // console.log(omega2);
+                pend.j1x = pivot.x + Math.floor(Math.sin(theta1)*L1*100)+1;
+                pend.j1y = pivot.y + Math.floor(Math.cos(theta1)*L1*100)+1;
+
+                pend.j2x = pend.j1x + Math.floor(Math.sin(theta2)*L2*100)+1;
+                pend.j2y = pend.j1y + Math.floor(Math.cos(theta2)*L2*100)+1;
+
+              //  var u = m1*g*(L1*Math.cos(theta1))+0.5*m1*L1*omega1*L1*omega1 + m2*g*(L1*Math.cos(theta1)+L2*Math.cos(theta2)) +0.5*m2*(L2*omega2*L2*omega2 + L1*omega1*L1*omega1 + 2*omega1*L1*omega2*L2*Math.cos(theta1-theta2));
+             //   console.log(u);
+                terCtx.beginPath();
+                terCtx.globalCompositeOperation='destination-over';
+                terCtx.rect(pend.j2x, pend.j2y, 1, 1);
+                terCtx.closePath();
+                terCtx.fillStyle = "rgba(153,220,5,0.15)";
+                terCtx.fill();
+
+                  //CORE
+                 context.beginPath();
+                 context.globalCompositeOperation='destination-over';
+                 context.arc(pivot.x,pivot.y,2,0, Math.PI*2, true);
+                 context.fillStyle = "rgba(0,0,0,1)";
+                 context.fill();
+                 context.closePath();
+
+                 //MID
+                  context.beginPath();
+                 context.globalCompositeOperation='destination-over';
+                 context.arc(pend.j1x,pend.j1y,3,0, Math.PI*2, true);
+                 context.fillStyle = "rgba(250,0,215,1)";
+                 context.fill();
+                 context.closePath();
+
+                 //LAST
+                  context.beginPath();
+                 context.globalCompositeOperation='destination-over';
+                 context.arc(pend.j2x,pend.j2y,3,0, Math.PI*2, true);
+                 context.fillStyle = "rgba(250,0,215,0.9)";
+                 context.fill();
+                 context.closePath();
+
+                 context.beginPath();
+                 context.moveTo(pivot.x,pivot.y);
+                 context.lineTo(pend.j1x,pend.j1y);
+                 context.lineTo(pend.j2x,pend.j2y);
+                 context.lineTo(pend.j1x,pend.j1y);
+                 context.closePath();
+                 context.stroke();
+                 x = x + 0.1;
+                // request new frame
+                requestAnimFrame(function(){
+                    animate(myRectangle,myStar,myPlanet,mousePos,pend);
+                });
+
+            }
+
+
+               function animate2(myRect){
+                var canvas = document.getElementById("myCanvas2");
+                var context = canvas.getContext("2d");
+
+                // update
+                var date = new Date();
+                var time = date.getTime();
+                var amplitude = 200;
+                var period = 16000; // in ms
+                var centerX = canvas.width / 2 - myRect.width / 2;
+                var nextX = amplitude * Math.sin(time * 2 * Math.PI / period) + centerX;
+                var nextXX = amplitude * Math.cos(time * 2 * Math.PI / period) + centerX;
+                myRect.x = nextX;
+
+                // clear
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                // draw
+                context.beginPath();
+                context.rect(myRect.x, myRect.y, myRect.width, myRect.height);
+                context.fillStyle = "rgba(155,100,255,0.2)";
+                context.fill();
+                context.closePath;
+                context.beginPath();
+                context.rect(nextXX, myRect.y, myRect.width, myRect.height);
+                context.fillStyle = "rgba(0,255,0,0.2)";
+                context.fill();
+                context.closePath();
+          //      context.lineWidth = myRect.borderWidth;
+          //      context.strokeStyle = "black";
+          //      context.stroke();
+
+                // request new frame
+                requestAnimFrame(function(){
+                    animate2(myRect);
+                });
+            }
+
+   function animate3(myRect3){
+                var canvas = document.getElementById("myCanvas3");
+
+                var context = canvas.getContext("2d");
+
+      // clear
+              context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var date = new Date();
+                var time = date.getTime();
+                var amplitude = 80;
+                var period = 16000; // in ms
+                var centerX = canvas.width / 2 - myRect3.width / 2;
+                var nextX = amplitude * Math.sin(time * 2 * Math.PI / period) + centerX;
+                var nextXX = amplitude * Math.cos(time * 2 * Math.PI / period) + centerX;
+                myRect3.x = nextX;
+
+                // clear
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                // draw
+                context.beginPath();
+                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
+                context.fillStyle = "rgba(255,150,105,0.1)";
+                context.fill();
+                context.closePath;
+
+
+                myRect3.x = nextXX;
+                context.beginPath();
+                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
+                context.fillStyle = "rgba(205,165,255,0.1)";
+                context.fill();
+                context.closePath;
+
+                requestAnimFrame(function(){
+                   animate3(myRect3);
+                });
+            }
+
+ function animate4(myRect3){
+                var canvas = document.getElementById("myCanvas4");
+
+                var context = canvas.getContext("2d");
+
+      // clear
+              context.clearRect(0, 0, canvas.width, canvas.height);
+
+                var date = new Date();
+                var time = date.getTime();
+                var amplitude = 80;
+                var period = 16000; // in ms
+                var centerX = canvas.width / 2 - myRect3.width / 2;
+                var nextX = amplitude * Math.sin(time * 2 * Math.PI / period) + centerX;
+                var nextXX = amplitude * Math.cos(time * 2 * Math.PI / period) + centerX;
+                myRect3.x = nextX;
+
+                // clear
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                // draw
+                context.beginPath();
+                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
+                context.fillStyle = "rgba(255,150,105,0.1)";
+                context.fill();
+                context.closePath;
+
+
+                myRect3.x = nextXX;
+                context.beginPath();
+                context.rect(myRect3.x, myRect3.y, myRect3.width-15, myRect3.height);
+                context.fillStyle = "rgba(205,165,255,0.1)";
+                context.fill();
+                context.closePath;
+
+                requestAnimFrame(function(){
+                   animate4(myRect3);
+                });
+            }
+
+
+    window.onload = function(){
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+
+
+                var myRect = {
+                    x: 250,
+                    y: 0,
+                    width: 100,
+                    height: 10,
+                    borderWidth: 5
+                };
+               var myRect3 = {
+                    x: 250,
+                    y: 0,
+                    width: 100,
+                    height: 10,
+                    borderWidth: 5
+                };
+
+                var myRectangle = {
+                    x: 700,
+                    y: 50,
+                    width: 1,
+                    height: 1
+
+                };
+
+               var myRectangle2 = {
+                    x: 500,
+                    y: 15,
+                    width: 10,
+                    height: 10,
+                    borderWidth: 2
+                };
+
+                  var myRectangle3 = {
+                    x: 110,
+                    y: 35,
+                    width: 10,
+                    height: 10,
+                    borderWidth: 2
+
+                };
+
+
+                  var myStar = {
+                     x: 500,
+                     y: 50,
+                     rad: 3,
+                     speedx: 0,
+                     speedy: 0
+
+                 };
+
+
+                var myPlanet = {
+                    x:520,
+                    y:20,
+                    rad: 3,
+                    speedx: -1,
+                    speedy: -1
+};
+
+      var mousePos ={x:400,y:60};
+
+      var pend = { j1x: 230, j1y: 45, j1vx:0, j1vy:-1, j2x: 220, j2vx:0, j2y:65, j2vy:0};
+
+      animate(myRectangle,myStar,myPlanet,mousePos,pend);
+      animate2(myRect);
+      animate3(myRect3);
+      animate4(myRect3);
+
+            };
+
+
+
+        </script>
+
+        <canvas id="terCanvas" width="960" height="100"></canvas>
+                <canvas id="myCanvas" width="960" height="100">
+       <h1>Student page, Timothy Jones</h1>
+                  <h2>Ph.D., Drexel University</h2>
+      </canvas>    <div id="main">
 <h2>Pandas</h2>
 <dl>
 <dd><a href="http://doctimjones.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html">Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</a></dd>
