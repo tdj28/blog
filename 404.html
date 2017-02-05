@@ -94,10 +94,9 @@ function getMousePos(canvas, evt){
 
                 var canvas = document.getElementById("myCanvas");
                 var context = canvas.getContext("2d");
-                context.canvas.width  = window.innerWidth;
+                canvas.width  = window.innerWidth;
                 var terrain = document.getElementById("terCanvas");
                 var terCtx = terrain.getContext("2d");
-                terCtx.terrain.width = window.innerWidth;
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
