@@ -95,7 +95,10 @@ function getMousePos(canvas, evt){
                 var canvas = document.getElementById("myCanvas");
                 var context = canvas.getContext("2d");
                 context.canvas.width  = window.innerWidth;
-
+                var terrain = document.getElementById("terCanvas");
+                var terCtx = terrain.getContext("2d");
+                terCtx.canvas.width = window.innerWidth;
+                
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -289,9 +292,7 @@ function getMousePos(canvas, evt){
 
     window.onload = function(){
 
-      var terrain = document.getElementById("terCanvas");
-      var terCtx = terrain.getContext("2d");
-      terCtx.canvas.width = window.innerWidth;
+
 
       var myRectangle = {
           x: 700,

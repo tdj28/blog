@@ -95,7 +95,10 @@ function getMousePos(canvas, evt){
                 var canvas = document.getElementById("myCanvas");
                 var context = canvas.getContext("2d");
                 context.canvas.width  = window.innerWidth;
-
+                var terrain = document.getElementById("terCanvas");
+                var terCtx = terrain.getContext("2d");
+                terCtx.canvas.width = window.innerWidth;
+                
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -289,9 +292,7 @@ function getMousePos(canvas, evt){
 
     window.onload = function(){
 
-      var terrain = document.getElementById("terCanvas");
-      var terCtx = terrain.getContext("2d");
-      terCtx.canvas.width = window.innerWidth;
+
 
       var myRectangle = {
           x: 700,
@@ -1337,10 +1338,10 @@ h6:hover .anchor-link {
 </div>
 <div class="output_area">
 <div class="prompt"></div>
-<div id="7721aa6b-8ead-4766-819d-c5b7beacc7d6"></div>
+<div id="f0750348-30d6-40c5-9ef6-6f71bcbcfdd0"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#7721aa6b-8ead-4766-819d-c5b7beacc7d6');
+var element = $('#f0750348-30d6-40c5-9ef6-6f71bcbcfdd0');
 
 (function(global) {
   function now() {
