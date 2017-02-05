@@ -235,8 +235,11 @@ to an otherwise systematic behavior). Here, we take a quick bite-sized look at a
 &lt;span class="math"&gt;\(\frac{dx}{dt} = u\)&lt;/span&gt;
 &lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;
-[ \frac{dx}{dt} = u ]
-&lt;/center&gt;&lt;/p&gt;
+.. math::&lt;/p&gt;
+&lt;p&gt;\frac{dx}{dt} = u&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;.. math::&lt;/p&gt;
+&lt;p&gt;\frac{dx}{dt} = u &lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(x(0) = 1\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;where we seek to minimize the function&lt;/p&gt;
 &lt;p&gt;&lt;span class="math"&gt;\(J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt\)&lt;/span&gt;.&lt;/p&gt;
@@ -2020,10 +2023,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="6d73d88a-8e8b-40ec-9ba1-742311d3bb4d"&gt;&lt;/div&gt;
+&lt;div id="ac7006ca-68ce-4ab1-b6d1-f6c16e27321b"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#6d73d88a-8e8b-40ec-9ba1-742311d3bb4d');
+var element = $('#ac7006ca-68ce-4ab1-b6d1-f6c16e27321b');
 
 (function(global) {
   function now() {
