@@ -291,7 +291,7 @@ function getMousePos(canvas, evt){
 
       var terrain = document.getElementById("terCanvas");
       var terCtx = terrain.getContext("2d");
-      terrain.width = canvas.width
+      terrain.width = window.innerWidth;
 
       var myRectangle = {
           x: 700,
