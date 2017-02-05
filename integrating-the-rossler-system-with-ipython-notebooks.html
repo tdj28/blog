@@ -97,7 +97,7 @@ function getMousePos(canvas, evt){
                 context.canvas.width  = window.innerWidth;
                 var terrain = document.getElementById("terCanvas");
                 var terCtx = terrain.getContext("2d");
-                terCtx.canvas.width = window.innerWidth;
+                terCtx.terrain.width = window.innerWidth;
               // clear
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -481,14 +481,11 @@ function getMousePos(canvas, evt){
       var pend = { j1x: 230, j1y: 45, j1vx:0, j1vy:-1, j2x: 220, j2vx:0, j2y:65, j2vy:0};
 
       animate(myRectangle,myStar,myPlanet,mousePos,pend);
-      animate2(myRect);
-      animate3(myRect3);
-      animate4(myRect3);
 
             };
 
         </script>
-        <canvas id="terCanvas" height="100" style="text-align:center;"></canvas>
+        <canvas id="terCanvas" height="100"></canvas>
         <canvas id="myCanvas" height="100" style="top:0; margin:-100px 0px 15px 0px;"></canvas>    <div id="main">
 <h2><a href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html">Integrating the Rossler System with iPython Notebooks</a></h2>
 <h5><i class="icon-feather"></i> Thu 03 March 2016
@@ -1503,10 +1500,10 @@ h6:hover .anchor-link {
 </div>
 <div class="output_area">
 <div class="prompt"></div>
-<div id="b189b68b-8d28-4ba7-9e63-f1b06a5928fa"></div>
+<div id="6e55a435-1532-4db2-b559-f648b437455f"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#b189b68b-8d28-4ba7-9e63-f1b06a5928fa');
+var element = $('#6e55a435-1532-4db2-b559-f648b437455f');
 
 (function(global) {
   function now() {
