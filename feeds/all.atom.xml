@@ -1,5 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/all.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-02-04T23:27:00-05:00</updated><entry><title>Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</title><link href="http://doctimjones.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html" rel="alternate"></link><published>2017-02-04T23:27:00-05:00</published><updated>2017-02-04T23:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-04:using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html</id><summary type="html">&lt;h3&gt;Background&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/all.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-02-20T19:27:00-05:00</updated><entry><title>Putting a Space Station Over Philly With Final Cut Pro X</title><link href="http://doctimjones.org/putting-a-space-station-over-philly-with-final-cut-pro-x.html" rel="alternate"></link><published>2017-02-20T19:27:00-05:00</published><updated>2017-02-20T19:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-20:putting-a-space-station-over-philly-with-final-cut-pro-x.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;If interested in creating special effects for film projects.&lt;/li&gt;
+&lt;li&gt;Uses Final Cut Pro X and CoreMelt's TrackX Plugin's Simple
+Tracker.&lt;/li&gt;
+&lt;li&gt;In about thirty minutes you can create a passable video that portrays the Star War's Death Star over Philadelphia, PA USA.&lt;/li&gt;
+&lt;li&gt;Resulting video:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/it_wj78IbFA" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2&gt;Gathering the Software&lt;/h2&gt;
+&lt;p&gt;I'll begin with an apology that the software discussed here requires Apple Mac* hardware to run. What we do here can be done with Adobe Premier Pro right out of the box.&lt;/p&gt;
+&lt;p&gt;Assuming you have a Mac* device, this project also requires
+&lt;a href="https://itunes.apple.com/us/app/final-cut-pro/id424389933?mt=12"&gt;Final Cut Pro&lt;/a&gt;. This is not cheap software, but I've found it to be worth it if you plan to be doing enough projects. I have many nieces and nephews and we've had an awesome time making movies with this tool.&lt;/p&gt;
+&lt;p&gt;Using Keyframing, we could get a realistic tracking effect, but this would be a very tedious and time consuming way to proceed. Fortunately there is a plugin we can use that does the tracking nearly automatically.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://coremelt.com/products/trackx-powered-by-mocha"&gt;Coremelt's TrackX Plugin&lt;/a&gt; powered by &lt;a href="https://www.imagineersystems.com/products/what-is-mocha/"&gt;Mocha&lt;/a&gt; analyzes your video frame by frame and attempts to match the motion of the camera. The user needs only provide some very simple guidance.&lt;/p&gt;
+&lt;h2&gt;Gathering the Media&lt;/h2&gt;
+&lt;p&gt;A quick image search will yield a wide range of choices for images of a space station, in this case the Death Star, but keep an eye towards an example that would look realistic in the
+context of your video. I chose an image that looked a lot
+like what the moon looks like in the daytime.&lt;/p&gt;
+&lt;p&gt;I also filmed a couple of scenes around Philadelphia,
+being careful to move the camera enough to make it
+seem realistic, but smoothly enough with no quick
+motions to make tracking easier for myself.&lt;/p&gt;
+&lt;h2&gt;Preparing the Death Star image&lt;/h2&gt;
+&lt;p&gt;When you apply the image, however, you also must keep
+in mind that if it doesn't match the shadowing seen in
+the video, the viewer's mind will feel a bit off about it.
+Look for the shadows in your video and flip the Death Star
+image to match that direction using the &lt;em&gt;flipped&lt;/em&gt; effect:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="flipped" src="assets/PuttingSpaceStationOverPhilly-c9525.png" /&gt;&lt;/p&gt;
+&lt;p&gt;That is, import the media, drag it down to your timeline, and then drag the &lt;em&gt;flipped&lt;/em&gt; effect to the corresponding timeline entry of the Death Star image. Next right click on that
+clip and create a new compound clip:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="compound_clip" src="assets/PuttingSpaceStationOverPhilly-e69aa.png" /&gt;&lt;/p&gt;
+&lt;p&gt;This is required for the TrackX plugin. Once you've done
+that, the compound clip of the Death Star will show up
+in your media and you can delete from your time line.&lt;/p&gt;
+&lt;p&gt;Because I had one scene facing West and another facing East,
+which is not recommended because that would imply two
+Death Stars in the sky, I needed to create two compound
+clips, one flipped from the other, in order to match
+the sun direction.&lt;/p&gt;
+&lt;h2&gt;Tracking your video clips&lt;/h2&gt;
+&lt;p&gt;Next we can start the tracking process. Import your video
+clips from your device or hard-drive and then drag the
+corresponding file from the media section onto the timeline.&lt;/p&gt;
+&lt;p&gt;Then, go to the &lt;em&gt;generators&lt;/em&gt; menu and select Simple Tracker
+under the C2 TrackX entry:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="generators" src="assets/PuttingSpaceStationOverPhilly-230aa.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Drag that &lt;strong&gt;on top of&lt;/strong&gt; the video clip. Your timeline
+will look something like this:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="timeline" src="assets/PuttingSpaceStationOverPhilly-a7eb0.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Above, I have three video clips and I have trimmed
+the Simple Tracker to fit each one and thus have three
+Simple Tracker entries in the timeline, one for each video.&lt;/p&gt;
+&lt;p&gt;Click on the Simple Tracker entry on the timeline and you'll
+now be able to set up tracking for your video:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="simple_tracker" src="assets/PuttingSpaceStationOverPhilly-c80e1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Figuring out what shape and placement for your area selection
+in Simple Tracker is an art more or less. Be sure to select
+an area that is completely in view for the majority of the clip.
+In the above screenshot, I chose the top of two sky-scrapers that are clearly and consistently within view during the entire
+clip. This helps the tracker maintain a passable tracking.&lt;/p&gt;
+&lt;p&gt;Drag your compound clip of the Death Star that you made
+in the previous step over to the Insert Layer section, and
+then adjust the X, Y offsets and scale until the image placement
+in your video looks satisfactory.&lt;/p&gt;
+&lt;p&gt;In the timeline, move to the start of the
+video, and after you set your tracking shape selection,
+click on the &lt;em&gt;Track forward&lt;/em&gt; button (white sideways arrow
+with the T in it). The plugin will iterate through each
+frame attempting to track the camera location in
+such a way that it can superimpose an image of the Death
+Star on the sky so that it appears as if it is stationary
+relative to the camera. In the resulting video (above)
+you can see, if you look closely enough, some flaws, but
+for the relatively small time put into it, the effect
+is quite good.&lt;/p&gt;
+&lt;h2&gt;Tutorial Video&lt;/h2&gt;
+&lt;p&gt;Finally, here is a quick how-to video walking you
+through the process in real-time:&lt;/p&gt;
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/se17wSZzKB8" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</summary><category term="Film"></category><category term="Final Cut Pro"></category><category term="Special Effects"></category><category term="MacBook"></category></entry><entry><title>Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</title><link href="http://doctimjones.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html" rel="alternate"></link><published>2017-02-04T23:27:00-05:00</published><updated>2017-02-04T23:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-04:using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html</id><summary type="html">&lt;h3&gt;Background&lt;/h3&gt;
 &lt;p&gt;Jupiter notebooks (iPython notebooks) is a
 convenient and powerful tools for research.
 Setting up an entire workstation with all
@@ -219,7 +300,7 @@ the links above with that hosts FQDN or IP Address.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="cloud9" src="assets/JupyterHowTo-33389.png" /&gt;&lt;/p&gt;
 &lt;p&gt;and a Jupyter notebook at &lt;a href="http://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="jupyter" src="assets/JupyterHowTo-22dfd.png" /&gt;&lt;/p&gt;
-&lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry><entry><title>Bize sized stochastic control theory</title><link href="http://doctimjones.org/bize-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bize-sized-stochastic-control-theory.html</id><summary type="html">&lt;p&gt;WORK IN PROGRESS...&lt;/p&gt;
+&lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry><entry><title>Bite sized stochastic control theory</title><link href="http://doctimjones.org/bite-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bite-sized-stochastic-control-theory.html</id><summary type="html">&lt;p&gt;WORK IN PROGRESS...&lt;/p&gt;
 &lt;h3&gt;Theory vs. on the ground&lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;Deterministic&lt;/em&gt; and &lt;em&gt;stochastic&lt;/em&gt; control theory both approach the same general problem of
 preventing unwanted behaviors of a system by controlling input variables. The deterministic
@@ -252,14 +333,22 @@ somehow an expression of some idealized behavior, (e.g. minimize polution output
 &lt;div class="math"&gt;$$u(t) = -e^{-t}$$&lt;/div&gt;
 &lt;p&gt;and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
 and use&lt;/p&gt;
-&lt;div class="math"&gt;$$\dot{x}{t} = -x(t)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$u(t) = -x(t)$$&lt;/div&gt;
 &lt;p&gt;,&lt;/p&gt;
 &lt;p&gt;e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter &lt;span class="math"&gt;\(x\)&lt;/span&gt; at time &lt;span class="math"&gt;\(t\)&lt;/span&gt; as dictated by the relation:&lt;/p&gt;
-&lt;div class="math"&gt;$$\delta x = -x(t) \delta t$$&lt;/div&gt;
+&lt;div class="math"&gt;$$\delta x(t) = -x(t) \delta t$$&lt;/div&gt;
 &lt;p&gt;.&lt;/p&gt;
 &lt;h5&gt;What is the difference?&lt;/h5&gt;
 &lt;p&gt;For a deterministic system, the exponent we found for &lt;span class="math"&gt;\(u\)&lt;/span&gt; seems like a great solution &lt;strong&gt;if&lt;/strong&gt; it can be
-designed into the system. But what happens if we have stochastic noise?&lt;/p&gt;
+designed into the system. In complex systems where fitting to a solution is not practical, the
+closed loop control (&lt;span class="math"&gt;\(\dot{x}{t} = -x(t)\)&lt;/span&gt;) &lt;strong&gt;is&lt;/strong&gt; a practical solution.&lt;/p&gt;
+&lt;p&gt;What happens if we have stochastic noise? In this case, the closed loop control performs better than
+the open loop control because it, by nature, incorporates real-time feedback from the system.&lt;/p&gt;
+&lt;h5&gt;Stochastic System&lt;/h5&gt;
+&lt;p&gt;Our toy stochastic system is governed by&lt;/p&gt;
+&lt;div class="math"&gt;$$ \frac{dx}{dt} = u + v $$&lt;/div&gt;
+&lt;p&gt; where &lt;span class="math"&gt;\(u\)&lt;/span&gt; is the theoretically predicted time derivative
+of the &lt;span class="math"&gt;\(x\)&lt;/span&gt; variable &lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -2019,10 +2108,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="452b38ea-c6f7-4b13-bda4-1109d6e36ce3"&gt;&lt;/div&gt;
+&lt;div id="8c70d9a9-e223-4110-b12f-ee7d839a41a4"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#452b38ea-c6f7-4b13-bda4-1109d6e36ce3');
+var element = $('#8c70d9a9-e223-4110-b12f-ee7d839a41a4');
 
 (function(global) {
   function now() {

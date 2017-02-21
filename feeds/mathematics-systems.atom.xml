@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/mathematics-systems.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-31T20:27:00-05:00</updated><entry><title>Bize sized stochastic control theory</title><link href="http://doctimjones.org/bize-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bize-sized-stochastic-control-theory.html</id><summary type="html">&lt;p&gt;WORK IN PROGRESS...&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/mathematics-systems.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-01-31T20:27:00-05:00</updated><entry><title>Bite sized stochastic control theory</title><link href="http://doctimjones.org/bite-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bite-sized-stochastic-control-theory.html</id><summary type="html">&lt;p&gt;WORK IN PROGRESS...&lt;/p&gt;
 &lt;h3&gt;Theory vs. on the ground&lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;Deterministic&lt;/em&gt; and &lt;em&gt;stochastic&lt;/em&gt; control theory both approach the same general problem of
 preventing unwanted behaviors of a system by controlling input variables. The deterministic
@@ -32,14 +32,22 @@ somehow an expression of some idealized behavior, (e.g. minimize polution output
 &lt;div class="math"&gt;$$u(t) = -e^{-t}$$&lt;/div&gt;
 &lt;p&gt;and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
 and use&lt;/p&gt;
-&lt;div class="math"&gt;$$\dot{x}{t} = -x(t)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$u(t) = -x(t)$$&lt;/div&gt;
 &lt;p&gt;,&lt;/p&gt;
 &lt;p&gt;e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter &lt;span class="math"&gt;\(x\)&lt;/span&gt; at time &lt;span class="math"&gt;\(t\)&lt;/span&gt; as dictated by the relation:&lt;/p&gt;
-&lt;div class="math"&gt;$$\delta x = -x(t) \delta t$$&lt;/div&gt;
+&lt;div class="math"&gt;$$\delta x(t) = -x(t) \delta t$$&lt;/div&gt;
 &lt;p&gt;.&lt;/p&gt;
 &lt;h5&gt;What is the difference?&lt;/h5&gt;
 &lt;p&gt;For a deterministic system, the exponent we found for &lt;span class="math"&gt;\(u\)&lt;/span&gt; seems like a great solution &lt;strong&gt;if&lt;/strong&gt; it can be
-designed into the system. But what happens if we have stochastic noise?&lt;/p&gt;
+designed into the system. In complex systems where fitting to a solution is not practical, the
+closed loop control (&lt;span class="math"&gt;\(\dot{x}{t} = -x(t)\)&lt;/span&gt;) &lt;strong&gt;is&lt;/strong&gt; a practical solution.&lt;/p&gt;
+&lt;p&gt;What happens if we have stochastic noise? In this case, the closed loop control performs better than
+the open loop control because it, by nature, incorporates real-time feedback from the system.&lt;/p&gt;
+&lt;h5&gt;Stochastic System&lt;/h5&gt;
+&lt;p&gt;Our toy stochastic system is governed by&lt;/p&gt;
+&lt;div class="math"&gt;$$ \frac{dx}{dt} = u + v $$&lt;/div&gt;
+&lt;p&gt; where &lt;span class="math"&gt;\(u\)&lt;/span&gt; is the theoretically predicted time derivative
+of the &lt;span class="math"&gt;\(x\)&lt;/span&gt; variable &lt;/p&gt;
 &lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
