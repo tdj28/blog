@@ -143,14 +143,13 @@ general global GDP growth rate:&lt;/p&gt;
 Since velocity is inversely proportional to the time it would take to reach the star, we can rewroite this as&lt;/p&gt;
 &lt;div class="math"&gt;$$ \frac{T_0}{T} = (1+r)^t $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(T\)&lt;/span&gt; is the time it would take if we waited &lt;span class="math"&gt;\(t\)&lt;/span&gt; years for technology to evolve, and &lt;span class="math"&gt;\(T_0\)&lt;/span&gt; is the time
-to take if we were to launch with today's current technology. T is always going to be less than &lt;span class="math"&gt;\(T_0\)&lt;/span&gt;
-assuming a constant growth rate. However, the time we wait &lt;span class="math"&gt;\(t\)&lt;/span&gt; can exceed the time it would take to get
-there if we launched now (&lt;span class="math"&gt;\(T_0\)&lt;/span&gt;) if wait too long. The purpose of the &lt;strong&gt;Wait Equation&lt;/strong&gt; is to find the
+to take if we were to launch with today's current technology. The purpose of the &lt;strong&gt;Wait Equation&lt;/strong&gt; is to find the
 sweet spot for launching such that to wait any longer would not return any advantage.&lt;/p&gt;
 &lt;p&gt;We seek, then, the condition for which:&lt;/p&gt;
 &lt;div class="math"&gt;$$ t  + \frac{T_0}{(1+r)^t} $$&lt;/div&gt;
 &lt;p&gt;reaches a minimum. Using our previous rough estimate of 178,846 years for
-Apollo 10 to reach TRAPPIST-1, we see that this minimum would happen about
+Apollo 10 to reach TRAPPIST-1 and a growth rate of 1%,
+we see that this minimum would happen about
 seven centuries from now.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="WaitEquation" src="assets/trappist1isprobablynotalive-520e1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The implication, if you accept the premises of this equation, is that
