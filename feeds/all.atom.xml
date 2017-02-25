@@ -140,7 +140,7 @@ journey is the strongest."&lt;/p&gt;
 general global GDP growth rate:&lt;/p&gt;
 &lt;div class="math"&gt;$$ v(t) = v_0 (1 + r)^t$$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(v\)&lt;/span&gt; is the velocity &lt;span class="math"&gt;\(t\)&lt;/span&gt; years after the velocity is &lt;span class="math"&gt;\(v_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(r\)&lt;/span&gt; is the average growth rate year over year.
-Since velocity is inversely proportional to the time it would take to reach the star, we can rewroite this as&lt;/p&gt;
+Since velocity is inversely proportional to the time it would take to reach the star, we can rewrite this as&lt;/p&gt;
 &lt;div class="math"&gt;$$ \frac{T_0}{T} = (1+r)^t $$&lt;/div&gt;
 &lt;p&gt;where &lt;span class="math"&gt;\(T\)&lt;/span&gt; is the time it would take if we waited &lt;span class="math"&gt;\(t\)&lt;/span&gt; years for technology to evolve, and &lt;span class="math"&gt;\(T_0\)&lt;/span&gt; is the time
 to take if we were to launch with today's current technology. The purpose of the &lt;strong&gt;Wait Equation&lt;/strong&gt; is to find the
@@ -2341,10 +2341,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="c152f41d-759b-427f-93b4-ca3a22502746"&gt;&lt;/div&gt;
+&lt;div id="e130e010-40ca-4de3-afba-00d346c4887e"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#c152f41d-759b-427f-93b4-ca3a22502746');
+var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
 
 (function(global) {
   function now() {
