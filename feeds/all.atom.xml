@@ -114,7 +114,8 @@ than larger stars:&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img alt="trillions" src="assets/trappist1isprobablynotalive-c401a.png" /&gt;&lt;/p&gt;
-&lt;p&gt;Even for the moons in our solar system, though, when the ocean is frozen over, there is a suspected liquid layer underneath that could possible host life (e.g. Europa) which is why NASA has an interest in looking for potential life on Europa. So the conditions of the TRAPPIST-1 system may support some form of life but like with Europa, the ability for complex life to develop is highly limited due to lack of resources. Also, life can be fragile, and Earth went through many periods of mass extinctions; if any of the planets around TRAPPIST-1 have life, they are probably relegated to small regions in the twilight zones (that is, if one side always faces the star and the other always faces empty space, the part of the planet between these two zones would be in permanent twilight and have the mildest climates if the planets still have their atmospheres) making life on those planets much more vulnerable to total extinction, a fate Earth avoided in part due to being almost entirely habitable and thus having a more diverse biosphere.&lt;/p&gt;
+&lt;p&gt;Even if some of oceans remain and are frozen over, that doesn't rule out life.
+Some of the moons in our solar system have frozen oceans of water where there is a suspected liquid layer underneath that could possible host life (e.g. Europa) which is why NASA has an interest in looking for potential life on Europa. So the conditions of the TRAPPIST-1 system may support some form of life but like with Europa, the ability for complex life to develop is highly limited due to lack of resources. Also, life can be fragile, and Earth went through many periods of mass extinctions; if any of the planets around TRAPPIST-1 have life, they are probably relegated to small regions in the twilight zones (that is, if one side always faces the star and the other always faces empty space, the part of the planet between these two zones would be in permanent twilight and have the mildest climates if the planets still have their atmospheres) making life on those planets much more vulnerable to total extinction, a fate Earth avoided in part due to being almost entirely habitable and thus having a more diverse biosphere.&lt;/p&gt;
 &lt;h2&gt;Sobering Conclusions&lt;/h2&gt;
 &lt;p&gt;Forty lightyears is a long way away. Apollo 10's max speed was around 11082.5 m/s which is the fastest manned craft speed we've ever obtained. That's slower than how fast TRAPPIST-1 is moving toward us. 40 light years is 3.784e+17 meters away. If Apollo 10 went directly towards TRAPPIST-1 at its maximum obtained speed, it would close the distance at a rate of about 67082.5 m/s (the sum of its speed relative to Earth and the speed of TRAPPIST-1 relative to Earth using Galilean Relativity, these speeds are too slow to justify using Einstein's Relativity). It would take Apollo 10 approximately 5.6408154e+12 seconds to make it to TRAPPIST-1. That's nearly 178,846 years. Rocket technology hasn't changed radically since then. And, of course, the astronauts wouldn't live long enough to get even
 a tiny fraction of the way there.&lt;/p&gt;
@@ -2341,10 +2342,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="9f3b9e0c-5428-4edd-861f-7189d8f58e80"&gt;&lt;/div&gt;
+&lt;div id="b1f55e3f-e1e9-4a86-a4d6-7ff08ca37cba"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#9f3b9e0c-5428-4edd-861f-7189d8f58e80');
+var element = $('#b1f55e3f-e1e9-4a86-a4d6-7ff08ca37cba');
 
 (function(global) {
   function now() {
