@@ -146,9 +146,7 @@ Since velocity is inversely proportional to the time it would take to reach the 
 to take if we were to launch with today's current technology. T is always going to be less than &lt;span class="math"&gt;\(T_0\)&lt;/span&gt;
 assuming a constant growth rate. However, the time we wait &lt;span class="math"&gt;\(t\)&lt;/span&gt; can exceed the time it would take to get
 there if we launched now (&lt;span class="math"&gt;\(T_0\)&lt;/span&gt;) if wait too long. The purpose of the &lt;strong&gt;Wait Equation&lt;/strong&gt; is to find the
-sweet spot for launching such that the relation &lt;span class="math"&gt;\(t + T &amp;lt; T_0\)&lt;/span&gt; no longer holds. That is, at the point
-where &lt;span class="math"&gt;\(t + T &amp;gt; T_0\)&lt;/span&gt;, then it makes perfect sense to launch now because you can be pretty sure
-that no future generation will beat you to the planet and build a giant space-wall around the planet.&lt;/p&gt;
+sweet spot for launching such that to wait any longer would not return any advantage.&lt;/p&gt;
 &lt;p&gt;We seek, then, the condition for which:&lt;/p&gt;
 &lt;div class="math"&gt;$$ t  + \frac{T_0}{(1+r)^t} $$&lt;/div&gt;
 &lt;p&gt;reaches a minimum. Using our previous rough estimate of 178,846 years for
