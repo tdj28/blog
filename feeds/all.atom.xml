@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/all.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-02-24T21:27:00-05:00</updated><entry><title>TRAPPIST-1 is probably not alive</title><link href="http://doctimjones.org/trappist-1-is-probably-not-alive.html" rel="alternate"></link><published>2017-02-24T21:27:00-05:00</published><updated>2017-02-24T21:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-24:trappist-1-is-probably-not-alive.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/all.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2017-02-24T21:27:00-05:00</updated><entry><title>TRAPPIST-1 is probably not alive</title><link href="http://3implieschaos.org/trappist-1-is-probably-not-alive.html" rel="alternate"></link><published>2017-02-24T21:27:00-05:00</published><updated>2017-02-24T21:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-02-24:trappist-1-is-probably-not-alive.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;It was recently announced that a nearby star, TRAPPIST-1,
 has been found to have additional planets (some were discovered prior to this study)
@@ -184,15 +184,13 @@ harm to yourself could exceed the harm of buying too early.&lt;/p&gt;
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
     mathjaxscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' }, Macros: {} }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
@@ -228,7 +226,7 @@ harm to yourself could exceed the harm of buying too early.&lt;/p&gt;
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</summary><category term="Astrophysics"></category><category term="Exoplanets"></category><category term="Space"></category><category term="Exobiology"></category></entry><entry><title>Putting a Space Station Over Philly With Final Cut Pro X</title><link href="http://doctimjones.org/putting-a-space-station-over-philly-with-final-cut-pro-x.html" rel="alternate"></link><published>2017-02-20T19:27:00-05:00</published><updated>2017-02-20T19:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-20:putting-a-space-station-over-philly-with-final-cut-pro-x.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
+&lt;/script&gt;</summary><category term="Astrophysics"></category><category term="Exoplanets"></category><category term="Space"></category><category term="Exobiology"></category></entry><entry><title>Putting a Space Station Over Philly With Final Cut Pro X</title><link href="http://3implieschaos.org/putting-a-space-station-over-philly-with-final-cut-pro-x.html" rel="alternate"></link><published>2017-02-20T19:27:00-05:00</published><updated>2017-02-20T19:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-02-20:putting-a-space-station-over-philly-with-final-cut-pro-x.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;If interested in creating special effects for film projects.&lt;/li&gt;
 &lt;li&gt;Uses Final Cut Pro X and CoreMelt's TrackX Plugin's Simple
@@ -313,7 +311,7 @@ through the process in real-time:&lt;/p&gt;
 
 &lt;h2&gt;Further references&lt;/h2&gt;
 &lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=bfhRtd1z2PY"&gt;Another example of this plugin&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=NYfMugEz2zA"&gt;Using Adobe to create this effect&lt;/a&gt;&lt;/p&gt;</summary><category term="Film"></category><category term="Final Cut Pro"></category><category term="Special Effects"></category><category term="MacBook"></category></entry><entry><title>Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</title><link href="http://doctimjones.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html" rel="alternate"></link><published>2017-02-04T23:27:00-05:00</published><updated>2017-02-04T23:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-04:using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html</id><summary type="html">&lt;h3&gt;Background&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=NYfMugEz2zA"&gt;Using Adobe to create this effect&lt;/a&gt;&lt;/p&gt;</summary><category term="Film"></category><category term="Final Cut Pro"></category><category term="Special Effects"></category><category term="MacBook"></category></entry><entry><title>Using Docker-Sparker to get a quick out-of-the-box Cloud9 IDE/Jupyter/Spark/Pandas/etc. experience</title><link href="http://3implieschaos.org/using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html" rel="alternate"></link><published>2017-02-04T23:27:00-05:00</published><updated>2017-02-04T23:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-02-04:using-docker-sparker-to-get-a-quick-out-of-the-box-cloud9-idejupytersparkpandasetc-experience.html</id><summary type="html">&lt;h3&gt;Background&lt;/h3&gt;
 &lt;p&gt;Jupiter notebooks (iPython notebooks) is a
 convenient and powerful tools for research.
 Setting up an entire workstation with all
@@ -533,112 +531,7 @@ the links above with that hosts FQDN or IP Address.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="cloud9" src="assets/JupyterHowTo-33389.png" /&gt;&lt;/p&gt;
 &lt;p&gt;and a Jupyter notebook at &lt;a href="http://localhost:18888"&gt;http://localhost:18888&lt;/a&gt;:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="jupyter" src="assets/JupyterHowTo-22dfd.png" /&gt;&lt;/p&gt;
-&lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry><entry><title>Bite sized stochastic control theory</title><link href="http://doctimjones.org/bite-sized-stochastic-control-theory.html" rel="alternate"></link><published>2017-01-31T20:27:00-05:00</published><updated>2017-01-31T20:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-31:bite-sized-stochastic-control-theory.html</id><summary type="html">&lt;p&gt;WORK IN PROGRESS...&lt;/p&gt;
-&lt;h3&gt;Theory vs. on the ground&lt;/h3&gt;
-&lt;p&gt;&lt;em&gt;Deterministic&lt;/em&gt; and &lt;em&gt;stochastic&lt;/em&gt; control theory both approach the same general problem of
-preventing unwanted behaviors of a system by controlling input variables. The deterministic
-variation assumes everything is known or at least knowable and predictable in such a way that
-given a snapshot of a system, with the proper analysis and with the proper system (i.e. a
-system which &lt;em&gt;can&lt;/em&gt; be controlled, doesn't have catastrophe points) we can control it in
-perpetuity. &lt;strong&gt;Stochastic&lt;/strong&gt; control theory essentially expands control theory to deal with
-systems which have real-world behavior-that is, systems which do not behave ideally and
-are subject to random variations in behavior (though those variations are perturbations
-to an otherwise systematic behavior). Here, we take a quick bite-sized look at an example.&lt;/p&gt;
-&lt;h4&gt;An example&lt;/h4&gt;
-&lt;p&gt;Take a look at the system defined by&lt;/p&gt;
-&lt;div class="math"&gt;$$\frac{dx}{dt} = u$$&lt;/div&gt;
-&lt;div class="math"&gt;$$x(0) = 1$$&lt;/div&gt;
-&lt;p&gt;where we seek to minimize the function&lt;/p&gt;
-&lt;div class="math"&gt;$$J = \int^{\infty}_0 \left[ x^2(t) + u^2(t)\right] dt$$&lt;/div&gt;
-&lt;p&gt;.&lt;/p&gt;
-&lt;h5&gt;What does it correspond to?&lt;/h5&gt;
-&lt;p&gt;Firstly, it is important to understand that &lt;span class="math"&gt;\(u\)&lt;/span&gt; is not necessarily a constant. In fact, if &lt;span class="math"&gt;\(J\)&lt;/span&gt; is
-somehow an expression of some idealized behavior, (e.g. minimize polution output), then choosing
-&lt;span class="math"&gt;\(u\)&lt;/span&gt; to be a constant would be a very bad idea as &lt;span class="math"&gt;\(J \rightarrow \infty\)&lt;/span&gt;.&lt;/p&gt;
-&lt;h5&gt;Finding u&lt;/h5&gt;
-&lt;p&gt;So let's now try to find a &lt;span class="math"&gt;\(u\)&lt;/span&gt; that would minimize &lt;span class="math"&gt;\(J\)&lt;/span&gt;. First, re-write &lt;span class="math"&gt;\(J\)&lt;/span&gt; as&lt;/p&gt;
-&lt;div class="math"&gt;$$J = \int^{\infty}_0 \left[ x^2(t) + u^2(t) \right] dt$$&lt;/div&gt;
-&lt;p&gt;and then we note that&lt;/p&gt;
-&lt;div class="math"&gt;$$\int^{T}_0 \left[ x^2(t) + u^2(t) \right] dt = x^2(0) - x^2(T) + \int^{T}_0 \left[ x(t) + \dot{x}(t) \right]^2 dt$$&lt;/div&gt;
-&lt;p&gt;Let's find the minima of this with respect to &lt;span class="math"&gt;\(d/d(\dot{x})\)&lt;/span&gt;, setting the result to zero, to find that&lt;/p&gt;
-&lt;div class="math"&gt;$$x(t) = - \dot{x}(t)$$&lt;/div&gt;
-&lt;p&gt;We can look at this as an open loop control, such that we solve to find that&lt;/p&gt;
-&lt;div class="math"&gt;$$u(t) = -e^{-t}$$&lt;/div&gt;
-&lt;p&gt;and then somehow find a way to design the system to obey this function. Or we can treat it as a closed loop control
-and use&lt;/p&gt;
-&lt;div class="math"&gt;$$u(t) = -x(t)$$&lt;/div&gt;
-&lt;p&gt;,&lt;/p&gt;
-&lt;p&gt;e.g. using a simple Eulerian integration for the sake of argument, the system can be best controlled by changing parameter &lt;span class="math"&gt;\(x\)&lt;/span&gt; at time &lt;span class="math"&gt;\(t\)&lt;/span&gt; as dictated by the relation:&lt;/p&gt;
-&lt;div class="math"&gt;$$\delta x(t) = -x(t) \delta t$$&lt;/div&gt;
-&lt;p&gt;.&lt;/p&gt;
-&lt;h5&gt;What is the difference?&lt;/h5&gt;
-&lt;p&gt;For a deterministic system, the exponent we found for &lt;span class="math"&gt;\(u\)&lt;/span&gt; seems like a great solution &lt;strong&gt;if&lt;/strong&gt; it can be
-designed into the system. In complex systems where fitting to a solution is not practical, the
-closed loop control (&lt;span class="math"&gt;\(\dot{x}{t} = -x(t)\)&lt;/span&gt;) &lt;strong&gt;is&lt;/strong&gt; a practical solution.&lt;/p&gt;
-&lt;p&gt;What happens if we have stochastic noise? In this case, the closed loop control performs better than
-the open loop control because it, by nature, incorporates real-time feedback from the system.&lt;/p&gt;
-&lt;h5&gt;Stochastic System&lt;/h5&gt;
-&lt;p&gt;Our toy stochastic system is governed by&lt;/p&gt;
-&lt;div class="math"&gt;$$ \frac{dx}{dt} = u + v $$&lt;/div&gt;
-&lt;p&gt; where &lt;span class="math"&gt;\(u\)&lt;/span&gt; is the theoretically predicted time derivative
-of the &lt;span class="math"&gt;\(x\)&lt;/span&gt; variable &lt;/p&gt;
-&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width &lt; 768) ? "left" : align;
-        indent = (screen.width &lt; 768) ? "0em" : indent;
-        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' }, Macros: {} }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-&lt;/script&gt;</summary><category term="Control Theory"></category><category term="Stochastic"></category><category term="Python"></category></entry><entry><title>AWS Virtual Machines, cook thyself! Part I</title><link href="http://doctimjones.org/aws-virtual-machines-cook-thyself-part-i.html" rel="alternate"></link><published>2017-01-28T17:00:00-05:00</published><updated>2017-01-28T17:00:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-28:aws-virtual-machines-cook-thyself-part-i.html</id><summary type="html">&lt;h3&gt;Motivation&lt;/h3&gt;
+&lt;p&gt;Now do some great development and research!&lt;/p&gt;</summary><category term="DevOps"></category><category term="Python"></category><category term="Data Science"></category><category term="Docker"></category><category term="Spark"></category><category term="Cloud 9 IDE"></category><category term="Jupyter"></category><category term="Pandas"></category><category term="Google Compute"></category><category term="SSH"></category></entry><entry><title>AWS Virtual Machines, cook thyself! Part I</title><link href="http://3implieschaos.org/aws-virtual-machines-cook-thyself-part-i.html" rel="alternate"></link><published>2017-01-28T17:00:00-05:00</published><updated>2017-01-28T17:00:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-01-28:aws-virtual-machines-cook-thyself-part-i.html</id><summary type="html">&lt;h3&gt;Motivation&lt;/h3&gt;
 &lt;p&gt;Cloudformation offers a nice solution to orchestrating infrastructure deployment, but has its limitations. Its built in method for deployment scripts, "User Data", is difficult to maintain and unwieldy for more complicated systems. This walkthrough tutorial shows you how you can use chef, AWS KMS, and AWS Cloudformation together to get the best of both worlds--full automation with Cloudformation coupled with Chef's configuration management. &lt;/p&gt;
 &lt;p&gt;In Part I, we create a chef cookbook to install the Cloud 9 IDE development package on a server.&lt;/p&gt;
 &lt;p&gt;In Part II, we do the same thing using Puppet.&lt;/p&gt;
@@ -1242,7 +1135,7 @@ include_recipe &amp;#39;c9_ide::supervisor&amp;#39;
 &lt;p&gt;You can find the source code for this recipe on my github account &lt;a href="https://github.com/doctimjones/c9_ide_chef/tree/PartI"&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;h3&gt;Future Steps&lt;/h3&gt;
 &lt;p&gt;We took some shortcuts and avoided some best practices for convenience here. Ideally we would like some unit tests and to pull in more community recipes. For example, the supervisor chef cookbook could be used here instead of dealing with that in a platform case. &lt;/p&gt;
-&lt;p&gt;In the forthcoming Part II, we will use Puppet, a widely used alternative to Chef, to provision a server that runs the Cloud 9 IDE SDK as we have here with Chef.&lt;/p&gt;</summary><category term="AWS"></category><category term="Chef"></category><category term="Cloudformation"></category></entry><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://doctimjones.org/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-01-20:python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;h4&gt;A Python feature?&lt;/h4&gt;
+&lt;p&gt;In the forthcoming Part II, we will use Puppet, a widely used alternative to Chef, to provision a server that runs the Cloud 9 IDE SDK as we have here with Chef.&lt;/p&gt;</summary><category term="AWS"></category><category term="Chef"></category><category term="Cloudformation"></category></entry><entry><title>Python uses operational chaining for boolean comparisons</title><link href="http://3implieschaos.org/python-uses-operational-chaining-for-boolean-comparisons.html" rel="alternate"></link><published>2017-01-20T18:23:00-05:00</published><updated>2017-01-20T18:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-01-20:python-uses-operational-chaining-for-boolean-comparisons.html</id><summary type="html">&lt;h4&gt;A Python feature?&lt;/h4&gt;
 &lt;p&gt;A colleague noticed this behavior:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;b&amp;#39; == 0
 False
@@ -1336,7 +1229,7 @@ True
 False
 &amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39; == True
 False
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="Python"></category></entry><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Python"></category></entry><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://3implieschaos.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -2341,10 +2234,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="e130e010-40ca-4de3-afba-00d346c4887e"&gt;&lt;/div&gt;
+&lt;div id="fdb77850-62c0-455c-93aa-49f414ee0502"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
+var element = $('#fdb77850-62c0-455c-93aa-49f414ee0502');
 
 (function(global) {
   function now() {
@@ -2491,8 +2384,7 @@ var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="cell border-box-sizing text_cell rendered"&gt;
-&lt;div class="prompt input_prompt"&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
@@ -2561,8 +2453,7 @@ var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="cell border-box-sizing text_cell rendered"&gt;
-&lt;div class="prompt input_prompt"&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
@@ -2763,7 +2654,7 @@ var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
 &lt;/script&gt;
-</summary><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://doctimjones.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;h4&gt;Goal&lt;/h4&gt;
+</summary><category term="Math"></category><category term="Physics"></category><category term="Thesis"></category></entry><entry><title>Abstracting Networking with Docker Containers</title><link href="http://3implieschaos.org/abstracting-networking-with-docker-containers.html" rel="alternate"></link><published>2016-03-03T00:23:00-05:00</published><updated>2016-03-03T00:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2016-03-03:abstracting-networking-with-docker-containers.html</id><summary type="html">&lt;h4&gt;Goal&lt;/h4&gt;
 &lt;p&gt;Network Namespace is a Linux tool that allows for the easy virtualization of network models. While it has plenty of &lt;a href="http://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/"&gt;practical uses directly on the hardware&lt;/a&gt;, this will be a quick introduction to how it can be used to create more complex Docker networks that could be extended to modeling, say, the infrastructure of a data center or cloud provider.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://github.com/brandon-rhodes/fopnp/tree/m/playground"&gt;Brandon Rhodes created&lt;/a&gt; a great "playground" for his book &lt;a href="https://github.com/brandon-rhodes/fopnp"&gt;Foundations of Python Network Programming&lt;/a&gt;. Inspired by this example, we will create a small simple netns/docker example that is more bite-sized for those who aren't familiar with these tools. &lt;/p&gt;
 &lt;h4&gt;What is NetNS?&lt;/h4&gt;

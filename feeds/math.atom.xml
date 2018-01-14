@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/math.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://doctimjones.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/math.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2016-03-03T01:23:00-05:00</updated><entry><title>Integrating the Rossler System with iPython Notebooks</title><link href="http://3implieschaos.org/integrating-the-rossler-system-with-ipython-notebooks.html" rel="alternate"></link><published>2016-03-03T01:23:00-05:00</published><updated>2016-03-03T01:23:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2016-03-03:integrating-the-rossler-system-with-ipython-notebooks.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
@@ -1004,10 +1004,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="e130e010-40ca-4de3-afba-00d346c4887e"&gt;&lt;/div&gt;
+&lt;div id="fdb77850-62c0-455c-93aa-49f414ee0502"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
+var element = $('#fdb77850-62c0-455c-93aa-49f414ee0502');
 
 (function(global) {
   function now() {
@@ -1154,8 +1154,7 @@ var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="cell border-box-sizing text_cell rendered"&gt;
-&lt;div class="prompt input_prompt"&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
@@ -1224,8 +1223,7 @@ var element = $('#e130e010-40ca-4de3-afba-00d346c4887e');
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class="cell border-box-sizing text_cell rendered"&gt;
-&lt;div class="prompt input_prompt"&gt;
+&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;

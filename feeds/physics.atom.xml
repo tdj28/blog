@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>doctimjones</title><link href="http://doctimjones.org/" rel="alternate"></link><link href="http://doctimjones.org/feeds/physics.atom.xml" rel="self"></link><id>http://doctimjones.org/</id><updated>2017-02-24T21:27:00-05:00</updated><entry><title>TRAPPIST-1 is probably not alive</title><link href="http://doctimjones.org/trappist-1-is-probably-not-alive.html" rel="alternate"></link><published>2017-02-24T21:27:00-05:00</published><updated>2017-02-24T21:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:doctimjones.org,2017-02-24:trappist-1-is-probably-not-alive.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/physics.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2017-02-24T21:27:00-05:00</updated><entry><title>TRAPPIST-1 is probably not alive</title><link href="http://3implieschaos.org/trappist-1-is-probably-not-alive.html" rel="alternate"></link><published>2017-02-24T21:27:00-05:00</published><updated>2017-02-24T21:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-02-24:trappist-1-is-probably-not-alive.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;It was recently announced that a nearby star, TRAPPIST-1,
 has been found to have additional planets (some were discovered prior to this study)
@@ -184,15 +184,13 @@ harm to yourself could exceed the harm of buying too early.&lt;/p&gt;
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
     mathjaxscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' }, Macros: {} }," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
         "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
         "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
         "    displayAlign: '"+ align +"'," +
