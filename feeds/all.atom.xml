@@ -59,14 +59,15 @@ and pay-walls on journals do nothing to help science and everything to line the 
 So you might say, well shut up then. But I won't shut up, because the New York Times didn't, and also because I have
 the abstract! When I read the 
 &lt;a href="https://www.ncbi.nlm.nih.gov/pubmed/28726475"&gt;abstract&lt;/a&gt;
-my eyes were desperately looking for the words "calories". Did I find it? &lt;a href="http://psycnet.apa.org/record/2017-31316-001"&gt;Nope&lt;/a&gt;:&lt;/p&gt;
+my eyes were desperately looking for the words "calories" and "metabolism" (bonus points for body fat percentage!). 
+Did I find it? &lt;a href="http://psycnet.apa.org/record/2017-31316-001"&gt;Nope&lt;/a&gt;:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;adjusting for actual levels of physical activity, health status and behavior, and sociodemographic variables.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;That's OK in general, were it not for the conclusions that &lt;em&gt;The Times&lt;/em&gt; and the authors are pointing at. It is a 
 very, very &lt;em&gt;fascinating&lt;/em&gt; finding, worthy of greater discussion and further investigation. But to draw conclusions
-from this study to bring to the public based on these preliminary results, when the most important variable, caloric
-intake, doesn't seem to have been considered, is highly problematic.&lt;/p&gt;
+from this study to bring to the public based on these preliminary results, when two super important variables
+don't seem to have been considered, is highly problematic.&lt;/p&gt;
 &lt;p&gt;In the abstract of the journal article, the authors conclude:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Individuals’ perceptions about their level of physical activity strongly predicted mortality, even after accounting for the effects of actual physical activity and other known determinants of mortality. This suggests that perceptions about health behaviors may play an important role in shaping health outcomes.&lt;/p&gt;
@@ -2363,10 +2364,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="33d7e05a-39b2-48fc-b37a-76e3bab160fe"&gt;&lt;/div&gt;
+&lt;div id="229e1d4f-b6d8-4ae4-9528-847ec48ba786"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#33d7e05a-39b2-48fc-b37a-76e3bab160fe');
+var element = $('#229e1d4f-b6d8-4ae4-9528-847ec48ba786');
 
 (function(global) {
   function now() {
