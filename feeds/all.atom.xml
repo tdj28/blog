@@ -5,6 +5,7 @@
 &lt;li&gt;Article reads like a press release rather than scientific journalism.&lt;/li&gt;
 &lt;li&gt;There may be much more plausible ways to present the study findings.&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3&gt;Entry&lt;/h3&gt;
 &lt;p&gt;&lt;a href="https://www.nytimes.com/2018/02/22/well/move/how-our-beliefs-can-shape-our-waistlines.html"&gt;This&lt;/a&gt; New York Times article
 has a rather stunning headline.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="theheadline" src="assets/nytheadline20180222.png" /&gt;&lt;/p&gt;
@@ -2361,10 +2362,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="7d180f7e-6862-4a88-8606-18eb854f2c7e"&gt;&lt;/div&gt;
+&lt;div id="36d2cdf8-21a1-4ccf-916e-0ff122e035a6"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#7d180f7e-6862-4a88-8606-18eb854f2c7e');
+var element = $('#36d2cdf8-21a1-4ccf-916e-0ff122e035a6');
 
 (function(global) {
   function now() {
