@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/business.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2018-06-24T19:27:00-04:00</updated><entry><title>A Risk Analysis Bowtie Diagram in Latex</title><link href="http://3implieschaos.org/a-risk-analysis-bowtie-diagram-in-latex.html" rel="alternate"></link><published>2018-06-24T19:27:00-04:00</published><updated>2018-06-24T19:27:00-04:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2018-06-24:a-risk-analysis-bowtie-diagram-in-latex.html</id><summary type="html">&lt;h3&gt;Bowtie Diagram in LaTeX&lt;/h3&gt;
+&lt;p&gt;For folks who have to conduct risk analysis, there are
+very limited choices for the creation of "bowtie diagrams".
+Searching the web for examples in LaTeX comes up pretty empty.
+So when googling comes up empty, its time to create:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/3implieschaos/latex-demos/blob/master/figures/bowtie/bowtie.tex"&gt;Bowtie diagram in LaTeX example&lt;/a&gt; &lt;/p&gt;
+&lt;p&gt;This code results in a diagram that looks pretty acceptable
+in terms of quality, or at least an acceptable starting point:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="bowtie diagram" src="assets/bowtie.png" /&gt;&lt;/p&gt;</summary><category term="LaTeX"></category><category term="Diagrams"></category><category term="Risk Analysis"></category></entry></feed>
