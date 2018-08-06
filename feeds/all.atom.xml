@@ -1346,7 +1346,7 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="Wikipedia-Page-hit-stats"&gt;Wikipedia Page hit stats&lt;a class="anchor-link" href="#Wikipedia-Page-hit-stats"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Previously, in order to get a nice way to access Wikipedia page hit data, I would have suggsted the R library wikipediatrend. The situation has evolved such that wikipediatrend is not functional &lt;a href="https://github.com/petermeissner/wikipediatrend/issues/32"&gt;see&lt;/a&gt;. But fortunately, Wikimedia themselves have released an api (which I missed in my initial search) that even has a &lt;a href="https://github.com/mediawiki-utilities/python-mwviews"&gt;python library&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id="Wikipedia-Page-hit-stats"&gt;Wikipedia Page hit stats&lt;a class="anchor-link" href="#Wikipedia-Page-hit-stats"&gt;¶&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Previously, in order to get a nice way to access Wikipedia page hit data, I would have suggsted the R library wikipediatrend. The situation has evolved such that wikipediatrend is not functional (see &lt;a href="https://github.com/petermeissner/wikipediatrend/issues/32"&gt;this link for more details&lt;/a&gt;). Fortunately, Wikimedia themselves have released an api that has a &lt;a href="https://github.com/mediawiki-utilities/python-mwviews"&gt;python library&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -4798,10 +4798,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="bbc76295-a808-40ba-b5d4-ea6bb4e9bbc5"&gt;&lt;/div&gt;
+&lt;div id="ca757772-e442-4636-a5b6-99f075cab889"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#bbc76295-a808-40ba-b5d4-ea6bb4e9bbc5');
+var element = $('#ca757772-e442-4636-a5b6-99f075cab889');
 
 (function(global) {
   function now() {
