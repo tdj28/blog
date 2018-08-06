@@ -1466,7 +1466,7 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;Firstly, do we see any trends just by glancing at the plot of these page hits over the three year period from July 2015 to July 2018? A few, such as that the page hits seem to go up after January, and have some unusual peaks in late 2016 and early 2017 (very likely, and precisely as we will see later, related to the election and inauguration of that period.&lt;/p&gt;
+&lt;p&gt;Do we see any trends just by glancing at the plot of these page hits over the three year period from July 2015 to July 2018? Initially we may see a few, such as that the page hits seem to go up after January, and have some unusual peaks in late 2016 and early 2017 (very likely, and precisely as we will see later, related to the election and inauguration of that period).&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -4798,10 +4798,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="ca757772-e442-4636-a5b6-99f075cab889"&gt;&lt;/div&gt;
+&lt;div id="b46ee4b0-2e96-4802-98d1-82eaed751517"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#ca757772-e442-4636-a5b6-99f075cab889');
+var element = $('#b46ee4b0-2e96-4802-98d1-82eaed751517');
 
 (function(global) {
   function now() {
