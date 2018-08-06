@@ -1260,7 +1260,7 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="inner_cell"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;Prophet makes nicer graphs out of the box, for sure. It also has a nice way to show uncertainty. And looking at the above, you might very well believe that indeed we have found some sort of phenomenon that seems to peak in late winter and spring, and on Thursday for some reason. It would be a pretty safe bet to bet that the above trend would peak in the months following the last dataset we have, right? Wrong, of course, because as you know, this dataset was generated entirely randomly. The lesson here is not that this method for modeling seasonality and forecasting is wrong, as indeed they work exactly as they are designed to, but instead that we need to be quite careful not to so readily believe what they say. This is the giant grain of salt I'm putting on your late before getting to the fun stuff.&lt;/p&gt;
+&lt;p&gt;Prophet makes nicer graphs out of the box, for sure. It also has a nice way to show uncertainty. And looking at the above, you might very well believe that indeed we have found some sort of phenomenon that seems to peak in late winter and spring, and on Thursday for some reason. It would be a pretty safe bet to bet that the above trend would peak in the months following the last dataset we have, right? Wrong, of course, because as you know, this dataset was generated entirely randomly. The lesson here is not that this method for modeling seasonality and forecasting is wrong, as indeed they work exactly as they are designed to, but instead that we need to be quite careful not to so readily believe what they say. This is the giant grain of salt I'm putting on your plate before getting to the fun stuff.&lt;/p&gt;
 &lt;p&gt;To make this point entirely visual, let's do the same analysis as above, but instead of just using two years worth of fake data, let's create three years, but only feed the additive model two years, and see how it does in the third year.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -4798,10 +4798,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="ebd4c3b9-dbcc-4d77-be20-cb758614aa98"&gt;&lt;/div&gt;
+&lt;div id="bbc76295-a808-40ba-b5d4-ea6bb4e9bbc5"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#ebd4c3b9-dbcc-4d77-be20-cb758614aa98');
+var element = $('#bbc76295-a808-40ba-b5d4-ea6bb4e9bbc5');
 
 (function(global) {
   function now() {
