@@ -2125,7 +2125,8 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here we see that prophet also very nicely picks out the 2016 trend, and clearly picks out the school year trend as well as the weekday trend. In order to make these quick peaks at the data more systematic, we create and use the following function. The first one we take a look at is "Christmas" which we expect, and indeed find, has a very clean seasonality. Note the weekday trend line shows a preference for some days over others, which is an artifact simply of which day the holiday fell on in the years that are used for training since this holiday doesn't fall on any particular weekday by design.</p>
+<p>Here we see that prophet also very nicely picks out the 2016 trend, and clearly picks out the school year trend as well as the weekday trend. In order to make these quick peaks at the data more systematic, we create and use the following function. We then use these functions to take a look at a varied array of Wikipedia pages and conjecture a bit about the results.</p>
+<p>The first one we take a look at is "Christmas" which we expect, and indeed find, has a very clean seasonality. Note the weekday trend line shows a preference for some days over others, which is an artifact simply of which day the holiday fell on in the years that are used for training (since this holiday doesn't fall on any particular weekday by design, and we only trained based on three years, those three days in occured on, or rather Christmas Eve, will see the bias. That would be Thursday/Friday 2015, Sunday/Monday 2016, and Monday/Tuesday 2017 [2016 was a leap year]).</p>
 </div>
 </div>
 </div>
@@ -2280,7 +2281,7 @@ h6:hover .anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Other topics will have entered the American dialectic (recall that we are looking at English wikipedia, which we suppose is likely dominated by American viewers), such as Russia given recent events related to the 2016 election.</p>
+<p>Other topics will have found greater frequency in the American dialectic (recall that we are looking at English wikipedia, which we suppose is likely dominated by American viewers), such as Russia, given recent events related to the 2016 election.</p>
 </div>
 </div>
 </div>
@@ -2420,11 +2421,11 @@ h6:hover .anchor-link {
 </li>
 <li><p>Trends that have an educational component, such as popular US Presidents like Abraham Lincoln, are complicated by holidays such as president's day, elections, and inaugurations.</p>
 </li>
-<li><p>Trends from pop culture, such as Beyonce, can possible trace the popularity of a celebrity but are complicated by things such as album releases, awards ceremonies, gossip outbreaks, etc.</p>
+<li><p>Trends from pop culture, such as Beyonce, can possibly trace the popularity of a celebrity but, are complicated by things such as album releases, awards ceremonies, gossip outbreaks, etc.</p>
 </li>
 <li><p>Sometimes, a massive surge in interest in a topic due to some even can entirely throw off seasonal decomposition, and such events will have to be 'windowed out' and interpolated to get an accurate picture of the routine behavior of the time series.</p>
 </li>
-<li><p>Some topics show the decline in interest in the topic in general, or in some cases, an increasing normalization of a topic such that in gains less page views over time.</p>
+<li><p>Some topics show the decline in interest in the topic in general, or in some cases, an increasing normalization of a topic such that it gets less page views over time.</p>
 </li>
 <li><p>Some topics are so random that speaking about trends and seasonality is nonsense. However, these models can easily overfit that data and give you a false sense of confidence that will inevitably be proven wrong.</p>
 </li>
