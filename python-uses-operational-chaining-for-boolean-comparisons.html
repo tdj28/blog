@@ -88,7 +88,7 @@ TypeError: argument of type &#39;bool&#39; is not iterable
 
 
 <h5>In words</h5>
-<p>Parenthesis essential forces Python to do 'something' first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python's operation chaining isn't the desired behavior. When we put <code>'a' in 'b'</code> inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to <code>True</code> or <code>False</code>, and then the <code>== 0</code> comparison acts as a Boolean comparison, giving expected behavior. </p>
+<p>Parenthesis essential forces Python to do 'something' first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python's operation chaining isn't the desired behavior. When we put <code>'a' in 'b'</code> inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to <code>True</code> or <code>False</code>, and then the <code>== 0</code> comparison acts as a Boolean comparison, giving expected behavior since Python sees False and 0 as equivalent here.</p>
 <p>In the first instance above, however, Python is operator chaining. For <code>'a' in 'b' == 0</code>, it first loads a and b strings such that the stack is</p>
 <div class="highlight"><pre><span></span>[ b, a ]
 </pre></div>
@@ -99,25 +99,28 @@ TypeError: argument of type &#39;bool&#39; is not iterable
 </pre></div>
 
 
-<p><code>ROT_THREE</code> lifts second and third stack item up and the top item down to third place, so now the stack is now: </p>
+<p><code>ROT_THREE</code> lifts second and third stack item up and the top item down to third place, so now the stack is: </p>
 <div class="highlight"><pre><span></span>[ b, a, b ]
 </pre></div>
 
 
-<p><code>COMPARE_OP</code> acts on <code>[ b, a]</code>, and since it is not true, <code>JUMP_IF_FALSE_OR_POP</code> forces it to jump and just returns False. What is interesting is if you do <code>'a' in 'a' == 1</code>, 
+<p><code>COMPARE_OP</code> acts on <code>[ b, a]</code>, and since it is not true, <code>JUMP_IF_FALSE_OR_POP</code> forces it to jump and just returns False. This makes sense because it
+sees this as a compound AND statement, and when the first part of an AND statement is false, the entire thing is false and it is a waste of
+resources to compute further. </p>
+<p>What is interesting is if you do <code>'a' in 'a' == 1</code>, instead of <code>'a' in 'a' == 0</code>, 
 which after <code>DUP_TOP</code> gives us the stack:</p>
 <div class="highlight"><pre><span></span>[ a, a, a ]
 </pre></div>
 
 
 <p>Here <code>'a' in 'a'</code> is obviously true, and these two entries of the stack are replaced with the result of that evaluation, which is <code>True</code>. This, now being the top of the stack, is popped off by <code>JUMP_IF_FALSE_OR_POP</code> 
-leaving the duplicated 'a' on the top of the stack, where then <code>1</code> is loaded so the stack is now:</p>
+leaving the duplicated 'a' on the top of the stack, where then <code>1</code> is loaded for the next comparison, so the stack is now:</p>
 <div class="highlight"><pre><span></span>[1, a]
 </pre></div>
 
 
 <p>and the <code>==</code> comparison is applied which is indeed False. 
-Thus <code>'a' in 'a' == 0</code> is chained as <code>'a' in 'a' and 'a' == 0</code> and will be false. Similarly, <code>'a' in 'b' == 0</code> is effectively the same as <code>'a' in 'b' and 'b' == 0</code> which is false.</p>
+Thus <code>'a' in 'a' == 0</code> is chained as <code>'a' in 'a' and 'a' == 0</code> and will also be false. Similarly, <code>'a' in 'b' == 0</code> is effectively the same as <code>'a' in 'b' and 'b' == 0</code> which is false.</p>
 <p>The following behavior, then, makes sense:</p>
 <div class="highlight"><pre><span></span>&gt;&gt;&gt; &#39;a&#39; in &#39;a&#39;
 True

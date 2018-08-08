@@ -56,7 +56,7 @@ TypeError: argument of type &amp;#39;bool&amp;#39; is not iterable
 
 
 &lt;h5&gt;In words&lt;/h5&gt;
-&lt;p&gt;Parenthesis essential forces Python to do 'something' first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python's operation chaining isn't the desired behavior. When we put &lt;code&gt;'a' in 'b'&lt;/code&gt; inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to &lt;code&gt;True&lt;/code&gt; or &lt;code&gt;False&lt;/code&gt;, and then the &lt;code&gt;== 0&lt;/code&gt; comparison acts as a Boolean comparison, giving expected behavior. &lt;/p&gt;
+&lt;p&gt;Parenthesis essential forces Python to do 'something' first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python's operation chaining isn't the desired behavior. When we put &lt;code&gt;'a' in 'b'&lt;/code&gt; inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to &lt;code&gt;True&lt;/code&gt; or &lt;code&gt;False&lt;/code&gt;, and then the &lt;code&gt;== 0&lt;/code&gt; comparison acts as a Boolean comparison, giving expected behavior since Python sees False and 0 as equivalent here.&lt;/p&gt;
 &lt;p&gt;In the first instance above, however, Python is operator chaining. For &lt;code&gt;'a' in 'b' == 0&lt;/code&gt;, it first loads a and b strings such that the stack is&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ b, a ]
 &lt;/pre&gt;&lt;/div&gt;
@@ -67,25 +67,28 @@ TypeError: argument of type &amp;#39;bool&amp;#39; is not iterable
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;code&gt;ROT_THREE&lt;/code&gt; lifts second and third stack item up and the top item down to third place, so now the stack is now: &lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ROT_THREE&lt;/code&gt; lifts second and third stack item up and the top item down to third place, so now the stack is: &lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ b, a, b ]
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;code&gt;COMPARE_OP&lt;/code&gt; acts on &lt;code&gt;[ b, a]&lt;/code&gt;, and since it is not true, &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt; forces it to jump and just returns False. What is interesting is if you do &lt;code&gt;'a' in 'a' == 1&lt;/code&gt;, 
+&lt;p&gt;&lt;code&gt;COMPARE_OP&lt;/code&gt; acts on &lt;code&gt;[ b, a]&lt;/code&gt;, and since it is not true, &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt; forces it to jump and just returns False. This makes sense because it
+sees this as a compound AND statement, and when the first part of an AND statement is false, the entire thing is false and it is a waste of
+resources to compute further. &lt;/p&gt;
+&lt;p&gt;What is interesting is if you do &lt;code&gt;'a' in 'a' == 1&lt;/code&gt;, instead of &lt;code&gt;'a' in 'a' == 0&lt;/code&gt;, 
 which after &lt;code&gt;DUP_TOP&lt;/code&gt; gives us the stack:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ a, a, a ]
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Here &lt;code&gt;'a' in 'a'&lt;/code&gt; is obviously true, and these two entries of the stack are replaced with the result of that evaluation, which is &lt;code&gt;True&lt;/code&gt;. This, now being the top of the stack, is popped off by &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt; 
-leaving the duplicated 'a' on the top of the stack, where then &lt;code&gt;1&lt;/code&gt; is loaded so the stack is now:&lt;/p&gt;
+leaving the duplicated 'a' on the top of the stack, where then &lt;code&gt;1&lt;/code&gt; is loaded for the next comparison, so the stack is now:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[1, a]
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;and the &lt;code&gt;==&lt;/code&gt; comparison is applied which is indeed False. 
-Thus &lt;code&gt;'a' in 'a' == 0&lt;/code&gt; is chained as &lt;code&gt;'a' in 'a' and 'a' == 0&lt;/code&gt; and will be false. Similarly, &lt;code&gt;'a' in 'b' == 0&lt;/code&gt; is effectively the same as &lt;code&gt;'a' in 'b' and 'b' == 0&lt;/code&gt; which is false.&lt;/p&gt;
+Thus &lt;code&gt;'a' in 'a' == 0&lt;/code&gt; is chained as &lt;code&gt;'a' in 'a' and 'a' == 0&lt;/code&gt; and will also be false. Similarly, &lt;code&gt;'a' in 'b' == 0&lt;/code&gt; is effectively the same as &lt;code&gt;'a' in 'b' and 'b' == 0&lt;/code&gt; which is false.&lt;/p&gt;
 &lt;p&gt;The following behavior, then, makes sense:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &amp;#39;a&amp;#39; in &amp;#39;a&amp;#39;
 True
