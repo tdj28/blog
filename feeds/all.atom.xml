@@ -3776,7 +3776,7 @@ TypeError: argument of type &amp;#39;bool&amp;#39; is not iterable
 &lt;p&gt;&lt;code&gt;COMPARE_OP&lt;/code&gt; acts on &lt;code&gt;[ b, a]&lt;/code&gt;, and since it is not true, &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt; forces it to jump and just returns False. This makes sense because it
 sees this as a compound AND statement, and when the first part of an AND statement is false, the entire thing is false and it is a waste of
 resources to compute further. &lt;/p&gt;
-&lt;p&gt;What is interesting is if you do &lt;code&gt;'a' in 'a' == 1&lt;/code&gt;, instead of &lt;code&gt;'a' in 'a' == 0&lt;/code&gt;, 
+&lt;p&gt;What is interesting is if you do &lt;code&gt;'a' in 'a' == 1&lt;/code&gt;,  or &lt;code&gt;'a' in 'a' == 0&lt;/code&gt;. Take the former, for example, 
 which after &lt;code&gt;DUP_TOP&lt;/code&gt; gives us the stack:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[ a, a, a ]
 &lt;/pre&gt;&lt;/div&gt;
@@ -4802,10 +4802,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="ce596f25-7fdb-46c9-b76e-97f54574185f"&gt;&lt;/div&gt;
+&lt;div id="265094f7-1331-43df-9bd9-18916aa97be5"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#ce596f25-7fdb-46c9-b76e-97f54574185f');
+var element = $('#265094f7-1331-43df-9bd9-18916aa97be5');
 
 (function(global) {
   function now() {

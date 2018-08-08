@@ -107,7 +107,7 @@ TypeError: argument of type &#39;bool&#39; is not iterable
 <p><code>COMPARE_OP</code> acts on <code>[ b, a]</code>, and since it is not true, <code>JUMP_IF_FALSE_OR_POP</code> forces it to jump and just returns False. This makes sense because it
 sees this as a compound AND statement, and when the first part of an AND statement is false, the entire thing is false and it is a waste of
 resources to compute further. </p>
-<p>What is interesting is if you do <code>'a' in 'a' == 1</code>, instead of <code>'a' in 'a' == 0</code>, 
+<p>What is interesting is if you do <code>'a' in 'a' == 1</code>,  or <code>'a' in 'a' == 0</code>. Take the former, for example, 
 which after <code>DUP_TOP</code> gives us the stack:</p>
 <div class="highlight"><pre><span></span>[ a, a, a ]
 </pre></div>

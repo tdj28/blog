@@ -1004,10 +1004,10 @@ h6:hover .anchor-link {
 &lt;/div&gt;
 &lt;div class="output_area"&gt;
 &lt;div class="prompt"&gt;&lt;/div&gt;
-&lt;div id="ce596f25-7fdb-46c9-b76e-97f54574185f"&gt;&lt;/div&gt;
+&lt;div id="265094f7-1331-43df-9bd9-18916aa97be5"&gt;&lt;/div&gt;
 &lt;div class="output_subarea output_javascript "&gt;
 &lt;script type="text/javascript"&gt;
-var element = $('#ce596f25-7fdb-46c9-b76e-97f54574185f');
+var element = $('#265094f7-1331-43df-9bd9-18916aa97be5');
 
 (function(global) {
   function now() {
