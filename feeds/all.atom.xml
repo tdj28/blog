@@ -72,9 +72,9 @@ some optimizations on it.&lt;/p&gt;
 
 
 &lt;p&gt;We can compare the rainbow version of the above plot:&lt;/p&gt;
-&lt;p&gt;![rainbow version](assets/20180819/color-blind-friendly-heatmap-5ca3f3e1.png =750x)&lt;/p&gt;
+&lt;p&gt;&lt;img alt="rainbow version" src="assets/20180819/color-blind-friendly-heatmap-5ca3f3e1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;with the Cividis version:&lt;/p&gt;
-&lt;p&gt;![civids version](assets/20180819/color-blind-friendly-heatmap-69d2bb6c.png =750x)&lt;/p&gt;
+&lt;p&gt;&lt;img alt="civids version" src="assets/20180819/color-blind-friendly-heatmap-69d2bb6c.png" /&gt;&lt;/p&gt;
 &lt;p&gt;It certainly may be a matter of preference for most folks. I find the Cividis version more appealing, for example, because although the dark reds pop to me and pinpoint "hot spots" perhaps a little more quickly, they appear to be almost detached from the rest of the heat blob. In the Cividis mapping, as in other mappings which have only two colors, the spectrum is clearer. Given that using Cividis ensures that any color blind readers will be getting the same information as I see seals the deal for me and makes Cividis my go to choice for colormaps going forward.&lt;/p&gt;
 &lt;h1&gt;Conclusions&lt;/h1&gt;
 &lt;ul&gt;
