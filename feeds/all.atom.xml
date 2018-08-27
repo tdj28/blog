@@ -1,5 +1,385 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/all.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2018-08-19T21:45:00-04:00</updated><entry><title>Jump start using PNNL's new Cividis colormap in data science to make color blind friendly heatmaps</title><link href="http://3implieschaos.org/jump-start-using-pnnls-new-cividis-colormap-in-data-science-to-make-color-blind-friendly-heatmaps.html" rel="alternate"></link><published>2018-08-19T21:45:00-04:00</published><updated>2018-08-19T21:45:00-04:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2018-08-19:jump-start-using-pnnls-new-cividis-colormap-in-data-science-to-make-color-blind-friendly-heatmaps.html</id><summary type="html">&lt;p&gt;Heat maps have become quite common in data science, and in science in general, and for good reason. For those who can see them, they succinctly summarize patterns in data. There are many color schemes used in the wild, with the Rainbow scheme being one of the more common ones.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/all.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2018-08-26T13:21:00-04:00</updated><entry><title>Jump Start for Using Headless Python Selenium With Behave</title><link href="http://3implieschaos.org/jump-start-for-using-headless-python-selenium-with-behave.html" rel="alternate"></link><published>2018-08-26T13:21:00-04:00</published><updated>2018-08-26T13:21:00-04:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2018-08-26:jump-start-for-using-headless-python-selenium-with-behave.html</id><summary type="html">&lt;p&gt;Testing software can often be seen as the least enjoyable part of the
+&lt;a href="https://en.wikipedia.org/wiki/Systems_development_life_cycle"&gt;systems development life cycle&lt;/a&gt;.
+It is easy to see why. Developing the actual application that does the magic 
+that the end user finds value in is indeed a very exciting core to the process.
+And yet, what you produce could be worthless if it doesn't work for the user.&lt;/p&gt;
+&lt;p&gt;So let's say you are working on an individual pet project. The fun part is 
+coding it up and getting it to do something. Here, I'm going to use a simple
+&lt;em&gt;Flask&lt;/em&gt; app that servers up some Wikipedia page count stats as an example.
+As a developer adds layers and new features and new bells and whistles and 
+pipes and extension cords to their project, things can break which they
+haven't developed in months or years, and if they don't have a good testing
+suite in place, they won't catch it and will serve out a degraded experience.
+That's a dis-service to their users, but even to themselves, whose hard work 
+has gone to waste because that piece of the project, which they might have
+spent many hours working on, might as well not even exist if it doesn't work.
+Worse yet, if they break their app entirely, it could take hours and hours 
+of searching for a bug. If instead there is a systematic testing suite in place,
+each incremental change can be subjected to a battery of tests that help ensure
+that it is safe to continue to the next incremental change. This &lt;em&gt;should not&lt;/em&gt; be
+the developer clicking through their app and making sure everything looks good.
+There are many awesome tools in place that allow for quick automated testing.&lt;/p&gt;
+&lt;h2&gt;Selenim&lt;/h2&gt;
+&lt;p&gt;Selenium is a Python library that automates testing the final product of 
+a webpage. It is as easy to install as &lt;code&gt;pip install selenium&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let's start with a very simple example. Suppose you have webpage that
+simply serves this up:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;WikiViz&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;   
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;example&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Hello World!&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Even if you didn't want to get fancy and set up a nice file structure and 
+orchestrate your testing with tools such as &lt;code&gt;behave&lt;/code&gt; and &lt;code&gt;nose&lt;/code&gt;, you 
+could simply create a very straight-forward python script that runs
+the selenium testing you need to ensure that your page is serving 
+the expected content.&lt;/p&gt;
+&lt;p&gt;If you are running these locally on your laptop, the following 
+step isn't necessary, you will just need to make sure you have
+Firefox installed. Selenium works with other browsers, but 
+to keep this simple at first, we will focus on Firefox.&lt;/p&gt;
+&lt;h3&gt;Headless on Ubuntu (skip this if using a Mac)&lt;/h3&gt;
+&lt;p&gt;Skip this section if you don't plan to run this on a remote
+ubuntu server. In this example, I'm using my Cloud 9 IDE 
+account which serves up containers with Ubuntu as the OS.&lt;/p&gt;
+&lt;p&gt;First we need to isntall the &lt;a href="https://en.wikipedia.org/wiki/Xvfb"&gt;Xvfb&lt;/a&gt; package:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install firefox xvfb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and the PyVirtualDisplay python library:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install PyVirtualDisplay
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Finally, you'll need the &lt;a href="https://github.com/mozilla/geckodriver/releases"&gt;geckodriver&lt;/a&gt;
+(they don't include md5sums or rsa hashes to confirm authenticity, but use github
+to host and release which comes with a great deal of trust):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz
+tar zxvf geckodriver-v0.21.0-linux64.tar.gz
+chmod a+x geckodriver
+sudo mv geckodriver /usr/local/bin/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Our first selenium assertion&lt;/h3&gt;
+&lt;p&gt;Now we are ready for our first test. This test will
+do two things. First, it will cause selenium to try
+to access the webpage. If it can't do so, it will fail.
+This means that a selenium tests automatically tells 
+you whether or not your page is up and running right
+out of the box. Secondly, the test will assert that
+the very simple webpage example shown above is setting
+the title to 'WikiViz' as it should be.&lt;/p&gt;
+&lt;p&gt;If you are using the headless on your remote server,
+your code will look like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/usr/bin/env python&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pyvirtualdisplay&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Display&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="n"&gt;display&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Display&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;visible&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="n"&gt;driver&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;http://localhost:8080/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;WikiViz&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stop&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If you are running this in a local environment, such as on 
+a mac, and you like to watch selenium open the browser and 
+walk through the tests, then your code would look like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="n"&gt;base_url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;http://localhost:8080&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;driver&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;base_url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;WikiViz&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Yes, it is that easy! OK, well, at least for the title. As
+your page gets more complicated, so will your testing, but 
+overall the spirit of simplicity in the selenium testing scheme 
+carries over.&lt;/p&gt;
+&lt;h3&gt;Expanding the tests&lt;/h3&gt;
+&lt;p&gt;In this next section, I'm going to make the tests a little more
+complicated in structure, but for a good payoff. If you like to 
+keep your tests in a single script as above, you can simply expand
+on that script. Here, I will show a simple example using &lt;code&gt;nose&lt;/code&gt;
+and &lt;code&gt;behave&lt;/code&gt; libraries. This example was inspired by a slightly more
+complicated (and well done) example 
+&lt;a href="https://the-creative-tester.github.io/Python-Web-Browser-Automation-Behave/"&gt;here&lt;/a&gt;,
+but meant to be easier to dive into for those new to testing.&lt;/p&gt;
+&lt;p&gt;Create a file structure that looks as follows:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;env&lt;span class="o"&gt;)&lt;/span&gt; tdj28:~/workspace/selenium_tests &lt;span class="o"&gt;(&lt;/span&gt;master&lt;span class="o"&gt;)&lt;/span&gt; $ tree .
+.
+├── features
+│   ├── __init__.py
+│   ├── pages
+│   │   └── __init__.py
+│   └── steps
+│       └── __init__.py
+└── simple_examples
+    └── xvfb_example.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;here's some bash to make that happen:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkdir -p selenium_tests/features
+mkdir selenium_tests/pages
+mkdir selenium_tests/steps
+mkdir selenium_tests/simple_examples
+touch selenium_tests/features/__init__.py
+touch selenium_tests/pages/__init__.py
+touch selenium_tests/steps/__init__.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The &lt;code&gt;simple_examples&lt;/code&gt; directory is where I put in some simple scripts
+for testing a few features (or writing this blog post), but you definitely
+don't want something that sloppy in a production version of your code.&lt;/p&gt;
+&lt;p&gt;(Google &lt;code&gt;init python files&lt;/code&gt; if you don't know what those &lt;code&gt;__init__.py&lt;/code&gt; files
+are for.)&lt;/p&gt;
+&lt;h3&gt;Step One: Define The Browser&lt;/h3&gt;
+&lt;p&gt;Create the file &lt;code&gt;features/browser.py&lt;/code&gt; with the following content
+if you want selenium to run on your laptop or desktop in a way
+that you can watch it run through the tests:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Browser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="n"&gt;driver&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;implicitly_wait&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;set_page_load_timeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;maximize_window&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;close&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The github users &lt;code&gt;creative tester&lt;/code&gt; is more generous, for example
+&lt;a href="https://github.com/the-creative-tester/python-behave-web-browser-automation-example/blob/master/features/browser.py"&gt;giving&lt;/a&gt;
+the page timeout as being thirty seconds. I've made that ten seconds
+here because if my page is taking longer than ten seconds to load, 
+to me that is a pretty good reason for it to fail. I would actually 
+recommend you being more generous than not, and instead build in timing
+features to test for load time rather than have the tests timeout as
+an indication that your page is slow, but again, this is meant to be 
+a baseline example.&lt;/p&gt;
+&lt;p&gt;For those wishing to use headless testing (on a remote server, no live
+browser to watch), the above file will look like:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pyvirtualdisplay&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Display&lt;/span&gt;  &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;BDisplay&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+    &lt;span class="n"&gt;display&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Display&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;visible&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;  &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+    &lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;  &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;stop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+        &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stop&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Browser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="n"&gt;driver&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Firefox&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;implicitly_wait&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;set_page_load_timeout&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;maximize_window&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;close&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;With one minor exception, going forward, there will be no difference
+between headless and live browser versions of testing in the code.&lt;/p&gt;
+&lt;h3&gt;Step Two: Define the Pages&lt;/h3&gt;
+&lt;p&gt;So for now, let's stick with our simple home page as detailed above. We
+can look behind the curtain of this page by using our browser's 
+developer console. On Chrome, for example, it is in settings &amp;gt; More Tools &amp;gt;
+Developer Tools. This gives you many great tools to inspect
+the code and help you locate elements in your code. For our
+simple example, that isn't so necessary, but as this example
+is expanded to include javascript which makes the page more dynamic,
+these developer tools become very useful. In this screenshot below,
+for example, we see how it helps us identify elements of the code.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="png" src="assets/assets20180826/devtools.png" /&gt;&lt;/p&gt;
+&lt;p&gt;These elements become key as we find key elements to use in our 
+testing. In order to make our example just a little more
+interesting, and give selenium something to &lt;em&gt;do&lt;/em&gt; rather than
+just &lt;em&gt;observe&lt;/em&gt;, let's add a button to our simple home page 
+that takes us to another page. Add the following just after
+the h1 entry:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;form&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;input&lt;/span&gt; &lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;button&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;value=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;results&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;onclick=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;window.location.href=&amp;#39;/results&amp;#39;&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In the pages folder, create a file called &lt;code&gt;home_page.py&lt;/code&gt; with the following content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.common.by&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;By&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;browser&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Browser&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;HomePage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Browser&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;# Home Page Actions&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;navigate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;address&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;address&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_page_title&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_page_header&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;example&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;click_button&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;locator&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;driver&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_element_by_class_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;button&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;click&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Because the source code of our simple page assigns the first and only
+h1 header by giving it the class "example", that makes it easy
+to &lt;code&gt;find_element_by_class_name&lt;/code&gt;. If in fact we had multiple h1 elements
+with that class, we would have to use the plural &lt;code&gt;find_elements_by_class_name&lt;/code&gt;
+instead, which returns a list that we could submit for testing (e.g. 
+we would know what the first h1 should be, the second, etc.).&lt;/p&gt;
+&lt;p&gt;So for our homepage, we have created the HomePage class, which inherits the
+Browser class we created previously, and we define the actions we will 
+need on this page for testing. When we add other pages to our example
+web app in later blog entries, we will create a new file in the pages 
+folder, one for each page. In this way, we keep the details nice and cleanly
+compartmentalized. If we have a subset of pages that share much in common,
+we can create a class for that subset, and then have individual pages 
+inherit that class, and so on.&lt;/p&gt;
+&lt;p&gt;Also note that there are multiple ways we can identify elements, including
+&lt;code&gt;xpath&lt;/code&gt;. In this file, we add three tools associated with our homepage. 
+The first returns the pagename, the second returns the h1 element, and
+the third clicks on the button we just added that will send us to a new page.&lt;/p&gt;
+&lt;h3&gt;Step Three: Define the behave Tests&lt;/h3&gt;
+&lt;p&gt;Now that we've defined our page and elements and events we expect our
+users to be able to access on that page, we can define what our tests
+want to do to confirm that our users get the experience we intend to provide.&lt;/p&gt;
+&lt;p&gt;In the &lt;code&gt;features&lt;/code&gt; directory, create a file called &lt;code&gt;clickbutton.feature&lt;/code&gt; with
+the following content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Feature&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ClickButton&lt;/span&gt;
+
+  &lt;span class="n"&gt;Scenario&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Click&lt;/span&gt; &lt;span class="n"&gt;Away&lt;/span&gt; &lt;span class="n"&gt;From&lt;/span&gt; &lt;span class="n"&gt;Homepage&lt;/span&gt;
+    &lt;span class="n"&gt;Given&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;navigate&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;Home&lt;/span&gt; &lt;span class="n"&gt;page&lt;/span&gt;
+    &lt;span class="n"&gt;And&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;see&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;pagename&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="n"&gt;WikiViz&lt;/span&gt;
+    &lt;span class="n"&gt;And&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;see&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;header&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Hello World!&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;When&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;click&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;button&lt;/span&gt;
+    &lt;span class="n"&gt;Then&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;see&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;pagename&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="n"&gt;no&lt;/span&gt; &lt;span class="n"&gt;longer&lt;/span&gt; &lt;span class="n"&gt;WikiViz&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This is the beauty of the &lt;code&gt;behave&lt;/code&gt; library and behavior based testing in general.
+We can use everyday language to describe our user's experience, and then translate
+that in to tests as we will see shortly. This enables non-technical folks to
+contribute tests. Indeed, when planning out a webpage, many users find it 
+best to start by sketching the page and defining the above tests &lt;em&gt;first&lt;/em&gt; 
+before writing a single line of code. &lt;/p&gt;
+&lt;p&gt;Note that in the above tests, the last line entry is a bit of a cheat on my part.
+The test really should, in that line, confirm in some way that it made it to the 
+results page. So don't do what I did there! If for example you click on the button
+and it takes you to a 404 error page, your test will still pass. I take that shortcut
+here only to keep this jump start example focused on a single simple html page.&lt;/p&gt;
+&lt;h3&gt;Step Four: Turn the Features Into Steps&lt;/h3&gt;
+&lt;p&gt;In the steps folder, create a file called &lt;code&gt;clickbutton_step.py&lt;/code&gt;. Note that
+it has the same prefix &lt;code&gt;clickbutton&lt;/code&gt; as the corresponding features file we
+created above, that is required for each feature file. The contents of this
+file will have:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;nose.tools&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;assert_equal&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;assert_not_equal&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;assert_true&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.common.by&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;By&lt;/span&gt;
+
+&lt;span class="nd"&gt;@given&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;I navigate to the Home page&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;step_impl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;home_page&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;navigate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://localhost:8080/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@given&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;I see that the pagename is WikiViz&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;step_impl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;assert_equal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;home_page&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_page_title&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;WikiViz&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@given&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;I see the header &amp;quot;Hello World!&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;step_impl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;assert_equal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;home_page&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_page_header&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Hello World!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@when&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;I click the button&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;step_impl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;home_page&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;click_button&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="nd"&gt;@then&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;I see that the pagename is no longer WikiViz&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;step_impl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;assert_not_equal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;home_page&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_page_title&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;WikiViz&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;So the pattern here is starting to become clear:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;User experience ---&amp;gt; Steps ---&amp;gt; Page functions
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Step Five: Putting it all together&lt;/h3&gt;
+&lt;p&gt;Finally, we need to have an environment definition to tie everything together.
+This will tell &lt;code&gt;behave&lt;/code&gt; what page classes to import and tell it what to 
+do before and after the tests are ran.&lt;/p&gt;
+&lt;p&gt;If the &lt;code&gt;features&lt;/code&gt; folder, create a file called &lt;code&gt;environment.py&lt;/code&gt; with the content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;browser&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;BDisplay&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;browser&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Browser&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pages.home_page&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;HomePage&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;before_all&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;display&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;BDisplay&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+    &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;browser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Browser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;home_page&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;HomePage&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;after_all&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;browser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;display&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stop&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;  &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In the folder above features, assuming you've installed &lt;code&gt;behave&lt;/code&gt; via pip already,
+simply run &lt;code&gt;behave&lt;/code&gt;. If all goes well, we get an output that indicates the tests
+ran and their pass/fail status:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;env&lt;span class="o"&gt;)&lt;/span&gt; tdj28:~/workspace/selenium_tests &lt;span class="o"&gt;(&lt;/span&gt;master&lt;span class="o"&gt;)&lt;/span&gt; $ behave
+Feature: ClickButton &lt;span class="c1"&gt;# features/clickbutton.feature:1&lt;/span&gt;
+
+  Scenario: Click Away From Homepage                  &lt;span class="c1"&gt;# features/clickbutton.feature:3&lt;/span&gt;
+    Given I navigate to the Home page                 &lt;span class="c1"&gt;# features/steps/clickbutton_steps.py:4 0.112s&lt;/span&gt;
+    And I see that the pagename is WikiViz            &lt;span class="c1"&gt;# features/steps/clickbutton_steps.py:8 0.005s&lt;/span&gt;
+    And I see the header &lt;span class="s2"&gt;&amp;quot;Hello World!&amp;quot;&lt;/span&gt;               &lt;span class="c1"&gt;# features/steps/clickbutton_steps.py:12 0.046s&lt;/span&gt;
+    When I click the button                           &lt;span class="c1"&gt;# features/steps/clickbutton_steps.py:16 0.112s&lt;/span&gt;
+    Then I see that the pagename is no longer WikiViz &lt;span class="c1"&gt;# features/steps/clickbutton_steps.py:20 0.009s&lt;/span&gt;
+
+&lt;span class="m"&gt;1&lt;/span&gt; feature passed, &lt;span class="m"&gt;0&lt;/span&gt; failed, &lt;span class="m"&gt;0&lt;/span&gt; skipped
+&lt;span class="m"&gt;1&lt;/span&gt; scenario passed, &lt;span class="m"&gt;0&lt;/span&gt; failed, &lt;span class="m"&gt;0&lt;/span&gt; skipped
+&lt;span class="m"&gt;5&lt;/span&gt; steps passed, &lt;span class="m"&gt;0&lt;/span&gt; failed, &lt;span class="m"&gt;0&lt;/span&gt; skipped, &lt;span class="m"&gt;0&lt;/span&gt; undefined
+Took 0m0.283s
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Find the code here&lt;/h3&gt;
+&lt;p&gt;For your convenience, the selenium code is 
+collected &lt;a href="https://github.com/3implieschaos/wikiviz_demo_selenium/tree/20180826"&gt;here&lt;/a&gt;.&lt;/p&gt;</summary><category term="Python"></category><category term="Testing"></category><category term="QA"></category></entry><entry><title>Jump start using PNNL's new Cividis colormap in data science to make color blind friendly heatmaps</title><link href="http://3implieschaos.org/jump-start-using-pnnls-new-cividis-colormap-in-data-science-to-make-color-blind-friendly-heatmaps.html" rel="alternate"></link><published>2018-08-19T21:45:00-04:00</published><updated>2018-08-19T21:45:00-04:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2018-08-19:jump-start-using-pnnls-new-cividis-colormap-in-data-science-to-make-color-blind-friendly-heatmaps.html</id><summary type="html">&lt;p&gt;Heat maps have become quite common in data science, and in science in general, and for good reason. For those who can see them, they succinctly summarize patterns in data. There are many color schemes used in the wild, with the Rainbow scheme being one of the more common ones.&lt;/p&gt;
 &lt;p&gt;A group at &lt;a href="https://www.pnnl.gov/"&gt;Pacific Northwest National Lab&lt;/a&gt; has recently published a &lt;a href="https://arxiv.org/pdf/1712.01662.pdf"&gt;PLOS One article&lt;/a&gt; (hat tip &lt;a href="https://www.scientificamerican.com/article/end-of-the-rainbow-new-map-scale-is-more-readable-by-people-who-are-color-blind/"&gt;Scientific American article&lt;/a&gt;) outlining their efforts to use mathematical modeling and the science of vision to create color maps for plots such that the exact same information is conveyed to those with and without color blindness.&lt;/p&gt;
 &lt;p&gt;The goal of this blogpost is to demonstrate a quick way you can utilize their results in your own graphs (if you use Python). Interested readers can follow the links above for more detail on their methodology. What follows below is enough to get you off the ground using their Cividis colormap right away. Here is a sample of the difference one can get using Cividis:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="before and after" src="assets/20180819/color-blind-friendly-heatmap-41643744.png" /&gt;&lt;/p&gt;
@@ -973,15 +1353,15 @@ point at which the negative incentive to leave changes to a positive one; where 
 journey is the strongest."&lt;/p&gt;
 &lt;p&gt;The equation assumes that the growth rate of the speed of the potential ship per year is tied to the
 general global GDP growth rate:&lt;/p&gt;
-&lt;div class="math"&gt;$$ v(t) = v_0 (1 + r)^t$$&lt;/div&gt;
-&lt;p&gt;where &lt;span class="math"&gt;\(v\)&lt;/span&gt; is the velocity &lt;span class="math"&gt;\(t\)&lt;/span&gt; years after the velocity is &lt;span class="math"&gt;\(v_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(r\)&lt;/span&gt; is the average growth rate year over year.
+&lt;p&gt;$$ v(t) = v_0 (1 + r)^t$$&lt;/p&gt;
+&lt;p&gt;where $v$ is the velocity $t$ years after the velocity is $v_0$ and $r$ is the average growth rate year over year.
 Since velocity is inversely proportional to the time it would take to reach the star, we can rewrite this as&lt;/p&gt;
-&lt;div class="math"&gt;$$ \frac{T_0}{T} = (1+r)^t $$&lt;/div&gt;
-&lt;p&gt;where &lt;span class="math"&gt;\(T\)&lt;/span&gt; is the time it would take if we waited &lt;span class="math"&gt;\(t\)&lt;/span&gt; years for technology to evolve, and &lt;span class="math"&gt;\(T_0\)&lt;/span&gt; is the time
+&lt;p&gt;$$ \frac{T_0}{T} = (1+r)^t $$&lt;/p&gt;
+&lt;p&gt;where $T$ is the time it would take if we waited $t$ years for technology to evolve, and $T_0$ is the time
 to take if we were to launch with today's current technology. The purpose of the &lt;strong&gt;Wait Equation&lt;/strong&gt; is to find the
 sweet spot for launching such that to wait any longer would not return any advantage.&lt;/p&gt;
 &lt;p&gt;We seek, then, the condition for which:&lt;/p&gt;
-&lt;div class="math"&gt;$$ t  + \frac{T_0}{(1+r)^t} $$&lt;/div&gt;
+&lt;p&gt;$$ t  + \frac{T_0}{(1+r)^t} $$&lt;/p&gt;
 &lt;p&gt;reaches a minimum. Using our previous rough estimate of 178,846 years for
 Apollo 10 to reach TRAPPIST-1 and a growth rate of 1%,
 we see that this minimum would happen about
@@ -1006,62 +1386,7 @@ might if you waited a year or two for the next iterations of that product
 to improve. However, if you wait too long, you also harm yourself by denying
 yourself access to that product, and waiting too long means that the net
 harm to yourself could exceed the harm of buying too early.&lt;/p&gt;
-&lt;p&gt;Indeed, that's a potentially awesome post so let's plan to discuss it again soon.&lt;/p&gt;
-&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width &lt; 768) ? "left" : align;
-        indent = (screen.width &lt; 768) ? "0em" : indent;
-        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-&lt;/script&gt;</summary><category term="Astrophysics"></category><category term="Exoplanets"></category><category term="Space"></category><category term="Exobiology"></category></entry><entry><title>Putting a Space Station Over Philly With Final Cut Pro X</title><link href="http://3implieschaos.org/putting-a-space-station-over-philly-with-final-cut-pro-x.html" rel="alternate"></link><published>2017-02-20T19:27:00-05:00</published><updated>2017-02-20T19:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-02-20:putting-a-space-station-over-philly-with-final-cut-pro-x.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
+&lt;p&gt;Indeed, that's a potentially awesome post so let's plan to discuss it again soon.&lt;/p&gt;</summary><category term="Astrophysics"></category><category term="Exoplanets"></category><category term="Space"></category><category term="Exobiology"></category></entry><entry><title>Putting a Space Station Over Philly With Final Cut Pro X</title><link href="http://3implieschaos.org/putting-a-space-station-over-philly-with-final-cut-pro-x.html" rel="alternate"></link><published>2017-02-20T19:27:00-05:00</published><updated>2017-02-20T19:27:00-05:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2017-02-20:putting-a-space-station-over-philly-with-final-cut-pro-x.html</id><summary type="html">&lt;h2&gt;Quick overview&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;If interested in creating special effects for film projects.&lt;/li&gt;
 &lt;li&gt;Uses Final Cut Pro X and CoreMelt's TrackX Plugin's Simple
