@@ -6,7 +6,7 @@ that the end user finds value in is indeed a very exciting core to the process.
 And yet, what you produce could be worthless if it doesn't work for the user.&lt;/p&gt;
 &lt;p&gt;So let's say you are working on an individual pet project. The fun part is 
 coding it up and getting it to do something. Here, I'm going to use a simple
-&lt;em&gt;Flask&lt;/em&gt; app that servers up some Wikipedia page count stats as an example.
+&lt;em&gt;Flask&lt;/em&gt; app that serves up some Wikipedia page count stats as an example.
 As a developer adds layers and new features and new bells and whistles and 
 pipes and extension cords to their project, things can break which they
 haven't developed in months or years, and if they don't have a good testing
