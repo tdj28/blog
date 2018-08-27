@@ -23,7 +23,7 @@ the developer clicking through their app and making sure everything looks good.
 There are many awesome tools in place that allow for quick automated testing.
 Here, we provide a walk through to jump start a web developer on using Python
  and the selenium and behave libraries to provide a full browser test of their site.&lt;/p&gt;
-&lt;h2&gt;Selenim&lt;/h2&gt;
+&lt;h2&gt;Selenium&lt;/h2&gt;
 &lt;p&gt;Selenium is a Python library that automates testing the final product of 
 a webpage. Selenium integrates with various browsers and replicates
 the behavior that you expect from your users, all while measuring the
