@@ -138,15 +138,15 @@ point at which the negative incentive to leave changes to a positive one; where 
 journey is the strongest."&lt;/p&gt;
 &lt;p&gt;The equation assumes that the growth rate of the speed of the potential ship per year is tied to the
 general global GDP growth rate:&lt;/p&gt;
-&lt;p&gt;$$ v(t) = v_0 (1 + r)^t$$&lt;/p&gt;
-&lt;p&gt;where $v$ is the velocity $t$ years after the velocity is $v_0$ and $r$ is the average growth rate year over year.
+&lt;div class="math"&gt;$$ v(t) = v_0 (1 + r)^t$$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(v\)&lt;/span&gt; is the velocity &lt;span class="math"&gt;\(t\)&lt;/span&gt; years after the velocity is &lt;span class="math"&gt;\(v_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(r\)&lt;/span&gt; is the average growth rate year over year.
 Since velocity is inversely proportional to the time it would take to reach the star, we can rewrite this as&lt;/p&gt;
-&lt;p&gt;$$ \frac{T_0}{T} = (1+r)^t $$&lt;/p&gt;
-&lt;p&gt;where $T$ is the time it would take if we waited $t$ years for technology to evolve, and $T_0$ is the time
+&lt;div class="math"&gt;$$ \frac{T_0}{T} = (1+r)^t $$&lt;/div&gt;
+&lt;p&gt;where &lt;span class="math"&gt;\(T\)&lt;/span&gt; is the time it would take if we waited &lt;span class="math"&gt;\(t\)&lt;/span&gt; years for technology to evolve, and &lt;span class="math"&gt;\(T_0\)&lt;/span&gt; is the time
 to take if we were to launch with today's current technology. The purpose of the &lt;strong&gt;Wait Equation&lt;/strong&gt; is to find the
 sweet spot for launching such that to wait any longer would not return any advantage.&lt;/p&gt;
 &lt;p&gt;We seek, then, the condition for which:&lt;/p&gt;
-&lt;p&gt;$$ t  + \frac{T_0}{(1+r)^t} $$&lt;/p&gt;
+&lt;div class="math"&gt;$$ t  + \frac{T_0}{(1+r)^t} $$&lt;/div&gt;
 &lt;p&gt;reaches a minimum. Using our previous rough estimate of 178,846 years for
 Apollo 10 to reach TRAPPIST-1 and a growth rate of 1%,
 we see that this minimum would happen about
@@ -171,4 +171,59 @@ might if you waited a year or two for the next iterations of that product
 to improve. However, if you wait too long, you also harm yourself by denying
 yourself access to that product, and waiting too long means that the net
 harm to yourself could exceed the harm of buying too early.&lt;/p&gt;
-&lt;p&gt;Indeed, that's a potentially awesome post so let's plan to discuss it again soon.&lt;/p&gt;</summary><category term="Astrophysics"></category><category term="Exoplanets"></category><category term="Space"></category><category term="Exobiology"></category></entry></feed>
+&lt;p&gt;Indeed, that's a potentially awesome post so let's plan to discuss it again soon.&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="Astrophysics"></category><category term="Exoplanets"></category><category term="Space"></category><category term="Exobiology"></category></entry></feed>

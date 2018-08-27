@@ -173,15 +173,15 @@ point at which the negative incentive to leave changes to a positive one; where 
 journey is the strongest."</p>
 <p>The equation assumes that the growth rate of the speed of the potential ship per year is tied to the
 general global GDP growth rate:</p>
-<p>$$ v(t) = v_0 (1 + r)^t$$</p>
-<p>where $v$ is the velocity $t$ years after the velocity is $v_0$ and $r$ is the average growth rate year over year.
+<div class="math">$$ v(t) = v_0 (1 + r)^t$$</div>
+<p>where <span class="math">\(v\)</span> is the velocity <span class="math">\(t\)</span> years after the velocity is <span class="math">\(v_0\)</span> and <span class="math">\(r\)</span> is the average growth rate year over year.
 Since velocity is inversely proportional to the time it would take to reach the star, we can rewrite this as</p>
-<p>$$ \frac{T_0}{T} = (1+r)^t $$</p>
-<p>where $T$ is the time it would take if we waited $t$ years for technology to evolve, and $T_0$ is the time
+<div class="math">$$ \frac{T_0}{T} = (1+r)^t $$</div>
+<p>where <span class="math">\(T\)</span> is the time it would take if we waited <span class="math">\(t\)</span> years for technology to evolve, and <span class="math">\(T_0\)</span> is the time
 to take if we were to launch with today's current technology. The purpose of the <strong>Wait Equation</strong> is to find the
 sweet spot for launching such that to wait any longer would not return any advantage.</p>
 <p>We seek, then, the condition for which:</p>
-<p>$$ t  + \frac{T_0}{(1+r)^t} $$</p>
+<div class="math">$$ t  + \frac{T_0}{(1+r)^t} $$</div>
 <p>reaches a minimum. Using our previous rough estimate of 178,846 years for
 Apollo 10 to reach TRAPPIST-1 and a growth rate of 1%,
 we see that this minimum would happen about
@@ -207,6 +207,61 @@ to improve. However, if you wait too long, you also harm yourself by denying
 yourself access to that product, and waiting too long means that the net
 harm to yourself could exceed the harm of buying too early.</p>
 <p>Indeed, that's a potentially awesome post so let's plan to discuss it again soon.</p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
 
 <p align="center"><a href="#">on the top</a></p>
     </div>
