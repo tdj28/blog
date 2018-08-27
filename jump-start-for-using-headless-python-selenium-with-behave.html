@@ -163,6 +163,17 @@ carries over. It's the complexities of html/javascript that
 you will eventually need to worry about. But we will keep things
 simple here.</p>
 <h3>Expanding the tests</h3>
+<p>In order to make our example just a little more
+interesting, and give selenium something to <em>do</em> rather than
+just <em>observe</em>, let's add a button to our simple home page 
+that takes us to another page. Add the following just after
+the h1 entry:</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;form&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">value=</span><span class="s">&quot;results&quot;</span> <span class="na">onclick=</span><span class="s">&quot;window.location.href=&#39;/results&#39;&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
+
+
 <p>In this next section, I'm going to make the tests a little more
 complicated in structure, but for a good payoff. If you like to 
 keep your tests in a single script as above, you can simply expand
@@ -279,17 +290,7 @@ these developer tools become very useful. In this screenshot below,
 for example, we see how it helps us identify elements of the code.</p>
 <p><img alt="png" src="assets/assets20180826/devtools.png" /></p>
 <p>These elements become key as we find key elements to use in our 
-testing. In order to make our example just a little more
-interesting, and give selenium something to <em>do</em> rather than
-just <em>observe</em>, let's add a button to our simple home page 
-that takes us to another page. Add the following just after
-the h1 entry:</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;form&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">value=</span><span class="s">&quot;results&quot;</span> <span class="na">onclick=</span><span class="s">&quot;window.location.href=&#39;/results&#39;&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/form&gt;</span>
-</pre></div>
-
-
+testing. </p>
 <p>In the pages folder, create a file called <code>home_page.py</code> with the following content:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
 <span class="kn">from</span> <span class="nn">browser</span> <span class="kn">import</span> <span class="n">Browser</span>

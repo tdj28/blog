@@ -129,6 +129,17 @@ carries over. It's the complexities of html/javascript that
 you will eventually need to worry about. But we will keep things
 simple here.&lt;/p&gt;
 &lt;h3&gt;Expanding the tests&lt;/h3&gt;
+&lt;p&gt;In order to make our example just a little more
+interesting, and give selenium something to &lt;em&gt;do&lt;/em&gt; rather than
+just &lt;em&gt;observe&lt;/em&gt;, let's add a button to our simple home page 
+that takes us to another page. Add the following just after
+the h1 entry:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;form&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;input&lt;/span&gt; &lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;button&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;value=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;results&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;onclick=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;window.location.href=&amp;#39;/results&amp;#39;&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;In this next section, I'm going to make the tests a little more
 complicated in structure, but for a good payoff. If you like to 
 keep your tests in a single script as above, you can simply expand
@@ -245,17 +256,7 @@ these developer tools become very useful. In this screenshot below,
 for example, we see how it helps us identify elements of the code.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="png" src="assets/assets20180826/devtools.png" /&gt;&lt;/p&gt;
 &lt;p&gt;These elements become key as we find key elements to use in our 
-testing. In order to make our example just a little more
-interesting, and give selenium something to &lt;em&gt;do&lt;/em&gt; rather than
-just &lt;em&gt;observe&lt;/em&gt;, let's add a button to our simple home page 
-that takes us to another page. Add the following just after
-the h1 entry:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;form&amp;gt;&lt;/span&gt;
-  &lt;span class="nt"&gt;&amp;lt;input&lt;/span&gt; &lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;button&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;value=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;results&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;onclick=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;window.location.href=&amp;#39;/results&amp;#39;&amp;quot;&lt;/span&gt; &lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class="nt"&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
+testing. &lt;/p&gt;
 &lt;p&gt;In the pages folder, create a file called &lt;code&gt;home_page.py&lt;/code&gt; with the following content:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium.webdriver.common.by&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;By&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;browser&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Browser&lt;/span&gt;
