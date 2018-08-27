@@ -385,19 +385,13 @@ browser to watch), the above file will look like:</p>
 </pre></div>
 
 
-<p>With one minor exception, going forward, there will be no difference
-between headless and live browser versions of testing in the code. If
-you have set up your linux system as demonstrated previously here,
-you should be good to go and can run these selenium tests as part 
-of a gate-keeping suite of tests that ensure your changes are not
-going to break anything before you push them out to your users.</p>
 <h3>Step Five: Putting it all together</h3>
 <p>Finally, we need to have an environment definition to tie everything together.
 This will tell <code>behave</code> what page classes to import and tell it what to 
 do before and after the tests are ran.</p>
 <p>If the <code>features</code> folder, create a file called <code>environment.py</code> with the content:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
-<span class="kn">from</span> <span class="nn">browser</span> <span class="kn">import</span> <span class="n">BDisplay</span>
+<span class="kn">from</span> <span class="nn">browser</span> <span class="kn">import</span> <span class="n">BDisplay</span> <span class="c1"># Comment this out for live browser</span>
 <span class="kn">from</span> <span class="nn">browser</span> <span class="kn">import</span> <span class="n">Browser</span>
 <span class="kn">from</span> <span class="nn">pages.home_page</span> <span class="kn">import</span> <span class="n">HomePage</span>
 

@@ -351,19 +351,13 @@ browser to watch), the above file will look like:&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;With one minor exception, going forward, there will be no difference
-between headless and live browser versions of testing in the code. If
-you have set up your linux system as demonstrated previously here,
-you should be good to go and can run these selenium tests as part 
-of a gate-keeping suite of tests that ensure your changes are not
-going to break anything before you push them out to your users.&lt;/p&gt;
 &lt;h3&gt;Step Five: Putting it all together&lt;/h3&gt;
 &lt;p&gt;Finally, we need to have an environment definition to tie everything together.
 This will tell &lt;code&gt;behave&lt;/code&gt; what page classes to import and tell it what to 
 do before and after the tests are ran.&lt;/p&gt;
 &lt;p&gt;If the &lt;code&gt;features&lt;/code&gt; folder, create a file called &lt;code&gt;environment.py&lt;/code&gt; with the content:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;selenium&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;webdriver&lt;/span&gt;
-&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;browser&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;BDisplay&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;browser&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;BDisplay&lt;/span&gt; &lt;span class="c1"&gt;# Comment this out for live browser&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;browser&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Browser&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pages.home_page&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;HomePage&lt;/span&gt;
 
