@@ -42,31 +42,43 @@ And yet, what you produce could be worthless if it doesn't work for the user.</p
 coding it up and getting it to do something. Here, I'm going to use a simple
 <em>Flask</em> app that serves up some Wikipedia page count stats as an example.
 As a developer adds layers and new features and new bells and whistles and 
-pipes and extension cords to their project, things can break which they
-haven't developed in months or years, and if they don't have a good testing
+pipes and extension cords to their project, things which they
+haven't developed in months or years can break, and if they don't have a good testing
 suite in place, they won't catch it and will serve out a degraded experience.
 That's a dis-service to their users, but even to themselves, whose hard work 
 has gone to waste because that piece of the project, which they might have
 spent many hours working on, might as well not even exist if it doesn't work.
 Worse yet, if they break their app entirely, it could take hours and hours 
-of searching for a bug. If instead there is a systematic testing suite in place,
+of searching for a bug. </p>
+<p>If instead there is a systematic testing suite in place,
 each incremental change can be subjected to a battery of tests that help ensure
 that it is safe to continue to the next incremental change. This <em>should not</em> be
 the developer clicking through their app and making sure everything looks good.
-There are many awesome tools in place that allow for quick automated testing.</p>
+There are many awesome tools in place that allow for quick automated testing.
+Here, we provide a walk through to jump start a web developer on using Python
+ and the selenium and behave libraries to provide a full browser test of their site.</p>
 <h2>Selenim</h2>
 <p>Selenium is a Python library that automates testing the final product of 
-a webpage. It is as easy to install as <code>pip install selenium</code>.</p>
-<p>Let's start with a very simple example. Suppose you have webpage that
-simply serves this up:</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>WikiViz<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>   
-        <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;example&quot;</span><span class="p">&gt;</span>Hello World!<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+a webpage. Selenium integrates with various browsers and replicates
+the behavior that you expect from your users, all while measuring the
+response to that behavior against your expectations for how the site, when
+in its optimal state, should respond. 
+It is as easy to install as </p>
+<div class="highlight"><pre><span></span>pip install selenium nose behave
+<span class="sb">````</span>
+
+Let<span class="err">&#39;</span>s start with a very simple example. Suppose you have webpage that
+simply serves this up:
+
+<span class="sb">```</span>html
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;WikiViz&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;   
+        &lt;h1 <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;example&quot;</span>&gt;Hello World!&lt;/h1&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
 </pre></div>
 
 
@@ -81,7 +93,7 @@ Firefox installed. Selenium works with other browsers, but
 to keep this simple at first, we will focus on Firefox.</p>
 <h3>Headless on Ubuntu (skip this if using a Mac)</h3>
 <p>Skip this section if you don't plan to run this on a remote
-ubuntu server. In this example, I'm using my Cloud 9 IDE 
+linux-based server. In this example, I'm using my Cloud 9 IDE 
 account which serves up containers with Ubuntu as the OS.</p>
 <p>First we need to isntall the <a href="https://en.wikipedia.org/wiki/Xvfb">Xvfb</a> package:</p>
 <div class="highlight"><pre><span></span>sudo apt-get install firefox xvfb
@@ -89,7 +101,7 @@ account which serves up containers with Ubuntu as the OS.</p>
 
 
 <p>and the PyVirtualDisplay python library:</p>
-<div class="highlight"><pre><span></span>pip install PyVirtualDisplay
+<div class="highlight"><pre><span></span>pip install selenium nose behave PyVirtualDisplay
 </pre></div>
 
 
@@ -132,7 +144,7 @@ your code will look like this:</p>
 
 
 <p>If you are running this in a local environment, such as on 
-a mac, and you like to watch selenium open the browser and 
+a Mac, and you like to watch selenium open the browser and 
 walk through the tests, then your code would look like this:</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 
@@ -147,16 +159,18 @@ walk through the tests, then your code would look like this:</p>
 <p>Yes, it is that easy! OK, well, at least for the title. As
 your page gets more complicated, so will your testing, but 
 overall the spirit of simplicity in the selenium testing scheme 
-carries over.</p>
+carries over. It's the complexities of html/javascript that 
+you will eventually need to worry about. But we will keep things
+simple here.</p>
 <h3>Expanding the tests</h3>
 <p>In this next section, I'm going to make the tests a little more
 complicated in structure, but for a good payoff. If you like to 
 keep your tests in a single script as above, you can simply expand
 on that script. Here, I will show a simple example using <code>nose</code>
 and <code>behave</code> libraries. This example was inspired by a slightly more
-complicated (and well done) example 
+complicated (and well done) example (which doesn't have the headless feature)
 <a href="https://the-creative-tester.github.io/Python-Web-Browser-Automation-Behave/">here</a>,
-but meant to be easier to dive into for those new to testing.</p>
+but meant to be easier to dive into for those new to testing with selenium.</p>
 <p>Create a file structure that looks as follows:</p>
 <div class="highlight"><pre><span></span><span class="o">(</span>env<span class="o">)</span> tdj28:~/workspace/selenium_tests <span class="o">(</span>master<span class="o">)</span> $ tree .
 .
@@ -187,63 +201,74 @@ for testing a few features (or writing this blog post), but you definitely
 don't want something that sloppy in a production version of your code.</p>
 <p>(Google <code>init python files</code> if you don't know what those <code>__init__.py</code> files
 are for.)</p>
-<h3>Step One: Define The Browser</h3>
-<p>Create the file <code>features/browser.py</code> with the following content
-if you want selenium to run on your laptop or desktop in a way
-that you can watch it run through the tests:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<h3>Step One: Define the Behavior</h3>
+<p>BDD development would have us define behaviors we expect of the site before
+we even begin to develop site. That's a good place to start for selenium testing
+as well, where if these definitions are pre-existing, we can use them as our starting
+point. If not, we can easily create our own.</p>
+<p>In the <code>features</code> directory, create a file called <code>clickbutton.feature</code> with
+the following content:</p>
+<div class="highlight"><pre><span></span><span class="n">Feature</span><span class="o">:</span> <span class="n">ClickButton</span>
 
-<span class="k">class</span> <span class="nc">Browser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
-    <span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">driver</span><span class="o">.</span><span class="n">set_page_load_timeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">driver</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
-        <span class="n">context</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+  <span class="n">Scenario</span><span class="o">:</span> <span class="n">Click</span> <span class="n">Away</span> <span class="n">From</span> <span class="n">Homepage</span>
+    <span class="n">Given</span> <span class="n">I</span> <span class="n">navigate</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Home</span> <span class="n">page</span>
+    <span class="n">And</span> <span class="n">I</span> <span class="n">see</span> <span class="n">that</span> <span class="n">the</span> <span class="n">pagename</span> <span class="k">is</span> <span class="n">WikiViz</span>
+    <span class="n">And</span> <span class="n">I</span> <span class="n">see</span> <span class="n">the</span> <span class="n">header</span> <span class="s2">&quot;Hello World!&quot;</span>
+    <span class="n">When</span> <span class="n">I</span> <span class="n">click</span> <span class="n">the</span> <span class="n">button</span>
+    <span class="n">Then</span> <span class="n">I</span> <span class="n">see</span> <span class="n">that</span> <span class="n">the</span> <span class="n">pagename</span> <span class="k">is</span> <span class="n">no</span> <span class="n">longer</span> <span class="n">WikiViz</span>
 </pre></div>
 
 
-<p>The github users <code>creative tester</code> is more generous, for example
-<a href="https://github.com/the-creative-tester/python-behave-web-browser-automation-example/blob/master/features/browser.py">giving</a>
-the page timeout as being thirty seconds. I've made that ten seconds
-here because if my page is taking longer than ten seconds to load, 
-to me that is a pretty good reason for it to fail. I would actually 
-recommend you being more generous than not, and instead build in timing
-features to test for load time rather than have the tests timeout as
-an indication that your page is slow, but again, this is meant to be 
-a baseline example.</p>
-<p>For those wishing to use headless testing (on a remote server, no live
-browser to watch), the above file will look like:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
-<span class="kn">from</span> <span class="nn">pyvirtualdisplay</span> <span class="kn">import</span> <span class="n">Display</span>  <span class="c1"># Comment this out for live browser</span>
+<p>This is the beauty of the <code>behave</code> library and behavior based testing in general.
+We can use everyday language to describe our user's experience, and then translate
+that in to tests as we will see shortly. This enables non-technical folks to
+contribute tests. </p>
+<p>Note that in the above tests, the last line entry is a bit of a cheat on my part.
+The test really should, in that line, confirm in some way that it made it to the 
+results page. So don't do what I did there! If for example you click on the button
+and it takes you to a 404 error page, your test will still pass. I take that shortcut
+here only to keep this jump start example focused on a single simple html page.</p>
+<h3>Step Two: Turn the Behaviors Into Steps</h3>
+<p>In the steps folder, create a file called <code>clickbutton_step.py</code>. Note that
+it has the same prefix <code>clickbutton</code> as the corresponding features file we
+created above, that is required for each feature file. The contents of this
+file will have:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nose.tools</span> <span class="kn">import</span> <span class="n">assert_equal</span><span class="p">,</span> <span class="n">assert_not_equal</span><span class="p">,</span> <span class="n">assert_true</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
 
+<span class="nd">@given</span><span class="p">(</span><span class="s1">&#39;I navigate to the Home page&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">navigate</span><span class="p">(</span><span class="s2">&quot;http://localhost:8080/&quot;</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">BDisplay</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> <span class="c1"># Comment this out for live browser</span>
-    <span class="n">display</span> <span class="o">=</span> <span class="n">Display</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>  <span class="c1"># Comment this out for live browser</span>
-    <span class="n">display</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># Comment this out for live browser</span>
+<span class="nd">@given</span><span class="p">(</span><span class="s1">&#39;I see that the pagename is WikiViz&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">assert_equal</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">get_page_title</span><span class="p">(),</span> <span class="s2">&quot;WikiViz&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="n">context</span><span class="p">):</span> <span class="c1"># Comment this out for live browser</span>
-        <span class="n">context</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span> <span class="c1"># Comment this out for live browser</span>
+<span class="nd">@given</span><span class="p">(</span><span class="s1">&#39;I see the header &quot;Hello World!&quot;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">assert_equal</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">get_page_header</span><span class="p">(),</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
 
+<span class="nd">@when</span><span class="p">(</span><span class="s1">&#39;I click the button&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">click_button</span><span class="p">()</span>
 
-<span class="k">class</span> <span class="nc">Browser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
-    <span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">driver</span><span class="o">.</span><span class="n">set_page_load_timeout</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">driver</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
-        <span class="n">context</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="nd">@then</span><span class="p">(</span><span class="s1">&#39;I see that the pagename is no longer WikiViz&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">assert_not_equal</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">get_page_title</span><span class="p">(),</span> <span class="s2">&quot;WikiViz&quot;</span><span class="p">)</span>
 </pre></div>
 
 
-<p>With one minor exception, going forward, there will be no difference
-between headless and live browser versions of testing in the code.</p>
-<h3>Step Two: Define the Pages</h3>
-<p>So for now, let's stick with our simple home page as detailed above. We
+<p>So the pattern here is starting to become clear:</p>
+<div class="highlight"><pre><span></span>User experience ---&gt; Steps ---&gt; Page functions
+</pre></div>
+
+
+<p>We have chosen to create the steps before the page functions here because that is
+a natural way to proceed. The steps will tell you what functions you need to create,
+and then afterwards, create those functions with the narrow scope defined by
+the steps.</p>
+<h3>Step Three: Turn the Steps Into Implemented Functions</h3>
+<p>Let's stick with our simple home page as detailed above. We
 can look behind the curtain of this page by using our browser's 
 developer console. On Chrome, for example, it is in settings &gt; More Tools &gt;
 Developer Tools. This gives you many great tools to inspect
@@ -302,72 +327,69 @@ compartmentalized. If we have a subset of pages that share much in common,
 we can create a class for that subset, and then have individual pages 
 inherit that class, and so on.</p>
 <p>Also note that there are multiple ways we can identify elements, including
-<code>xpath</code>. In this file, we add three tools associated with our homepage. 
-The first returns the pagename, the second returns the h1 element, and
-the third clicks on the button we just added that will send us to a new page.</p>
-<h3>Step Three: Define the behave Tests</h3>
-<p>Now that we've defined our page and elements and events we expect our
-users to be able to access on that page, we can define what our tests
-want to do to confirm that our users get the experience we intend to provide.</p>
-<p>In the <code>features</code> directory, create a file called <code>clickbutton.feature</code> with
-the following content:</p>
-<div class="highlight"><pre><span></span><span class="n">Feature</span><span class="o">:</span> <span class="n">ClickButton</span>
+<code>xpath</code>. In this file, we add four tools associated with our homepage. 
+The first is a navigate function, the second returns the pagename, 
+the third returns the h1 element, and
+the fourth clicks on the button we just added that will send us to a new page.</p>
+<h3>Step Four: Define The Browser</h3>
+<p>Before we can make use of the defined behaviors and expectations,
+we need to set up our browser and display (for headless).</p>
+<p>Create the file <code>features/browser.py</code> with the following content
+if you want selenium to run on your laptop or desktop in a way
+that you can watch it run through the tests:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 
-  <span class="n">Scenario</span><span class="o">:</span> <span class="n">Click</span> <span class="n">Away</span> <span class="n">From</span> <span class="n">Homepage</span>
-    <span class="n">Given</span> <span class="n">I</span> <span class="n">navigate</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Home</span> <span class="n">page</span>
-    <span class="n">And</span> <span class="n">I</span> <span class="n">see</span> <span class="n">that</span> <span class="n">the</span> <span class="n">pagename</span> <span class="k">is</span> <span class="n">WikiViz</span>
-    <span class="n">And</span> <span class="n">I</span> <span class="n">see</span> <span class="n">the</span> <span class="n">header</span> <span class="s2">&quot;Hello World!&quot;</span>
-    <span class="n">When</span> <span class="n">I</span> <span class="n">click</span> <span class="n">the</span> <span class="n">button</span>
-    <span class="n">Then</span> <span class="n">I</span> <span class="n">see</span> <span class="n">that</span> <span class="n">the</span> <span class="n">pagename</span> <span class="k">is</span> <span class="n">no</span> <span class="n">longer</span> <span class="n">WikiViz</span>
+<span class="k">class</span> <span class="nc">Browser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">set_page_load_timeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 
 
-<p>This is the beauty of the <code>behave</code> library and behavior based testing in general.
-We can use everyday language to describe our user's experience, and then translate
-that in to tests as we will see shortly. This enables non-technical folks to
-contribute tests. Indeed, when planning out a webpage, many users find it 
-best to start by sketching the page and defining the above tests <em>first</em> 
-before writing a single line of code. </p>
-<p>Note that in the above tests, the last line entry is a bit of a cheat on my part.
-The test really should, in that line, confirm in some way that it made it to the 
-results page. So don't do what I did there! If for example you click on the button
-and it takes you to a 404 error page, your test will still pass. I take that shortcut
-here only to keep this jump start example focused on a single simple html page.</p>
-<h3>Step Four: Turn the Features Into Steps</h3>
-<p>In the steps folder, create a file called <code>clickbutton_step.py</code>. Note that
-it has the same prefix <code>clickbutton</code> as the corresponding features file we
-created above, that is required for each feature file. The contents of this
-file will have:</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nose.tools</span> <span class="kn">import</span> <span class="n">assert_equal</span><span class="p">,</span> <span class="n">assert_not_equal</span><span class="p">,</span> <span class="n">assert_true</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+<p>Here, I've made the page timeout ten seconds 
+because if my page is taking longer than ten seconds to load, 
+to me that is a pretty good reason for it to fail. I would actually 
+recommend you being more generous than not, and instead build in timing
+features to test for load time rather than have the tests timeout as
+an indication that your page is slow, but again, this is meant to be 
+a baseline example.</p>
+<p>For those wishing to use headless testing (on a remote server, no live
+browser to watch), the above file will look like:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">pyvirtualdisplay</span> <span class="kn">import</span> <span class="n">Display</span>  <span class="c1"># Comment this out for live browser</span>
 
-<span class="nd">@given</span><span class="p">(</span><span class="s1">&#39;I navigate to the Home page&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">navigate</span><span class="p">(</span><span class="s2">&quot;http://localhost:8080/&quot;</span><span class="p">)</span>
 
-<span class="nd">@given</span><span class="p">(</span><span class="s1">&#39;I see that the pagename is WikiViz&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
-    <span class="n">assert_equal</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">get_page_title</span><span class="p">(),</span> <span class="s2">&quot;WikiViz&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">BDisplay</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> <span class="c1"># Comment this out for live browser</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">Display</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>  <span class="c1"># Comment this out for live browser</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># Comment this out for live browser</span>
 
-<span class="nd">@given</span><span class="p">(</span><span class="s1">&#39;I see the header &quot;Hello World!&quot;&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
-    <span class="n">assert_equal</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">get_page_header</span><span class="p">(),</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="n">context</span><span class="p">):</span> <span class="c1"># Comment this out for live browser</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span> <span class="c1"># Comment this out for live browser</span>
 
-<span class="nd">@when</span><span class="p">(</span><span class="s1">&#39;I click the button&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">click_button</span><span class="p">()</span>
 
-<span class="nd">@then</span><span class="p">(</span><span class="s1">&#39;I see that the pagename is no longer WikiViz&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">step_impl</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
-    <span class="n">assert_not_equal</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">home_page</span><span class="o">.</span><span class="n">get_page_title</span><span class="p">(),</span> <span class="s2">&quot;WikiViz&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Browser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">set_page_load_timeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 
 
-<p>So the pattern here is starting to become clear:</p>
-<div class="highlight"><pre><span></span>User experience ---&gt; Steps ---&gt; Page functions
-</pre></div>
-
-
+<p>With one minor exception, going forward, there will be no difference
+between headless and live browser versions of testing in the code. If
+you have set up your linux system as demonstrated previously here,
+you should be good to go and can run these selenium tests as part 
+of a gate-keeping suite of tests that ensure your changes are not
+going to break anything before you push them out to your users.</p>
 <h3>Step Five: Putting it all together</h3>
 <p>Finally, we need to have an environment definition to tie everything together.
 This will tell <code>behave</code> what page classes to import and tell it what to 
