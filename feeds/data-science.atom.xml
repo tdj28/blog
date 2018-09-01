@@ -759,7 +759,7 @@ docker-sparker on. On a linux machine:&lt;/li&gt;
 &lt;ul&gt;
 &lt;li&gt;Clone the docker-sparker repo:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/doctimjones/docker-sparker.git
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/3implieschaos/docker-sparker.git
 &lt;/pre&gt;&lt;/div&gt;
 
 
