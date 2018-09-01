@@ -1,5 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/all.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2018-08-26T13:21:00-04:00</updated><entry><title>Jump Start for Using Headless Python Selenium With Behave</title><link href="http://3implieschaos.org/jump-start-for-using-headless-python-selenium-with-behave.html" rel="alternate"></link><published>2018-08-26T13:21:00-04:00</published><updated>2018-08-26T13:21:00-04:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2018-08-26:jump-start-for-using-headless-python-selenium-with-behave.html</id><summary type="html">&lt;p&gt;Testing software can often be seen as the least enjoyable part of the
+<feed xmlns="http://www.w3.org/2005/Atom"><title>3implieschaos</title><link href="http://3implieschaos.org/" rel="alternate"></link><link href="http://3implieschaos.org/feeds/all.atom.xml" rel="self"></link><id>http://3implieschaos.org/</id><updated>2018-08-31T18:37:00-04:00</updated><entry><title>Let's Name Laws of Physics After Physics, not People</title><link href="http://3implieschaos.org/lets-name-laws-of-physics-after-physics-not-people.html" rel="alternate"></link><published>2018-08-31T18:37:00-04:00</published><updated>2018-08-31T18:37:00-04:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2018-08-31:lets-name-laws-of-physics-after-physics-not-people.html</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;The IAU XXX General Assembly &lt;a href="https://www.iau.org/news/pressreleases/detail/iau1810/"&gt;closed today&lt;/a&gt;
+and has passed &lt;a href="https://www.iau.org/static/archives/announcements/pdf/ann18029e.pdf"&gt;Resolution B4&lt;/a&gt;
+calling for renaming Hubble's Law to the Hubble-Lema&amp;icirc;tre Law. Members will electronically
+vote on this resolution later this year. Here's a bigger idea:
+let's stop naming laws after people.&lt;/p&gt;
+&lt;h3&gt;Why the IAU XXX wishes to rename Hubble's Law&lt;/h3&gt;
+&lt;p&gt;Here are their main
+points, summarized in my own words:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The discovery that galaxies are flying away from us was &lt;em&gt;huge&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;Belgian astronomer Georges Lema&amp;icirc;tre published this finding in 
+1927 along with theoretical support before Hubble.&lt;/li&gt;
+&lt;li&gt;The journal he published in wasn't too popular so his findings were not widely 
+circulated.&lt;/li&gt;
+&lt;li&gt;Lema&amp;icirc;tre and Hubble attended a conference together in 1928 and talked 
+about this expansion, Hubble later giving no attribution to Lema&amp;icirc;tre.&lt;/li&gt;
+&lt;li&gt;Hubble's 1929 paper included new data that more strongly made the 
+case for expansion and in it he proposes/derives a linear distance 
+relationship which is what we now think of when referring to Hubble's Law.&lt;/li&gt;
+&lt;li&gt;Lema&amp;icirc;tre essentially botched his chance to get more attribution when,
+at the invitation of the Royal Astronomical Society, he published an English
+translation of his paper but omitted the section where he derives the rate
+of expansion thinking it wasn't of interest.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;They make a very valid point, and if I had voting rights, I would vote for
+this resolution. But let's, just for fun, look at a radical alternative.&lt;/p&gt;
+&lt;h3&gt;Why we should stop naming new laws after people, and rename old laws after concepts&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Discoveries are never clear-cut. Who gets credit for Calculus? Newton or Leibniz? 
+Special relativity is often credited exclusively to Einstein, but be careful 
+doing so around the French as there is a chance they may gleefully point out that 
+Poincare had all the ingredients on the table before Einstein did, except the one 
+magic ingredient that Einstein added, which was to 
+&lt;em&gt;believe the math over any pre-conceived notions&lt;/em&gt;. By doing so, Einstein was able to 
+cook up all the ingredients properly and introduce a revolution in the way we
+think about space and time.&lt;/li&gt;
+&lt;li&gt;Most French who will point out Poincare's contributions
+do so out of national pride, for sure--Poincare was a tremendously talented 
+scientist who is one of the founders of the field of Chaos Theory, for example. 
+And while you can 
+&lt;a href="https://en.wikipedia.org/wiki/Relativity_priority_dispute"&gt;find some intelligent discussion&lt;/a&gt; 
+about how Relativity, both Special and General, were in the air and were the payoff of
+a longer thread of mathematics and physics involving many contributors, that
+discussion is tainted by historic and current anti-semitism, nasty bigots
+who have long sought to discredit Einstein because he was of Jewish heritage.&lt;/li&gt;
+&lt;li&gt;Which goes to the bigger point. While it is perfectly healthy to have a historical
+interest in science history, it is inevitably tainted with biases, nationalism, and
+prejudices, and other nasty ingredients which belie the concept of science and 
+mathematics as being a universal human endeavor.&lt;/li&gt;
+&lt;li&gt;The mathematical and scientific endeavor is a universal endeavor, and many of
+the great early discoveries are named after mostly men and a few women who were
+lucky enough to be parts of society that were empowered to be a part of that 
+endeavor.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That gets to the bigger point. Were in not for Haskalah and Germany's introduction
+of civil liberties for Jewish citizens, Einstein would likely never had had the 
+opportunity to contribute to the body of science. We can find other examples like
+Einstein in India, where the British rule was softening and British scientist were
+becoming open to contributions from Indian science. Both 
+&lt;a href="https://www.theguardian.com/education/2005/mar/31/research.highereducation"&gt;S Chandrasekhar (Chandrasekhar limit, our understanding of black holes)&lt;/a&gt;
+and his uncle
+&lt;a href="https://en.wikipedia.org/wiki/C._V._Raman"&gt;C. V. Raman (Raman scattering, quantum mechanics)&lt;/a&gt;, 
+went on to win a Nobel prize and have a major law or phenomenon named after them.
+Without these historical openings, these phenomenons and laws would have 
+very likely had European names attached to them instead. We could go on, of course,
+and we haven't even started talking about the lack of opportunities afforded to 
+women in science, historically.&lt;/p&gt;
+&lt;p&gt;Naming laws after people also has a negative effect on public perception of science
+and math. It induces a culture of hero-worship that greatly skews the public's
+concept of how math and science make progress. It is an iterative endeavor, where
+from time to time particularly bright minds push the state of knowledge further
+a decade or so, but always building upon work that came before them. 
+Einstein's
+General Relativity built on the work of the mathematician Riemann, for example,
+as well as the field concepts of Maxwell. Newton's work built upon Euclid's 
+mathematical contributions and Galileo's physical insights. The revolutions these
+two helped ignite would have happened without them, only, it would have happened a bit
+later. Leibniz worked out Calculus independently of Newton, and his formalism is
+superior. 
+Mathematicians and physicists on continental Europe made great strides with
+the superior formalism both by making Calculus rigorous 
+&lt;a href="https://www.jstor.org/stable/23722354"&gt;(e.g. this discussion)&lt;/a&gt; 
+and by finding superior mathematical approaches to mechanics. Some
+speculate that this is the case because British scientist were 
+too long to overcome their devotion to Newton's formalism &lt;a href="https://www.jstor.org/stable/2974733"&gt;see this article for 
+a more nuanced view&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;We are in a tremendously dangerous period in history, in some ways.
+Science has become a global phenomenon for both better and worse. 
+Science is a tool, as good or as evil as the intention behind it. 
+We can be happy that there are scientist all over the globe working
+to discover new laws that help us understand the universe, new treatments
+to cancer, new ways to make our use of energy more efficient and renewable.
+We can also be worried that there scientist all over the world engaged 
+in research meant to find more efficient ways to kill other human beings.
+As globalization distributes power centers more broadly around the world,
+we should aim for the scientific endeavor to foster a sense of universalism
+ and connectivity. The IAU XXX General Assembly should rename Hubble's Law
+ as the Law of Cosmological Expansion. History will never forget the 
+ contributions of Hubble and Lema&amp;icirc;tre (and let's not forget those of 
+ &lt;a href="http://www.astronomy.com/news/2018/08/big-bang-vote-iau-debates-who-gets-credit-for-expanding-universe"&gt;Howard Robertson&lt;/a&gt;
+ as well). The future, hopefully, belongs to all of us.&lt;/p&gt;</summary><category term="Physics"></category><category term="Science History"></category></entry><entry><title>Jump Start for Using Headless Python Selenium With Behave</title><link href="http://3implieschaos.org/jump-start-for-using-headless-python-selenium-with-behave.html" rel="alternate"></link><published>2018-08-26T13:21:00-04:00</published><updated>2018-08-26T13:21:00-04:00</updated><author><name>Tim Jones</name></author><id>tag:3implieschaos.org,2018-08-26:jump-start-for-using-headless-python-selenium-with-behave.html</id><summary type="html">&lt;p&gt;Testing software can often be seen as the least enjoyable part of the
 &lt;a href="https://en.wikipedia.org/wiki/Systems_development_life_cycle"&gt;systems development life cycle&lt;/a&gt;.
 It is easy to see why. Developing the actual application that does the magic 
 that the end user finds value in is indeed a very exciting core to the process.
