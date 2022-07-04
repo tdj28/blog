@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on tdj28</title>
+    <link>http://3implieschaos.org/post/</link>
+    <description>Recent content in Posts on tdj28</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 26 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Headless Python Selenium With Behave</title>
+      <link>http://3implieschaos.org/post/headless-python-selenium-with-behave/</link>
+      <pubDate>Sun, 26 Aug 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/headless-python-selenium-with-behave/</guid>
+      <description>Selenium Testing a Web App can be a quick and productive win.</description>
+    </item>
+    
+    <item>
+      <title>Using PNNL&#39;s new Cividis colormap in data science to make accessible heat maps</title>
+      <link>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</link>
+      <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</guid>
+      <description>Recent work at PNNL has introduced a mathematically optimized colormap called Cividis that optimizes viewing of heatmaps and other plots for both those with and without full color vision</description>
+    </item>
+    
+    <item>
+      <title>Exploring Wikipedia Page Count Trends</title>
+      <link>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</link>
+      <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</guid>
+      <description>There are some readily available tools in python for doing time series analysis, and these tools can be used to study Wikipedia page count stats.</description>
+    </item>
+    
+    <item>
+      <title>A Risk Analysis Bowtie Diagram in Latex</title>
+      <link>http://3implieschaos.org/post/risk-analysis-bowtie-diagram-latex/</link>
+      <pubDate>Sun, 24 Jun 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/risk-analysis-bowtie-diagram-latex/</guid>
+      <description>Couldn&amp;rsquo;t find a good example on the web, wrote one instead.</description>
+    </item>
+    
+    <item>
+      <title>TRAPPIST-1 is probably not alive</title>
+      <link>http://3implieschaos.org/post/trappist1-is-probably-not-alive/</link>
+      <pubDate>Fri, 24 Feb 2017 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/trappist1-is-probably-not-alive/</guid>
+      <description>While the findings of additional potentially habitable planets around TRAPPIST-1 is exciting, it also isn&amp;rsquo;t overly promising.</description>
+    </item>
+    
+    <item>
+      <title>Putting a Space Station Over Philly With Final Cut Pro</title>
+      <link>http://3implieschaos.org/post/putting-a-space-station-over-philly/</link>
+      <pubDate>Mon, 20 Feb 2017 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/putting-a-space-station-over-philly/</guid>
+      <description>A quick and easy (though not free) way to put a imaginary space station over Philadelphia.</description>
+    </item>
+    
+    <item>
+      <title>DevOps 101: Chef Cookbook with Testing</title>
+      <link>http://3implieschaos.org/post/chef-cookbook-example/</link>
+      <pubDate>Sat, 28 Jan 2017 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/chef-cookbook-example/</guid>
+      <description>A quick and dirty example of creating a chef cookbook with rspec tests.</description>
+    </item>
+    
+    <item>
+      <title>Python Uses Operational Chaining for Boolean Comparisons</title>
+      <link>http://3implieschaos.org/post/python-operational-chaining/</link>
+      <pubDate>Fri, 20 Jan 2017 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/python-operational-chaining/</guid>
+      <description>It is important to understand Python&amp;rsquo;s use of operational chaining to avoid programming errors.</description>
+    </item>
+    
+    <item>
+      <title>Abstracting Networking with Docker Containers</title>
+      <link>http://3implieschaos.org/post/abstracting-networking-with-docker-containers/</link>
+      <pubDate>Thu, 03 Mar 2016 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/abstracting-networking-with-docker-containers/</guid>
+      <description>Docker comes with a default network, but you can make your own network of unlimited complexity.</description>
+    </item>
+    
+  </channel>
+</rss>

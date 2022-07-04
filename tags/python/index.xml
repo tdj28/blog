@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python on tdj28</title>
+    <link>http://3implieschaos.org/tags/python/</link>
+    <description>Recent content in python on tdj28</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 26 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Headless Python Selenium With Behave</title>
+      <link>http://3implieschaos.org/post/headless-python-selenium-with-behave/</link>
+      <pubDate>Sun, 26 Aug 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/headless-python-selenium-with-behave/</guid>
+      <description>Selenium Testing a Web App can be a quick and productive win.</description>
+    </item>
+    
+    <item>
+      <title>Using PNNL&#39;s new Cividis colormap in data science to make accessible heat maps</title>
+      <link>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</link>
+      <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</guid>
+      <description>Recent work at PNNL has introduced a mathematically optimized colormap called Cividis that optimizes viewing of heatmaps and other plots for both those with and without full color vision</description>
+    </item>
+    
+    <item>
+      <title>Exploring Wikipedia Page Count Trends</title>
+      <link>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</link>
+      <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</guid>
+      <description>There are some readily available tools in python for doing time series analysis, and these tools can be used to study Wikipedia page count stats.</description>
+    </item>
+    
+    <item>
+      <title>Python Uses Operational Chaining for Boolean Comparisons</title>
+      <link>http://3implieschaos.org/post/python-operational-chaining/</link>
+      <pubDate>Fri, 20 Jan 2017 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/python-operational-chaining/</guid>
+      <description>It is important to understand Python&amp;rsquo;s use of operational chaining to avoid programming errors.</description>
+    </item>
+    
+  </channel>
+</rss>

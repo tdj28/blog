@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>computer-science on tdj28</title>
+    <link>http://3implieschaos.org/tags/computer-science/</link>
+    <description>Recent content in computer-science on tdj28</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 20 Jan 2017 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/computer-science/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python Uses Operational Chaining for Boolean Comparisons</title>
+      <link>http://3implieschaos.org/post/python-operational-chaining/</link>
+      <pubDate>Fri, 20 Jan 2017 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/python-operational-chaining/</guid>
+      <description>It is important to understand Python&amp;rsquo;s use of operational chaining to avoid programming errors.</description>
+    </item>
+    
+  </channel>
+</rss>

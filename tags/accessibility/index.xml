@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>accessibility on tdj28</title>
+    <link>http://3implieschaos.org/tags/accessibility/</link>
+    <description>Recent content in accessibility on tdj28</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 19 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/accessibility/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using PNNL&#39;s new Cividis colormap in data science to make accessible heat maps</title>
+      <link>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</link>
+      <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</guid>
+      <description>Recent work at PNNL has introduced a mathematically optimized colormap called Cividis that optimizes viewing of heatmaps and other plots for both those with and without full color vision</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <meta name="generator" content="Hugo 0.101.0" />
-  <link rel="canonical" href="http://3implieschaos.org/about/" />
+  <link rel="canonical" href="http://3implieschaos.org/post/python-operational-chaining/" />
 
   
     
-    <meta name="description" content="Who is tdj28">
+    <meta name="description" content="It is important to understand Python’s use of operational chaining to avoid programming errors.">
   
 
   <link rel="apple-touch-icon" sizes="180x180" href="http://3implieschaos.org/apple-touch-icon.png">
@@ -56,7 +56,7 @@
 
   
   
-  <title>About tdj28 | tdj28</title>
+  <title>Python Uses Operational Chaining for Boolean Comparisons | tdj28</title>
 </head>
 
   <body>
@@ -205,7 +205,7 @@
       
       
       
-      <a href="/post/" >
+      <a href="/post/" aria-current="page">
         <svg class="bookmark-icon" aria-hidden="true" focusable="false" viewBox="0 0 40 50">
           <use href="#bookmark"></use>
         </svg>
@@ -262,16 +262,166 @@
         <div>
           
   <main id="main">
-    <h1>About tdj28</h1>
-    <h2 id="who-wrote-this">Who wrote this?</h2>
-<p>TJ completed a Ph.D. in Physics and then moved into the tech world.</p>
-<h2 id="elsewhere">Elsewhere</h2>
-<ul>
-<li><a href="https://github.com/tdj28">GitHub</a></li>
-<li><a href="https://twitter.com/">Twitter</a></li>
-</ul>
+    <h1>
+      <svg class="bookmark-icon" aria-hidden="true" viewBox="0 0 40 50" focusable="false">
+        <use href="#bookmark"></use>
+      </svg>
+      Python Uses Operational Chaining for Boolean Comparisons
+    </h1>
+
+    <div class="date">
+      
+      
+      <strong>Publish date: </strong>Jan 20, 2017
+      
+        
+          <br>
+          <strong>Last updated: </strong>Jun 26, 2022
+        
+      
+    </div>
+
+    
+      <div class="tags">
+        <strong>Tags: </strong>
+        <ul aria-label="tags">
+          
+            <li>
+              <svg class="tag-icon" aria-hidden="true" viewBox="0 0 177.16535 177.16535" focusable="false">
+                <use href="#tag"></use>
+              </svg>
+              
+              <a href="/tags/python/">python</a>
+            </li>
+          
+            <li>
+              <svg class="tag-icon" aria-hidden="true" viewBox="0 0 177.16535 177.16535" focusable="false">
+                <use href="#tag"></use>
+              </svg>
+              
+              <a href="/tags/computer-science/">computer-science</a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+  <nav class="toc" aria-labelledby="toc-heading">
+    <strong id="toc-heading">Table of Contents</strong>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#a-python-feature">A Python feature?</a></li>
+    <li><a href="#explanation">Explanation</a>
+      <ul>
+        <li><a href="#using-the-dis-module-to-dig-deeper">Using the Dis Module to dig deeper</a></li>
+        <li><a href="#in-words">In words</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </nav>
+
+
+
+    <h2 id="a-python-feature">A Python feature?</h2>
+<p>A colleague noticed this behavior:</p>
+<pre><code class="language-python">&gt;&gt;&gt; 'a' in 'b' == 0
+False
+&gt;&gt;&gt; ('a' in 'b') == 0
+True
+&gt;&gt;&gt; 'a' in ('b' == 0)
+TypeError: argument of type 'bool' is not iterable
+</code></pre>
+<p>offering a bucket of doubloons to anyone who can explain it. The final case is simply a typecasting problem, but the first two cases demonstrate Python&rsquo;s operating chaining behavior.</p>
+<h2 id="explanation">Explanation</h2>
+<h3 id="using-the-dis-module-to-dig-deeper">Using the Dis Module to dig deeper</h3>
+<p>Using the  <code>dis</code><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> module, we find:</p>
+<pre><code class="language-python">'a' in 'b' == 0
+
+  7           0 LOAD_CONST               1 ('a')
+              3 LOAD_CONST               2 ('b')
+              6 DUP_TOP
+              7 ROT_THREE
+              8 COMPARE_OP               6 (in)
+             11 JUMP_IF_FALSE_OR_POP    21
+             14 LOAD_CONST               3 (0)
+             17 COMPARE_OP               2 (==)
+             20 RETURN_VALUE
+        &gt;&gt;   21 ROT_TWO
+             22 POP_TOP
+             23 RETURN_VALUE
+
+'a' in 'b' and 'b' == 0
+15           0 LOAD_CONST               1 ('a')
+              3 LOAD_CONST               2 ('b')
+              6 COMPARE_OP               6 (in)
+              9 JUMP_IF_FALSE_OR_POP    21
+             12 LOAD_CONST               2 ('b')
+             15 LOAD_CONST               3 (0)
+             18 COMPARE_OP               2 (==)
+        &gt;&gt;   21 RETURN_VALUE
+
+'a' in 'a' == 0
+  9           0 LOAD_CONST               1 ('a')
+              3 LOAD_CONST               1 ('a')
+              6 DUP_TOP
+              7 ROT_THREE
+              8 COMPARE_OP               6 (in)
+             11 JUMP_IF_FALSE_OR_POP    21
+             14 LOAD_CONST               2 (0)
+             17 COMPARE_OP               2 (==)
+             20 RETURN_VALUE
+        &gt;&gt;   21 ROT_TWO
+             22 POP_TOP
+             23 RETURN_VALUE
+</code></pre>
+<h3 id="in-words">In words</h3>
+<p>Parenthesis essential forces Python to do &lsquo;something&rsquo; first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python&rsquo;s operation chaining isn&rsquo;t the desired behavior. When we put <code>'a' in 'b'</code> inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to <code>True</code> or <code>False</code>, and then the <code>== 0</code> comparison acts as a Boolean comparison, giving expected behavior since Python sees False and 0 as equivalent here.</p>
+<p>In the first instance above, however, Python is operator chaining. For <code>'a' in 'b' == 0</code>, it first loads a and b strings such that the stack is</p>
+<pre><code class="language-python">[ b, a ]
+</code></pre>
+<p>it then <code>DUP_TOP</code> duplicates <code>b</code> so that it doesn’t have to waste time to load it again for the second evaluation, resulting in the stack:</p>
+<pre><code class="language-python">[ b, b, a ]
+</code></pre>
+<p><code>ROT_THREE</code> lifts second and third stack item up and the top item down to third place, so now the stack is:</p>
+<pre><code class="language-python">[ b, a, b ]
+</code></pre>
+<p><code>COMPARE_OP</code> acts on <code>[ b, a]</code>, and since it is not true, <code>JUMP_IF_FALSE_OR_POP</code> forces it to jump and just returns False. This makes sense because it
+sees this as a compound AND statement, and when the first part of an AND statement is false, the entire thing is false and it is a waste of
+resources to compute further.</p>
+<p>What is interesting is if you do <code>'a' in 'a' == 1</code>,  or <code>'a' in 'a' == 0</code>. Take the former, for example,
+which after <code>DUP_TOP</code> gives us the stack:</p>
+<pre><code class="language-python">[ a, a, a ]
+</code></pre>
+<p>Here <code>'a' in 'a'</code> is obviously true, and these two entries of the stack are replaced with the result of that evaluation, which is <code>True</code>. This, now being the top of the stack, is popped off by <code>JUMP_IF_FALSE_OR_POP</code>
+leaving the duplicated &lsquo;a&rsquo; on the top of the stack, where then <code>1</code> is loaded for the next comparison, so the stack is now:</p>
+<pre><code class="language-python">[1, a]
+</code></pre>
+<p>and the <code>==</code> comparison is applied which is indeed False.
+Thus <code>'a' in 'a' == 0</code> is chained as <code>'a' in 'a' and 'a' == 0</code> and will also be false. Similarly, <code>'a' in 'b' == 0</code> is effectively the same as <code>'a' in 'b' and 'b' == 0</code> which is false.</p>
+<p>The following behavior, then, makes sense:</p>
+<pre><code class="language-python">&gt;&gt;&gt; 'a' in 'a'
+True
+&gt;&gt;&gt; 'a' in 'a' and 'a' == True
+False
+&gt;&gt;&gt; 'a' in 'a' == True
+False
+</code></pre>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><code>pip install dis</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
 
   </main>
+  <div id="disqus-container">
+  
+</div>
+
 
           
             <footer role="contentinfo">
