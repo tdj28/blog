@@ -9,28 +9,28 @@
     <lastBuildDate>Sun, 24 Jun 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/devops/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>A Risk Analysis Bowtie Diagram in Latex</title>
-      <link>http://3implieschaos.org/post/risk-analysis-bowtie-diagram-latex/</link>
+      <link>http://3implieschaos.org/post/tech/devops/risk-analysis-bowtie-diagram-latex/</link>
       <pubDate>Sun, 24 Jun 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/risk-analysis-bowtie-diagram-latex/</guid>
+      <guid>http://3implieschaos.org/post/tech/devops/risk-analysis-bowtie-diagram-latex/</guid>
       <description>Couldn&amp;rsquo;t find a good example on the web, wrote one instead.</description>
     </item>
     
     <item>
       <title>DevOps 101: Chef Cookbook with Testing</title>
-      <link>http://3implieschaos.org/post/chef-cookbook-example/</link>
+      <link>http://3implieschaos.org/post/tech/devops/chef-cookbook-example/</link>
       <pubDate>Sat, 28 Jan 2017 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/chef-cookbook-example/</guid>
+      <guid>http://3implieschaos.org/post/tech/devops/chef-cookbook-example/</guid>
       <description>A quick and dirty example of creating a chef cookbook with rspec tests.</description>
     </item>
     
     <item>
       <title>Abstracting Networking with Docker Containers</title>
-      <link>http://3implieschaos.org/post/abstracting-networking-with-docker-containers/</link>
+      <link>http://3implieschaos.org/post/tech/devops/abstracting-networking-with-docker-containers/</link>
       <pubDate>Thu, 03 Mar 2016 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/abstracting-networking-with-docker-containers/</guid>
+      <guid>http://3implieschaos.org/post/tech/devops/abstracting-networking-with-docker-containers/</guid>
       <description>Docker comes with a default network, but you can make your own network of unlimited complexity.</description>
     </item>
     

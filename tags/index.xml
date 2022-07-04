@@ -6,7 +6,43 @@
     <description>Recent content in Tags on tdj28</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Jul 2022 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>chaos-theory</title>
+      <link>http://3implieschaos.org/tags/chaos-theory/</link>
+      <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/chaos-theory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nonlinear-dynamics</title>
+      <link>http://3implieschaos.org/tags/nonlinear-dynamics/</link>
+      <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/nonlinear-dynamics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>physics</title>
+      <link>http://3implieschaos.org/tags/physics/</link>
+      <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/physics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>timeseries</title>
+      <link>http://3implieschaos.org/tags/timeseries/</link>
+      <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/timeseries/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>python</title>
       <link>http://3implieschaos.org/tags/python/</link>
@@ -49,15 +85,6 @@
       <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
       
       <guid>http://3implieschaos.org/tags/statistics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>timeseries</title>
-      <link>http://3implieschaos.org/tags/timeseries/</link>
-      <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/timeseries/</guid>
       <description></description>
     </item>
     

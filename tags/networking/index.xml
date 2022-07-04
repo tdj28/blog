@@ -9,10 +9,10 @@
     <lastBuildDate>Thu, 03 Mar 2016 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/networking/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Abstracting Networking with Docker Containers</title>
-      <link>http://3implieschaos.org/post/abstracting-networking-with-docker-containers/</link>
+      <link>http://3implieschaos.org/post/tech/devops/abstracting-networking-with-docker-containers/</link>
       <pubDate>Thu, 03 Mar 2016 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/abstracting-networking-with-docker-containers/</guid>
+      <guid>http://3implieschaos.org/post/tech/devops/abstracting-networking-with-docker-containers/</guid>
       <description>Docker comes with a default network, but you can make your own network of unlimited complexity.</description>
     </item>
     

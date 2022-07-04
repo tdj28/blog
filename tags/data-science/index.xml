@@ -9,19 +9,19 @@
     <lastBuildDate>Sun, 19 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/data-science/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using PNNL&#39;s new Cividis colormap in data science to make accessible heat maps</title>
-      <link>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</link>
+      <link>http://3implieschaos.org/post/math_science/datasci/cividis-accessible-colormap-in-datascience/</link>
       <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/cividis-accessible-colormap-in-datascience/</guid>
+      <guid>http://3implieschaos.org/post/math_science/datasci/cividis-accessible-colormap-in-datascience/</guid>
       <description>Recent work at PNNL has introduced a mathematically optimized colormap called Cividis that optimizes viewing of heatmaps and other plots for both those with and without full color vision</description>
     </item>
     
     <item>
       <title>Exploring Wikipedia Page Count Trends</title>
-      <link>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</link>
+      <link>http://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</link>
       <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</guid>
+      <guid>http://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</guid>
       <description>There are some readily available tools in python for doing time series analysis, and these tools can be used to study Wikipedia page count stats.</description>
     </item>
     

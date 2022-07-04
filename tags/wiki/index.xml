@@ -9,10 +9,10 @@
     <lastBuildDate>Sun, 05 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/wiki/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Exploring Wikipedia Page Count Trends</title>
-      <link>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</link>
+      <link>http://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</link>
       <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/exploring-wikipedia-page-counts-trends/</guid>
+      <guid>http://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</guid>
       <description>There are some readily available tools in python for doing time series analysis, and these tools can be used to study Wikipedia page count stats.</description>
     </item>
     

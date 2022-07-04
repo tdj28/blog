@@ -9,10 +9,10 @@
     <lastBuildDate>Sun, 26 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/software-testing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Headless Python Selenium With Behave</title>
-      <link>http://3implieschaos.org/post/headless-python-selenium-with-behave/</link>
+      <link>http://3implieschaos.org/post/tech/comp_sci/headless-python-selenium-with-behave/</link>
       <pubDate>Sun, 26 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/headless-python-selenium-with-behave/</guid>
+      <guid>http://3implieschaos.org/post/tech/comp_sci/headless-python-selenium-with-behave/</guid>
       <description>Selenium Testing a Web App can be a quick and productive win.</description>
     </item>
     
