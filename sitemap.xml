@@ -2,109 +2,131 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://3implieschaos.org/tags/chaos-theory/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
+    <loc>http://3implieschaos.org/post/math_science/kerbal/apollo-into-orbit/</loc>
+    <lastmod>2022-07-23T17:49:12-07:00</lastmod>
   </url><url>
-    <loc>http://3implieschaos.org/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
-  </url><url>
-    <loc>http://3implieschaos.org/tags/nonlinear-dynamics/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
+    <loc>http://3implieschaos.org/tags/kerbal/</loc>
+    <lastmod>2022-07-23T17:49:12-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/physics/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T17:49:12-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
-  </url><url>
-    <loc>http://3implieschaos.org/post/math_science/chaos/rossler_strange_attractor_with_python_series/rossler_strange_attractor_with_python_part1/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
-  </url><url>
-    <loc>http://3implieschaos.org/tags/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
-  </url><url>
-    <loc>http://3implieschaos.org/tags/timeseries/</loc>
-    <lastmod>2022-07-03T19:21:05-07:00</lastmod>
-  </url><url>
-    <loc>http://3implieschaos.org/post/tech/comp_sci/headless-python-selenium-with-behave/</loc>
-    <lastmod>2018-08-26T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T17:49:12-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/python/</loc>
-    <lastmod>2018-08-26T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T17:49:12-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/tags/space/</loc>
+    <lastmod>2022-07-23T17:49:12-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/tags/</loc>
+    <lastmod>2022-07-23T17:49:12-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/tags/chaos-theory/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/tags/nonlinear-dynamics/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/post/math_science/chaos/rossler_strange_attractor_with_python_series/rossler_strange_attractor_with_python_part1/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/tags/timeseries/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/post/tech/comp_sci/headless-python-selenium-with-behave/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/software-testing/</loc>
-    <lastmod>2018-08-26T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/accessibility/</loc>
-    <lastmod>2018-08-19T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/data-science/</loc>
-    <lastmod>2018-08-19T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/math_science/datasci/cividis-accessible-colormap-in-datascience/</loc>
-    <lastmod>2018-08-19T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</loc>
-    <lastmod>2018-08-05T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/statistics/</loc>
-    <lastmod>2018-08-05T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/wiki/</loc>
-    <lastmod>2018-08-05T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/tech/devops/risk-analysis-bowtie-diagram-latex/</loc>
-    <lastmod>2018-06-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/devops/</loc>
-    <lastmod>2018-06-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/risk-analysis/</loc>
-    <lastmod>2018-06-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/soc2/</loc>
-    <lastmod>2018-06-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/sre/</loc>
-    <lastmod>2018-06-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/about/</loc>
     <lastmod>2022-07-03T18:58:48-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/astrophysics/</loc>
-    <lastmod>2017-02-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/exobiology/</loc>
-    <lastmod>2017-02-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/exoplanets/</loc>
-    <lastmod>2017-02-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/math_science/astro/trappist1-is-probably-not-alive/</loc>
-    <lastmod>2017-02-24T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/finalcutpro/</loc>
-    <lastmod>2017-02-20T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/macos/</loc>
-    <lastmod>2017-02-20T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/other/putting-a-space-station-over-philly/</loc>
-    <lastmod>2017-02-20T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/tech/devops/chef-cookbook-example/</loc>
-    <lastmod>2017-01-28T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/computer-science/</loc>
-    <lastmod>2017-01-20T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/tech/comp_sci/python-operational-chaining/</loc>
-    <lastmod>2017-01-20T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/post/tech/devops/abstracting-networking-with-docker-containers/</loc>
-    <lastmod>2016-03-03T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
   </url><url>
     <loc>http://3implieschaos.org/tags/networking/</loc>
-    <lastmod>2016-03-03T19:21:05-07:00</lastmod>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/physics-content/coordinate-systems/</loc>
+  </url><url>
+    <loc>http://3implieschaos.org/physics-content/general-notes/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/physics/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/physics-content/</loc>
+    <lastmod>2022-07-23T16:42:01-07:00</lastmod>
+  </url><url>
+    <loc>http://3implieschaos.org/series/</loc>
   </url>
 </urlset>

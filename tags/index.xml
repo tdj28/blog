@@ -1,19 +1,65 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on tdj28</title>
+    <title>Tags on 3implieschaos</title>
     <link>http://3implieschaos.org/tags/</link>
-    <description>Recent content in Tags on tdj28</description>
+    <description>Recent content in Tags on 3implieschaos</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 03 Jul 2022 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Sat, 23 Jul 2022 15:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kerbal</title>
+      <link>http://3implieschaos.org/tags/kerbal/</link>
+      <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/kerbal/</guid>
+      
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>physics</title>
+      <link>http://3implieschaos.org/tags/physics/</link>
+      <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/physics/</guid>
+      
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>http://3implieschaos.org/tags/python/</link>
+      <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/python/</guid>
+      
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>space</title>
+      <link>http://3implieschaos.org/tags/space/</link>
+      <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
+      
+      <guid>http://3implieschaos.org/tags/space/</guid>
+      
+      <description></description>
+      
+    </item>
+    
     <item>
       <title>chaos-theory</title>
       <link>http://3implieschaos.org/tags/chaos-theory/</link>
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
       <guid>http://3implieschaos.org/tags/chaos-theory/</guid>
+      
       <description></description>
+      
     </item>
     
     <item>
@@ -22,16 +68,9 @@
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
       <guid>http://3implieschaos.org/tags/nonlinear-dynamics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>physics</title>
-      <link>http://3implieschaos.org/tags/physics/</link>
-      <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/physics/</guid>
       <description></description>
+      
     </item>
     
     <item>
@@ -40,16 +79,9 @@
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
       <guid>http://3implieschaos.org/tags/timeseries/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>http://3implieschaos.org/tags/python/</link>
-      <pubDate>Sun, 26 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/python/</guid>
       <description></description>
+      
     </item>
     
     <item>
@@ -58,7 +90,9 @@
       <pubDate>Sun, 26 Aug 2018 19:21:05 -0700</pubDate>
       
       <guid>http://3implieschaos.org/tags/software-testing/</guid>
+      
       <description></description>
+      
     </item>
     
     <item>
@@ -67,7 +101,9 @@
       <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
       
       <guid>http://3implieschaos.org/tags/accessibility/</guid>
+      
       <description></description>
+      
     </item>
     
     <item>
@@ -76,124 +112,9 @@
       <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
       
       <guid>http://3implieschaos.org/tags/data-science/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>statistics</title>
-      <link>http://3implieschaos.org/tags/statistics/</link>
-      <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/statistics/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>wiki</title>
-      <link>http://3implieschaos.org/tags/wiki/</link>
-      <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/wiki/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>devops</title>
-      <link>http://3implieschaos.org/tags/devops/</link>
-      <pubDate>Sun, 24 Jun 2018 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/devops/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>risk-analysis</title>
-      <link>http://3implieschaos.org/tags/risk-analysis/</link>
-      <pubDate>Sun, 24 Jun 2018 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/risk-analysis/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>soc2</title>
-      <link>http://3implieschaos.org/tags/soc2/</link>
-      <pubDate>Sun, 24 Jun 2018 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/soc2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>sre</title>
-      <link>http://3implieschaos.org/tags/sre/</link>
-      <pubDate>Sun, 24 Jun 2018 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/sre/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>astrophysics</title>
-      <link>http://3implieschaos.org/tags/astrophysics/</link>
-      <pubDate>Fri, 24 Feb 2017 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/astrophysics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>exobiology</title>
-      <link>http://3implieschaos.org/tags/exobiology/</link>
-      <pubDate>Fri, 24 Feb 2017 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/exobiology/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>exoplanets</title>
-      <link>http://3implieschaos.org/tags/exoplanets/</link>
-      <pubDate>Fri, 24 Feb 2017 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/exoplanets/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>finalcutpro</title>
-      <link>http://3implieschaos.org/tags/finalcutpro/</link>
-      <pubDate>Mon, 20 Feb 2017 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/finalcutpro/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>macos</title>
-      <link>http://3implieschaos.org/tags/macos/</link>
-      <pubDate>Mon, 20 Feb 2017 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/macos/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>computer-science</title>
-      <link>http://3implieschaos.org/tags/computer-science/</link>
-      <pubDate>Fri, 20 Jan 2017 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/computer-science/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>networking</title>
-      <link>http://3implieschaos.org/tags/networking/</link>
-      <pubDate>Thu, 03 Mar 2016 19:21:05 -0700</pubDate>
-      
-      <guid>http://3implieschaos.org/tags/networking/</guid>
-      <description></description>
     </item>
     
   </channel>
