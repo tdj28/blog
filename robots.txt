@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://3implieschaos.org/sitemap.xml
+Sitemap: https://www.tdj28.org/sitemap.xml

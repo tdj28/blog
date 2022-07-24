@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>software-testing on tdj28</title>
-    <link>https://3implieschaos.org/tags/software-testing/</link>
+    <link>https://www.tdj28.org/tags/software-testing/</link>
     <description>Recent content in software-testing on tdj28</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 26 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="https://3implieschaos.org/tags/software-testing/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 26 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="https://www.tdj28.org/tags/software-testing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Headless Python Selenium With Behave</title>
-      <link>https://3implieschaos.org/post/tech/comp_sci/headless-python-selenium-with-behave/</link>
+      <link>https://www.tdj28.org/post/tech/comp_sci/headless-python-selenium-with-behave/</link>
       <pubDate>Sun, 26 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>https://3implieschaos.org/post/tech/comp_sci/headless-python-selenium-with-behave/</guid>
+      <guid>https://www.tdj28.org/post/tech/comp_sci/headless-python-selenium-with-behave/</guid>
       
       <description>&lt;p&gt;Testing software can often be seen as the least enjoyable part of the
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Systems_development_life_cycle&#34;&gt;systems development life cycle&lt;/a&gt;.
