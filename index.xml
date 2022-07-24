@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language><atom:link href="https://3implieschaos.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Automating a Kerbal trip to the moon with KRPC</title>
+      <title>Automating the circularization of Apollo in Kerbal with python, KRPC, and Physics</title>
       <link>https://3implieschaos.org/post/math_science/kerbal/apollo-into-orbit/</link>
       <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
       
