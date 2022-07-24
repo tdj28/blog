@@ -50,15 +50,15 @@
 &lt;li&gt;every element belongs to all of its neighborhoods&lt;/li&gt;
 &lt;li&gt;if a subset of points include a neighborhood of a specific point, that subset is a neighborhood of that specific point&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;assets/index-4b64c.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;!-- ![](assets/index-4b64c.png) --&gt;
 &lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;the intersection of two neighborhoods of a point is a neighborhood of that point&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;assets/index-e4f51.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;!-- ![](assets/index-e4f51.png) --&gt;
 &lt;ol start=&#34;4&#34;&gt;
 &lt;li&gt;a neighborhood A of a point contains a subset that is also a neighborhood of that point, and A is a neighborhood of every point in the subset&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;assets/index-e9b94.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;!-- ![](assets/index-e9b94.png) --&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
