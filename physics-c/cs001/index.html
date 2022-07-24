@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  
+  <meta name="author" content="">
+
+  
+  
+  <meta name="description" content="Entry point">
+  
+
+  
+  <link rel="icon" href="https://3implieschaos.org/favicon.ico">
+
+  
+  
+  <meta name="keywords" content=" hugo  latex  theme ">
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css"
+  integrity="sha384-KiWOvVjnN8qwAZbuQyWDIbfCLFhLXNETzBQjA/92pIowpC0d2O3nppDGQVgwd2nB" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"
+  integrity="sha384-0fdwu/T/EQMsQlrHCCHoH10pkPLlKA1jL5dFyUOvB3lfeT2540/2g6YgSi2BL14p" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/contrib/auto-render.min.js"
+  integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\[', right: '\\]', display: true },
+        { left: '$', right: '$', display: false },
+        { left: '\\(', right: '\\)', display: false }
+      ],
+      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+      throwOnError: false
+    });
+  });
+</script>
+
+
+  
+
+  
+  <meta property="og:title" content="Coordinate Systems 0001: Generalizing Away from Standard Euclidean" />
+<meta property="og:description" content="Entry point" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://3implieschaos.org/physics-c/cs001/" /><meta property="article:section" content="physics-c" />
+<meta property="article:published_time" content="2022-07-23T12:11:05-07:00" />
+<meta property="article:modified_time" content="2022-07-23T12:11:05-07:00" />
+
+
+
+  
+  <link rel="canonical" href="https://3implieschaos.org/physics-c/cs001/">
+
+  
+  
+  <meta itemprop="name" content="Coordinate Systems 0001: Generalizing Away from Standard Euclidean">
+<meta itemprop="description" content="Entry point"><meta itemprop="datePublished" content="2022-07-23T12:11:05-07:00" />
+<meta itemprop="dateModified" content="2022-07-23T12:11:05-07:00" />
+<meta itemprop="wordCount" content="569">
+<meta itemprop="keywords" content="physics,quantum,qft," />
+
+  
+  <link media="screen" rel="stylesheet" href='https://3implieschaos.org/css/common.css'>
+  <link media="screen" rel="stylesheet" href='https://3implieschaos.org/css/content.css'>
+
+  
+  
+  <title>Coordinate Systems 0001: Generalizing Away from Standard Euclidean - 3implieschaos</title>
+  
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Coordinate Systems 0001: Generalizing Away from Standard Euclidean"/>
+<meta name="twitter:description" content="Entry point"/>
+
+
+  
+<link rel="stylesheet" href='https://3implieschaos.org/css/single.css'>
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1>
+    <a href="https://3implieschaos.org/">3implieschaos</a>
+  </h1>
+
+  <nav>
+    
+    <span class="nav-bar-item">
+      <a class="link" href="/">Post</a>
+    </span>
+    
+    <span class="nav-bar-item">
+      <a class="link" href="/post/">Archives</a>
+    </span>
+    
+    <span class="nav-bar-item">
+      <a class="link" href="/physics/">Physics</a>
+    </span>
+    
+    <span class="nav-bar-item">
+      <a class="link" href="/about/">About</a>
+    </span>
+    
+  </nav>
+</header>
+
+    
+<main id="main" class="post">
+  
+  <article class="content">
+    <!-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+ -->
+<div class="toc">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a>
+      <ul>
+        <li><a href="#topology">Topology</a></li>
+        <li><a href="#coordinates-on-a-manifold">Coordinates on a Manifold</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+
+<h2 id="introduction">Introduction</h2>
+<p>In this note, we show how physicists construct more general coordinate systems that go beyond the standard Euclidean system.</p>
+<h3 id="topology">Topology</h3>
+<ul>
+<li>A topological space is a set with elements of points and mathematical rules (called a topology) that tell us how to define neighborhoods around these elements.
+<ul>
+<li>
+<p>neighborhood&rsquo;s can be known from these axioms<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<ol>
+<li>every element belongs to all of its neighborhoods</li>
+<li>if a subset of points include a neighborhood of a specific point, that subset is a neighborhood of that specific point</li>
+</ol>
+<p><img src="assets/index-4b64c.png" alt=""></p>
+<ol start="3">
+<li>the intersection of two neighborhoods of a point is a neighborhood of that point</li>
+</ol>
+<p><img src="assets/index-e4f51.png" alt=""></p>
+<ol start="4">
+<li>a neighborhood A of a point contains a subset that is also a neighborhood of that point, and A is a neighborhood of every point in the subset</li>
+</ol>
+<p><img src="assets/index-e9b94.png" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>One of the simpler topologies that we need to consider in physics is Euclidean<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> where the neighborhoods are called open balls defined by the Euclidean metric (think Pythagorean theorem):</p>
+<p>$$ B_r(p) = { x \in \R^n: d(p, x) &lt; r }$$</p>
+<p>In other words, all points surrounding the point such that those points are less than a distance r from that point</p>
+<h3 id="coordinates-on-a-manifold">Coordinates on a Manifold</h3>
+<ul>
+<li>A manifold is a topological space that &ldquo;looks&rdquo; Euclidean in a small neighborhood of any given point. How we define &ldquo;small&rdquo; depends on the nature of that space, but think of the Earth, which is an oblate spheroid, but appears to be a flat two dimensional (more or less) space to anybody floating on the ocean or walking on flatland. Manifolds are useful in physics because it abstracts our discussion of spaces away from the Euclidean realm typical of Newtonian physics. Relativity requires the concept of manifolds for example.</li>
+</ul>
+<p>We can abstract our typical Newtonian coordinate systems to a definition that also works for manifolds.</p>
+<p>Let&rsquo;s start most simply with a coordinate system. An abstract coordinate system for a system with $n$ dimensions on an n-manifold M (an n-dimensional manifoled) can be written:</p>
+<p>$$ \vec{x^i}, i \in \N_{&gt; 0}, i \leq n $$</p>
+<p>We wish to create a &ldquo;local basis&rdquo; around a point via tangent vectors:</p>
+<p>$$ \vec{e_i} = \frac{\partial}{\partial x^i} \equiv \partial_i, i \in \N_{&gt; 0}, i \leq n $$</p>
+<p>Unlike the previous definition of $x^i$ which was descriptive, this definition is prescriptive, that is, it is how to create the local basis at each point. To get the actual local basis, you need to calculate the tangents at each point. This also allows you to define a metric tensor<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> on the manifold as the dot product between the local basis vectors:</p>
+<p>$$ g^{ij} = \vec{e}_i \cdot \vec{e}_j $$</p>
+<p>The inverse of this metric tensor can then be used to define the daul basis<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> $g^{ij} = (g^{-1})_{ij}$:</p>
+<p>$$ \vec{e^i} = \vec{e_j} g^{ij}, i \in \N_{&gt; 0}, i \leq n $$</p>
+<p>What do we need a dual basis for? In Euclidean space, to get the component of a function along a specific basis direction, say $\vec{e_i}$, all we need is $\vec{f(x)}\cdot \vec{e_i}$. But in more complicated spaces, we can have a scenario where $\vec{e_i \cdot e_j} \neq 0, \forall i \neq j$. With a dual basis and a local basis, we have the orthogonality we may need to extract components along specific dimensions.</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://en.wikipedia.org/wiki/Topological_space#Examples_of_topologies">Topology</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://en.wikipedia.org/wiki/Euclidean_topology">Euclidean topology</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>A <strong>metric tensor</strong> on a manifold is a way of defining distance and angles in a local area around each point on a manifold.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p><a href="https://en.wikipedia.org/wiki/Dual_basis">Dual basis</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+  </article>
+  
+</main>
+
+    <footer id="footer">
+  <div>
+    <span>© 2016</span> - <span>2022</span>
+  </div>
+
+  <div>
+    <span>Powered by </span>
+    <a class="link" href="https://gohugo.io/">Hugo</a>
+    <span> 🍦 Theme </span>
+    <a class="link" href="https://github.com/queensferryme/hugo-theme-texify">TeXify</a>
+  </div>
+
+  <div class="footnote">
+    <span>Follow me on <a class=link href=https://github.com/tdj28>GitHub</a>,
+<a class=link href=https://twitter.com/tdj11100>Twitter</a> or
+<a class=link href=/index.xml>RSS</a> |
+<a class=link href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh target=_blank rel=noopener>CC BY-NC-SA 4.0</a>
+</span>
+  </div>
+</footer>
+
+  </div>
+
+  
+  
+
+  
+  
+
+  
+  
+
+</body>
+
+</html>

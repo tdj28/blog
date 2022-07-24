@@ -241,6 +241,100 @@ Launch complete
     </item>
     
     <item>
+      <title>Coordinate Systems 0001: Generalizing Away from Standard Euclidean</title>
+      <link>https://3implieschaos.org/physics-c/cs001/</link>
+      <pubDate>Sat, 23 Jul 2022 12:11:05 -0700</pubDate>
+      
+      <guid>https://3implieschaos.org/physics-c/cs001/</guid>
+      
+      <description>&lt;!-- &lt;script&gt;
+    document.addEventListener(&#34;DOMContentLoaded&#34;, function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: &#34;$$&#34;, right: &#34;$$&#34;, display: true},
+                {left: &#34;$&#34;, right: &#34;$&#34;, display: false}
+            ]
+        });
+    });
+&lt;/script&gt;
+ --&gt;
+&lt;div class=&#34;toc&#34;&gt;
+  &lt;nav id=&#34;TableOfContents&#34;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#topology&#34;&gt;Topology&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#coordinates-on-a-manifold&#34;&gt;Coordinates on a Manifold&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;In this note, we show how physicists construct more general coordinate systems that go beyond the standard Euclidean system.&lt;/p&gt;
+&lt;h3 id=&#34;topology&#34;&gt;Topology&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A topological space is a set with elements of points and mathematical rules (called a topology) that tell us how to define neighborhoods around these elements.
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;neighborhood&amp;rsquo;s can be known from these axioms&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;every element belongs to all of its neighborhoods&lt;/li&gt;
+&lt;li&gt;if a subset of points include a neighborhood of a specific point, that subset is a neighborhood of that specific point&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;assets/index-4b64c.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;the intersection of two neighborhoods of a point is a neighborhood of that point&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;assets/index-e4f51.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;a neighborhood A of a point contains a subset that is also a neighborhood of that point, and A is a neighborhood of every point in the subset&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;assets/index-e9b94.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;One of the simpler topologies that we need to consider in physics is Euclidean&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; where the neighborhoods are called open balls defined by the Euclidean metric (think Pythagorean theorem):&lt;/p&gt;
+&lt;p&gt;$$ B_r(p) = { x \in \R^n: d(p, x) &amp;lt; r }$$&lt;/p&gt;
+&lt;p&gt;In other words, all points surrounding the point such that those points are less than a distance r from that point&lt;/p&gt;
+&lt;h3 id=&#34;coordinates-on-a-manifold&#34;&gt;Coordinates on a Manifold&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A manifold is a topological space that &amp;ldquo;looks&amp;rdquo; Euclidean in a small neighborhood of any given point. How we define &amp;ldquo;small&amp;rdquo; depends on the nature of that space, but think of the Earth, which is an oblate spheroid, but appears to be a flat two dimensional (more or less) space to anybody floating on the ocean or walking on flatland. Manifolds are useful in physics because it abstracts our discussion of spaces away from the Euclidean realm typical of Newtonian physics. Relativity requires the concept of manifolds for example.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We can abstract our typical Newtonian coordinate systems to a definition that also works for manifolds.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s start most simply with a coordinate system. An abstract coordinate system for a system with $n$ dimensions on an n-manifold M (an n-dimensional manifoled) can be written:&lt;/p&gt;
+&lt;p&gt;$$ \vec{x^i}, i \in \N_{&amp;gt; 0}, i \leq n $$&lt;/p&gt;
+&lt;p&gt;We wish to create a &amp;ldquo;local basis&amp;rdquo; around a point via tangent vectors:&lt;/p&gt;
+&lt;p&gt;$$ \vec{e_i} = \frac{\partial}{\partial x^i} \equiv \partial_i, i \in \N_{&amp;gt; 0}, i \leq n $$&lt;/p&gt;
+&lt;p&gt;Unlike the previous definition of $x^i$ which was descriptive, this definition is prescriptive, that is, it is how to create the local basis at each point. To get the actual local basis, you need to calculate the tangents at each point. This also allows you to define a metric tensor&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; on the manifold as the dot product between the local basis vectors:&lt;/p&gt;
+&lt;p&gt;$$ g^{ij} = \vec{e}_i \cdot \vec{e}_j $$&lt;/p&gt;
+&lt;p&gt;The inverse of this metric tensor can then be used to define the daul basis&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; $g^{ij} = (g^{-1})_{ij}$:&lt;/p&gt;
+&lt;p&gt;$$ \vec{e^i} = \vec{e_j} g^{ij}, i \in \N_{&amp;gt; 0}, i \leq n $$&lt;/p&gt;
+&lt;p&gt;What do we need a dual basis for? In Euclidean space, to get the component of a function along a specific basis direction, say $\vec{e_i}$, all we need is $\vec{f(x)}\cdot \vec{e_i}$. But in more complicated spaces, we can have a scenario where $\vec{e_i \cdot e_j} \neq 0, \forall i \neq j$. With a dual basis and a local basis, we have the orthogonality we may need to extract components along specific dimensions.&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Topological_space#Examples_of_topologies&#34;&gt;Topology&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_topology&#34;&gt;Euclidean topology&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;A &lt;strong&gt;metric tensor&lt;/strong&gt; on a manifold is a way of defining distance and angles in a local area around each point on a manifold.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Dual_basis&#34;&gt;Dual basis&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>Rössler Strange Attractor with Python: Part 1</title>
       <link>https://3implieschaos.org/post/math_science/chaos/rossler_strange_attractor_with_python_series/rossler_strange_attractor_with_python_part1/</link>
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
@@ -1582,507 +1676,6 @@ through the process in real-time:&lt;/p&gt;
 &lt;h2 id=&#34;further-references&#34;&gt;Further references&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=bfhRtd1z2PY&#34;&gt;Another example of this plugin&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=NYfMugEz2zA&#34;&gt;Using Adobe to create this effect&lt;/a&gt;&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>DevOps 101: Chef Cookbook with Testing</title>
-      <link>https://3implieschaos.org/post/tech/devops/chef-cookbook-example/</link>
-      <pubDate>Sat, 28 Jan 2017 19:21:05 -0700</pubDate>
-      
-      <guid>https://3implieschaos.org/post/tech/devops/chef-cookbook-example/</guid>
-      
-      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;h3 id=&#34;yet-another-chef-tutorial&#34;&gt;Yet another chef tutorial&lt;/h3&gt;
-&lt;p&gt;You can of course skip this step if you are familiar with Chef to a great enough degree, but in the spirit of making this a self-contained walkthrough, we will start from the ground up.&lt;/p&gt;
-&lt;h4 id=&#34;getting-started&#34;&gt;Getting started&lt;/h4&gt;
-&lt;h5 id=&#34;installing-chefdk&#34;&gt;Installing ChefDK&lt;/h5&gt;
-&lt;p&gt;It is widely considered best practice to use &lt;a href=&#34;https://downloads.chef.io/chefdk&#34;&gt;ChefDK&lt;/a&gt;, and this walkthrough uses ChefDK exclusively.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;On Mac, install &lt;a href=&#34;http://brew.sh/&#34;&gt;HomeBrew&lt;/a&gt; and run &lt;code&gt;brew cask install chefdk&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;On Linux, &lt;a href=&#34;https://downloads.chef.io/chefdk&#34;&gt;download a package&lt;/a&gt; corresponding to your distro and install accordingly.&lt;/li&gt;
-&lt;li&gt;On Windows: Run Linux as a Virtual Machine, get Docker for Windows, or &lt;em&gt;try&lt;/em&gt; using Bash on Windows, but this walkthrough doesn&amp;rsquo;t support Windows-based development.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h5 id=&#34;initiating-your-cookbook&#34;&gt;Initiating your cookbook&lt;/h5&gt;
-&lt;p&gt;Let&amp;rsquo;s start with the following command:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chef generate cookbook c9_ide_chef
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This command generates a template for a cookbook. Note that we use and underline in the name instead of a hyphen as hyphens can be problematic for chef in some circumstances. We now have a folder with the following content:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── .gitignore
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── .kitchen.yml
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── Berksfile
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── README.md
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── chefignore
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── metadata.rb
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── recipes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── default.rb
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── spec
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   ├── spec_helper.rb
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   └── unit
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│       └── recipes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│           └── default_spec.rb
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└── &lt;span style=&#34;color:#a2f&#34;&gt;test&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    └── smoke
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        └── default
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            └── default_test.rb
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It also  creates a &lt;code&gt;.delivery&lt;/code&gt; and a &lt;code&gt;.git&lt;/code&gt; folder whose contents are omitted here for clarity.&lt;/p&gt;
-&lt;p&gt;The second command creates an attribute folder which we can populate with default attributes for our cookbook, and the third line creates a default template for a &amp;ldquo;message of the day&amp;rdquo; to be displayed when first logging in.&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;.git&lt;/code&gt; directory is useful and we will use it as the basis for a new repo in github repo.&lt;/p&gt;
-&lt;h5 id=&#34;pushing-to-github&#34;&gt;Pushing to GitHub&lt;/h5&gt;
-&lt;p&gt;Now that we have the skeleton for our cookbook, we should start pushing to GitHub for version-control. On GitHub, create a public repo called c9_ide. Then run the following commands:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;First commit&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote add origin git@github.com:YOUR_GITHUB_USERNAME/c9_ide_chef.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push -u origin master
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now the stage is set and we are ready to make the cookbook actually do something.&lt;/p&gt;
-&lt;h4 id=&#34;create-the-core-configuration&#34;&gt;Create the core configuration&lt;/h4&gt;
-&lt;h5 id=&#34;creating-a-story-for-the-cookbook&#34;&gt;Creating a story for the cookbook&lt;/h5&gt;
-&lt;p&gt;So far we&amp;rsquo;ve seen how to set up the cookbook, but we don&amp;rsquo;t quite know what we are going to do with it. Now is a good time to set up some goals for our cookbook:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;It should update all packages before doing anything else&lt;/li&gt;
-&lt;li&gt;It should create a message of the day that gives basic information about the server to a user logging in&lt;/li&gt;
-&lt;li&gt;It should install basic security packages and other utilities&lt;/li&gt;
-&lt;li&gt;It should install the packages needed to run Cloud 9 IDE&lt;/li&gt;
-&lt;li&gt;It should pull and install Cloud 9 IDE&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h6 id=&#34;updating-all-packages&#34;&gt;Updating all packages&lt;/h6&gt;
-&lt;p&gt;Just for fun, we are going to make our cookbook work for both Debian and RHEL variations of Linux. Under the recipes folder, let&amp;rsquo;s create a recipe file called &lt;code&gt;update.rb&lt;/code&gt; and give it contents:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# Update system to start with&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;case&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;platform&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;when&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;debian&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;ubuntu&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;AptUpdateUpgrade&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        command &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;apt-get update &amp;amp;&amp;amp; DEBIAN_FRONTEND=noninteractive apt-get upgrade -y&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;when&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;redhat&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;centos&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;fedora&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     &lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# Update all packages&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;UpdateYum&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        command &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;yum -y update&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# Add Fedora&amp;#39;s Extra Packages for Enterprise Linux&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;GetEPELRepo&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        command &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        not_if &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;rpm -qa | grep -qx &amp;#39;epel-release-7-9.noarch&amp;#39;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;in the &lt;code&gt;default.rb&lt;/code&gt; recipe, add the line:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9_ide::update&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That&amp;rsquo;s it for now! Before we go any further, let&amp;rsquo;s test this. Chef has automatically added some basis for testing to your repo. Let&amp;rsquo;s start with kitchen. This assumes you have &lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34;&gt;VirtualBox&lt;/a&gt; and &lt;a href=&#34;https://www.vagrantup.com/&#34;&gt;Vagrant&lt;/a&gt; installed (if you don&amp;rsquo;t, install them). At the base directory, run:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kitchen create
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kitchen converge
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The first command creates the virtual machines for us to work with, and teh second command cooks Chef inside of them. It is a very convenient way to do a full test of your code before pushing to github. The converge command may take quite a while as we are updating all packages on the systems and doing it for two VMs, and Ubuntu one and a CentOS one. If all goes well, the final output looks like:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Chef Client finished, 1/1 resources updated in &lt;span style=&#34;color:#666&#34;&gt;02&lt;/span&gt; minutes &lt;span style=&#34;color:#666&#34;&gt;21&lt;/span&gt; seconds
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h6 id=&#34;creating-a-c9-user&#34;&gt;Creating a C9 User&lt;/h6&gt;
-&lt;p&gt;It is rarely a good idea to run a program as root. As such, our next step is to create a user for running the Cloud 9 IDE. We start by creating a data bag. First, install knife-solo and &lt;a href=&#34;https://github.com/thbishop/knife-solo_data_bag&#34;&gt;knife-solo data bag&lt;/a&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chef gem install knife-solo
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chef gem install knife-solo_data_bag
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This is not entirely necessary, but that tool can be useful in other ways for making chef solo cookbooks. Then we can generate a databag and databag item:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir data_bags
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#b8860b&#34;&gt;EDITOR&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;vi&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;knife solo data bag create users c9ide
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In the editor that pops up, paste the following content:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;#34;id&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;c9ide&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;#34;comment&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;c9ide User&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;#34;ssh_keys&amp;#34;&lt;/span&gt;: [
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ],
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;#34;home&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;/home/c9ide&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;#34;ssh_keygen&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Next, back to &lt;code&gt;recipe/default.rb&lt;/code&gt;, we can invoke the external chef recipe &amp;ldquo;users&amp;rdquo; to have this user installed on our system:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;user::data_bag&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To create an attributes file:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chef generate attribute default
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and in &lt;code&gt;attributes/default.rb&lt;/code&gt; add the line:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;users&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9ide&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This of course shows the fantastic power and utility of Chef since we can call upon a wide range of libraries already created by the chef community. Now we need to tell Chef that we are using an external library, so in our &lt;code&gt;metadata.rb&lt;/code&gt; file at the top level we add the line at the end:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;depends          &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;At the same level there is a Berksfile with the content:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;https://supermarket.chef.io&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;metadata
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;which tells chef to check this &lt;code&gt;metadata.rb&lt;/code&gt; file for dependencies (such as the user dependency we just added) that we need to pull and make available during cooking. We&amp;rsquo;ll show how this is done manually a bit later, but for now &lt;code&gt;kitchen converge&lt;/code&gt; takes care of that.&lt;/p&gt;
-&lt;p&gt;Now run &lt;code&gt;kitchen converge&lt;/code&gt; one more time, and you should see that the user is created.&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s create a quick smoke test item, add:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;describe user(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9ide&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    it { should exist }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;to &lt;code&gt;test/default/default_test.rb&lt;/code&gt; and run&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kitchen verify
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;if all went well you will see:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; User c9ide
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  should exist
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now is a good time to push to github:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;Adds update and users&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push origin master
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h6 id=&#34;installing-motd&#34;&gt;Installing MOTD&lt;/h6&gt;
-&lt;p&gt;First, let&amp;rsquo;s generate a blank template file:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chef generate template motd
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;fill with content:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;%&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;motd-attributes&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;message&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; %&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;The hostname of this node is &amp;lt;%&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;hostname&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; %&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;The IP address of this node is &amp;lt;%&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;ipaddress&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; %&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and create a recipe file &lt;code&gt;recipes/motd.rb&lt;/code&gt; with contents:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;template &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/etc/motd&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#a2f&#34;&gt;source&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;motd.erb&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      mode &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;0644&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;end
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and finally add this line to the &lt;code&gt;attributes/default.rb&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;motd-attributes&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;message&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;A Cloud 9 IDE server&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We add the following tests at &lt;code&gt;test/smoke/default/motd_test.rb&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;describe directory(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/etc/motd&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;  &lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# describe this directory&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	its(&lt;span style=&#34;color:#b8860b&#34;&gt;:content&lt;/span&gt;) { should match &lt;span style=&#34;color:#b68&#34;&gt;/A Cloud 9 IDE server/&lt;/span&gt; }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We run &lt;code&gt;kitchen converge&lt;/code&gt; and &lt;code&gt;kitchen verify&lt;/code&gt; again to make sure the recipe is fine, and then push to github as before.&lt;/p&gt;
-&lt;h6 id=&#34;installing-packages&#34;&gt;Installing Packages&lt;/h6&gt;
-&lt;p&gt;We are getting close to installing the Cloud9 IDE. Before doing so, we need to install some packages. Some of these packages are for security purposes, or convenience in administration, while others are needed for the Cloud 9 IDE system.&lt;/p&gt;
-&lt;p&gt;Create a file &lt;code&gt;recipe/packages.rb&lt;/code&gt; with content:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;case&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;platform&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;when&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;debian&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;ubuntu&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    req_packages &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;fail2ban&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;gcc&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;g++&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;git&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;htop&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;make&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nodejs&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nmap&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;npm&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;sysstat&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;apt-listchanges&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    req_packages&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;packs&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#800&#34;&gt;Chef&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;Log&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;info(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;Installing: &amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; packs)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      package packs &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        action &lt;span style=&#34;color:#b8860b&#34;&gt;:install&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    template &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/etc/apt/apt.conf.d/50unattended-upgrades&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        owner &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        group &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        mode &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;0644&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        source &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;50unattended-upgrades.erb&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    template &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/etc/apt/apt.conf.d/20auto-upgrades&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        owner &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        group &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        mode &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;0644&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        source &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;20auto-upgrades.erb&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;when&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;redhat&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;centos&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;fedora&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    req_packages &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;fail2ban&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;gcc-c++&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;git&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;glibc-static&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;htop&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;make&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nodejs&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nmap&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;npm&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;sysstat&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;yum-cron&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    req_packages&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;packs&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#800&#34;&gt;Chef&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;Log&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;info(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;Installing: &amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; packs)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      package packs &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        action &lt;span style=&#34;color:#b8860b&#34;&gt;:install&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    template &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/etc/yum/yum-cron.conf&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        owner &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        group &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        mode &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;0644&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        source &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;yum-cron.conf.erb&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;systemctl enable yum-cron&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;systemctl start yum-cron&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Notice that we have sneaked in automated security updates as well. For that, we require the following templates:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;templates/50unattended-upgrades.erb&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// Automatically upgrade packages from these &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;origin, archive&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt; pairs
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Unattended-Upgrade::Allowed-Origins &lt;span style=&#34;color:#666&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;lt;% node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;origins&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;.each &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt; |origin| %&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;lt;%= origin %&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;lt;% end %&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;}&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// List of packages to not update
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Unattended-Upgrade::Package-Blacklist &lt;span style=&#34;color:#666&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;apache2&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;//  &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;libc6-dev&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;//  &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;libc6-i686&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;}&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// Send email to this address &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;for&lt;/span&gt; problems or packages upgrades
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// If empty or &lt;span style=&#34;color:#a2f&#34;&gt;unset&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;then&lt;/span&gt; no email is sent, make sure that you
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// have a working mail setup on your system. The package &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;mailx&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// must be installed or anything that provides /usr/bin/mail.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;%&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;send_email&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; ? &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt; : &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;// &amp;#34;&lt;/span&gt; %&amp;gt;Unattended-Upgrade::Mail &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;lt;%= node[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;email_address&amp;#39;] %&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// Do automatic removal of new unused dependencies after the upgrade
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;equivalent to apt-get autoremove&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Unattended-Upgrade::Remove-Unused-Dependencies &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;lt;%= node[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;auto_remove&amp;#39;] ? &amp;#34;&lt;/span&gt;true&lt;span style=&#34;color:#b44&#34;&gt;&amp;#34; : &amp;#34;&lt;/span&gt;false&lt;span style=&#34;color:#b44&#34;&gt;&amp;#34; %&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// Automatically reboot *WITHOUT CONFIRMATION* &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;if&lt;/span&gt; a
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// the file /var/run/reboot-required is found after the upgrade
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Unattended-Upgrade::Automatic-Reboot &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;lt;%= node[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;auto_reboot&amp;#39;] ? &amp;#34;&lt;/span&gt;true&lt;span style=&#34;color:#b44&#34;&gt;&amp;#34; : &amp;#34;&lt;/span&gt;false&lt;span style=&#34;color:#b44&#34;&gt;&amp;#34; %&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;templates/20auto-upgrades.erb&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;APT::Periodic::Update-Package-Lists &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;lt;%=node[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;update_package_lists_interval&amp;#39;]%&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;APT::Periodic::Unattended-Upgrade &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;&amp;lt;%=node[&amp;#39;unattended-upgrades&amp;#39;][&amp;#39;upgrade_interval&amp;#39;]%&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;templates/yum-cron.conf.erb&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#b8860b&#34;&gt;update_cmd&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; security
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#b8860b&#34;&gt;apply_updates&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; yes
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;update_package_lists_interval&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;upgrade_interval&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;origins&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;${distro_id} ${distro_codename}-security&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;send_email&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a2f&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;email_address&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;test@example.com&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;auto_remove&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a2f&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;default&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;auto_reboot&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a2f&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and of course, our inspec test in &lt;code&gt;test/smoke/default/packages_test.rb&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;if&lt;/span&gt; os&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b8860b&#34;&gt;:family&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;debian&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  	req_packages &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;fail2ban&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;gcc&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;g++&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;git&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;htop&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;make&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nodejs&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nmap&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;npm&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;sysstat&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;unattended-upgrades&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;apt-listchanges&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    req_packages&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;packs&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      describe package(packs) &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      	it { should be_installed }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;else&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    req_packages &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;fail2ban&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;gcc-c++&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;git&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;glibc-static&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;htop&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;make&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nodejs&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;nmap&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;npm&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;sysstat&amp;#39;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;yum-cron&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    req_packages&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;packs&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      describe package(packs) &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      	it { should be_installed }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h6 id=&#34;installing-cloud-9-ide&#34;&gt;Installing Cloud 9 IDE&lt;/h6&gt;
-&lt;p&gt;Chef has a built-in git resource that we can use to pull the Cloud 9 IDE code.&lt;/p&gt;
-&lt;p&gt;The test for this section will be rather brief:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;describe directory(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/home/c9ide/core/README.md&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;  &lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# describe this directory&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	its(&lt;span style=&#34;color:#b8860b&#34;&gt;:content&lt;/span&gt;) { should match &lt;span style=&#34;color:#b68&#34;&gt;/^Cloud9/&lt;/span&gt; }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and the reason is that we can really verify whether or not this section succeeded in the next section on running via supervisor.&lt;/p&gt;
-&lt;p&gt;The code for this section, in &lt;code&gt;/recipes/c9ide.rb&lt;/code&gt;, is:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git &lt;span style=&#34;color:#b44&#34;&gt;&amp;#34;/home/c9ide/core&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   repository &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;https://github.com/c9/core.git&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   reference &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;master&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   action &lt;span style=&#34;color:#b8860b&#34;&gt;:sync&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;case&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;platform&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;when&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;debian&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;ubuntu&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	bash &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;create nodejs link&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		code &lt;span style=&#34;color:#b44&#34;&gt;&amp;lt;&amp;lt;-EOH
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&lt;/span&gt;		ln &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;s &lt;span style=&#34;color:#b68&#34;&gt;/usr/&lt;/span&gt;bin&lt;span style=&#34;color:#666&#34;&gt;/&lt;/span&gt;nodejs &lt;span style=&#34;color:#b68&#34;&gt;/usr/&lt;/span&gt;bin&lt;span style=&#34;color:#666&#34;&gt;/&lt;/span&gt;node
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#800&#34;&gt;EOH&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		not_if { &lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;File&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;exist?(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/usr/bin/node&amp;#39;&lt;/span&gt;) }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;install_cloud9ide&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   cwd &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/home/c9ide/core/&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   user &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   code &lt;span style=&#34;color:#b44&#34;&gt;&amp;lt;&amp;lt;-EOH
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&lt;/span&gt;     scripts&lt;span style=&#34;color:#666&#34;&gt;/&lt;/span&gt;install&lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;sdk&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sh
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     &lt;span style=&#34;color:#800&#34;&gt;EOH&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   environment &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;PREFIX&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/usr/local&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h6 id=&#34;installing-supervisor&#34;&gt;Installing Supervisor&lt;/h6&gt;
-&lt;p&gt;Finally, we want to leave our server running Cloud 9 IDE after provisioning it. Supervisor is a fantastic way to do so, though of course not the only way and perhaps not even the best way, but it is a convenient and production-ready solution (though this development kit version of Cloud 9 IDE is not production material and is meant for development purposes).&lt;/p&gt;
-&lt;p&gt;In &lt;code&gt;recipes/supervisor.rb&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;package &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;supervisor&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action &lt;span style=&#34;color:#b8860b&#34;&gt;:install&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;case&lt;/span&gt; node&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;platform&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;when&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;debian&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;ubuntu&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	cookbook_file &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/etc/supervisor/conf.d/cloud9ide.conf&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  source &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9ide.conf&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  owner &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  group &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  mode &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;0755&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  action &lt;span style=&#34;color:#b8860b&#34;&gt;:create&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;start supervisor&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  command &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;service supervisor start&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;reload supervisor&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  command &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;supervisorctl update&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;when&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;redhat&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;centos&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;fedora&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	cookbook_file &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;/etc/supervisord.d/cloud9ide.ini&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  source &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9ide.conf&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  owner &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  group &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  mode &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;0755&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  action &lt;span style=&#34;color:#b8860b&#34;&gt;:create&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;start supervisor&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  command &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;service supervisord start&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	execute &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;reload supervisor&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	  command &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;supervisorctl update&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and finally add this to the &lt;code&gt;c9ide_test.rb&lt;/code&gt; test file:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;describe port(&lt;span style=&#34;color:#666&#34;&gt;9999&lt;/span&gt;) &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  it { should be_listening }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;putting-it-all-together&#34;&gt;Putting it all together&lt;/h5&gt;
-&lt;p&gt;The default recipe should now look like this:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9_ide::update&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;user::data_bag&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9_ide::motd&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9_ide::packages&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9_ide::cloud9ide&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;include_recipe &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;c9_ide::supervisor&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;we run a final &lt;code&gt;kitchen converge&lt;/code&gt;; if all goes well, we follow up with a final &lt;code&gt;kitchen verify&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-----&amp;gt; Starting Kitchen &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;v1.14.2&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-----&amp;gt; Setting up &amp;lt;default-ubuntu-1604&amp;gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       Finished setting up &amp;lt;default-ubuntu-1604&amp;gt; &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;0m0.00s&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-----&amp;gt; Verifying &amp;lt;default-ubuntu-1604&amp;gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       Loaded
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Target:  ssh://vagrant@127.0.0.1:2222
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  File /home/c9ide/core/README.md
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  content should match /^Cloud9/
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Port &lt;span style=&#34;color:#666&#34;&gt;9999&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  should be listening
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User c9ide
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  should exist
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  File /etc/motd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  content should match /A Cloud &lt;span style=&#34;color:#666&#34;&gt;9&lt;/span&gt; IDE server/
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  fail2ban should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  gcc should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  g++ should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  git should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  htop should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  make should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  nodejs should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  nmap should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  npm should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  sysstat should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  unattended-upgrades should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  apt-listchanges should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Test Summary: &lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt; successful, &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt; failures, &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt; skipped
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       Finished verifying &amp;lt;default-ubuntu-1604&amp;gt; &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;0m1.28s&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-----&amp;gt; Setting up &amp;lt;default-centos-72&amp;gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       Finished setting up &amp;lt;default-centos-72&amp;gt; &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;0m0.00s&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-----&amp;gt; Verifying &amp;lt;default-centos-72&amp;gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       Loaded
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Target:  ssh://vagrant@127.0.0.1:2200
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  File /home/c9ide/core/README.md
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  content should match /^Cloud9/
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Port &lt;span style=&#34;color:#666&#34;&gt;9999&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  should be listening
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User c9ide
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  should exist
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  File /etc/motd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  content should match /A Cloud &lt;span style=&#34;color:#666&#34;&gt;9&lt;/span&gt; IDE server/
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  fail2ban should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  gcc-c++ should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  git should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  glibc-static should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  htop should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  make should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  nodejs should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  nmap should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  npm should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  sysstat should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  System Package
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     ✔  yum-cron should be installed
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Test Summary: &lt;span style=&#34;color:#666&#34;&gt;15&lt;/span&gt; successful, &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt; failures, &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt; skipped
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;       Finished verifying &amp;lt;default-centos-72&amp;gt; &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;0m13.80s&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-----&amp;gt; Kitchen is finished. &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;0m16.47s&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Congratulations, you have a basic working chef recipe for installing Cloud 9 IDE, tested and provisioned on both major families of Linux.&lt;/p&gt;
-&lt;h3 id=&#34;source-code&#34;&gt;Source Code&lt;/h3&gt;
-&lt;p&gt;You can find the source code for this recipe on my github account &lt;a href=&#34;https://github.com/3implieschaos/c9_ide_chef/tree/PartI&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;future-steps&#34;&gt;Future Steps&lt;/h3&gt;
-&lt;p&gt;We took some shortcuts and avoided some best practices for convenience here. Ideally we would like some unit tests and to pull in more community recipes. For example, the supervisor chef cookbook could be used here instead of dealing with that in a platform case.&lt;/p&gt;
-&lt;p&gt;In the forthcoming Part II, we will use Puppet, a widely used alternative to Chef, to provision a server that runs the Cloud 9 IDE SDK as we have here with Chef.&lt;/p&gt;
 </description>
       
     </item>
