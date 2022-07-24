@@ -1,11 +1,11 @@
 .content .MathJax {
-    font-size: 100%!important;
+    font-size: 120%!important;
     overflow-x: auto;
     overflow-y: hidden;
 }
 
 .content .katex {
-    font-size: 100%!important;
+    font-size: 120%!important;
     overflow-x: auto;
     overflow-y: hidden;
 }
@@ -41,6 +41,7 @@
 .content table,
 .content ul {
     margin-bottom: 1rem;
+    font-size: 110%
 }
 
 .content blockquote {
