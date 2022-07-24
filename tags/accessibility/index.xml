@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>accessibility on 3implieschaos</title>
-    <link>http://3implieschaos.org/tags/accessibility/</link>
+    <link>https://3implieschaos.org/tags/accessibility/</link>
     <description>Recent content in accessibility on 3implieschaos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 19 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/accessibility/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="https://3implieschaos.org/tags/accessibility/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using PNNL&#39;s new Cividis colormap in data science to make accessible heat maps</title>
-      <link>http://3implieschaos.org/post/math_science/datasci/cividis-accessible-colormap-in-datascience/</link>
+      <link>https://3implieschaos.org/post/math_science/datasci/cividis-accessible-colormap-in-datascience/</link>
       <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/math_science/datasci/cividis-accessible-colormap-in-datascience/</guid>
+      <guid>https://3implieschaos.org/post/math_science/datasci/cividis-accessible-colormap-in-datascience/</guid>
       
       <description>&lt;p&gt;Heat maps have become quite common in data science, and in science in general, and for good reason. For those who can see them, they succinctly summarize patterns in data. There are many color schemes used in the wild, with the Rainbow scheme being one of the more common ones.&lt;/p&gt;
 &lt;p&gt;A group at &lt;a href=&#34;https://www.pnnl.gov/&#34;&gt;Pacific Northwest National Lab&lt;/a&gt; has recently published a &lt;a href=&#34;https://arxiv.org/pdf/1712.01662.pdf&#34;&gt;PLOS One article&lt;/a&gt; (hat tip &lt;a href=&#34;https://www.scientificamerican.com/article/end-of-the-rainbow-new-map-scale-is-more-readable-by-people-who-are-color-blind/&#34;&gt;Scientific American article&lt;/a&gt;) outlining their efforts to use mathematical modeling and the science of vision to create color maps for plots such that the exact same information is conveyed to those with and without color blindness.&lt;/p&gt;

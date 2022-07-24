@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 3implieschaos</title>
-    <link>http://3implieschaos.org/tags/</link>
+    <link>https://3implieschaos.org/tags/</link>
     <description>Recent content in Tags on 3implieschaos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 23 Jul 2022 15:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 23 Jul 2022 15:21:05 -0700</lastBuildDate><atom:link href="https://3implieschaos.org/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>kerbal</title>
-      <link>http://3implieschaos.org/tags/kerbal/</link>
+      <link>https://3implieschaos.org/tags/kerbal/</link>
       <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/kerbal/</guid>
+      <guid>https://3implieschaos.org/tags/kerbal/</guid>
       
       <description></description>
       
@@ -20,10 +20,10 @@
     
     <item>
       <title>physics</title>
-      <link>http://3implieschaos.org/tags/physics/</link>
+      <link>https://3implieschaos.org/tags/physics/</link>
       <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/physics/</guid>
+      <guid>https://3implieschaos.org/tags/physics/</guid>
       
       <description></description>
       
@@ -31,10 +31,10 @@
     
     <item>
       <title>python</title>
-      <link>http://3implieschaos.org/tags/python/</link>
+      <link>https://3implieschaos.org/tags/python/</link>
       <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/python/</guid>
+      <guid>https://3implieschaos.org/tags/python/</guid>
       
       <description></description>
       
@@ -42,10 +42,10 @@
     
     <item>
       <title>space</title>
-      <link>http://3implieschaos.org/tags/space/</link>
+      <link>https://3implieschaos.org/tags/space/</link>
       <pubDate>Sat, 23 Jul 2022 15:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/space/</guid>
+      <guid>https://3implieschaos.org/tags/space/</guid>
       
       <description></description>
       
@@ -53,10 +53,10 @@
     
     <item>
       <title>chaos-theory</title>
-      <link>http://3implieschaos.org/tags/chaos-theory/</link>
+      <link>https://3implieschaos.org/tags/chaos-theory/</link>
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/chaos-theory/</guid>
+      <guid>https://3implieschaos.org/tags/chaos-theory/</guid>
       
       <description></description>
       
@@ -64,10 +64,10 @@
     
     <item>
       <title>nonlinear-dynamics</title>
-      <link>http://3implieschaos.org/tags/nonlinear-dynamics/</link>
+      <link>https://3implieschaos.org/tags/nonlinear-dynamics/</link>
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/nonlinear-dynamics/</guid>
+      <guid>https://3implieschaos.org/tags/nonlinear-dynamics/</guid>
       
       <description></description>
       
@@ -75,10 +75,10 @@
     
     <item>
       <title>timeseries</title>
-      <link>http://3implieschaos.org/tags/timeseries/</link>
+      <link>https://3implieschaos.org/tags/timeseries/</link>
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/timeseries/</guid>
+      <guid>https://3implieschaos.org/tags/timeseries/</guid>
       
       <description></description>
       
@@ -86,10 +86,10 @@
     
     <item>
       <title>software-testing</title>
-      <link>http://3implieschaos.org/tags/software-testing/</link>
+      <link>https://3implieschaos.org/tags/software-testing/</link>
       <pubDate>Sun, 26 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/software-testing/</guid>
+      <guid>https://3implieschaos.org/tags/software-testing/</guid>
       
       <description></description>
       
@@ -97,10 +97,10 @@
     
     <item>
       <title>accessibility</title>
-      <link>http://3implieschaos.org/tags/accessibility/</link>
+      <link>https://3implieschaos.org/tags/accessibility/</link>
       <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/accessibility/</guid>
+      <guid>https://3implieschaos.org/tags/accessibility/</guid>
       
       <description></description>
       
@@ -108,10 +108,10 @@
     
     <item>
       <title>data-science</title>
-      <link>http://3implieschaos.org/tags/data-science/</link>
+      <link>https://3implieschaos.org/tags/data-science/</link>
       <pubDate>Sun, 19 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/tags/data-science/</guid>
+      <guid>https://3implieschaos.org/tags/data-science/</guid>
       
       <description></description>
       

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>statistics on 3implieschaos</title>
-    <link>http://3implieschaos.org/tags/statistics/</link>
+    <link>https://3implieschaos.org/tags/statistics/</link>
     <description>Recent content in statistics on 3implieschaos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/statistics/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Aug 2018 19:21:05 -0700</lastBuildDate><atom:link href="https://3implieschaos.org/tags/statistics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Exploring Wikipedia Page Count Trends</title>
-      <link>http://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</link>
+      <link>https://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</link>
       <pubDate>Sun, 05 Aug 2018 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</guid>
+      <guid>https://3implieschaos.org/post/math_science/datasci/exploring-wikipedia-page-counts-trends/</guid>
       
       <description>&lt;h1 id=&#34;exploring-wikipedia-page-counts-via-additive-models-for-seasonality-decomposition&#34;&gt;Exploring Wikipedia page counts via additive models for seasonality decomposition&lt;/h1&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;

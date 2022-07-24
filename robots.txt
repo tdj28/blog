@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: http://3implieschaos.org/sitemap.xml
+Sitemap: https://3implieschaos.org/sitemap.xml
