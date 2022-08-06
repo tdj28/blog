@@ -13,92 +13,7 @@
       <pubDate>Sat, 23 Jul 2022 12:11:05 -0700</pubDate>
       
       <guid>https://www.tdj28.org/physics-c/cs001/</guid>
-      
-      <description>&lt;!-- &lt;script&gt;
-    document.addEventListener(&#34;DOMContentLoaded&#34;, function() {
-        renderMathInElement(document.body, {
-            delimiters: [
-                {left: &#34;$$&#34;, right: &#34;$$&#34;, display: true},
-                {left: &#34;$&#34;, right: &#34;$&#34;, display: false}
-            ]
-        });
-    });
-&lt;/script&gt;
- --&gt;
-&lt;div class=&#34;toc&#34;&gt;
-  &lt;nav id=&#34;TableOfContents&#34;&gt;
-  &lt;ul&gt;
-    &lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;
-      &lt;ul&gt;
-        &lt;li&gt;&lt;a href=&#34;#topology&#34;&gt;Topology&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&#34;#coordinates-on-a-manifold&#34;&gt;Coordinates on a Manifold&lt;/a&gt;&lt;/li&gt;
-      &lt;/ul&gt;
-    &lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/nav&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;p&gt;In this note, we show how physicists construct more general coordinate systems that go beyond the standard Euclidean system.&lt;/p&gt;
-&lt;h3 id=&#34;topology&#34;&gt;Topology&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;A topological space is a set with elements of points and mathematical rules (called a topology) that tell us how to define neighborhoods around these elements.
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;neighborhood&amp;rsquo;s can be known from these axioms&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;every element belongs to all of its neighborhoods&lt;/li&gt;
-&lt;li&gt;if a subset of points include a neighborhood of a specific point, that subset is a neighborhood of that specific point&lt;/li&gt;
-&lt;/ol&gt;
-&lt;!-- ![](assets/index-4b64c.png) --&gt;
-&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;the intersection of two neighborhoods of a point is a neighborhood of that point&lt;/li&gt;
-&lt;/ol&gt;
-&lt;!-- ![](assets/index-e4f51.png) --&gt;
-&lt;ol start=&#34;4&#34;&gt;
-&lt;li&gt;a neighborhood A of a point contains a subset that is also a neighborhood of that point, and A is a neighborhood of every point in the subset&lt;/li&gt;
-&lt;/ol&gt;
-&lt;!-- ![](assets/index-e9b94.png) --&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;One of the simpler topologies that we need to consider in physics is Euclidean&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; where the neighborhoods are called open balls defined by the Euclidean metric (think Pythagorean theorem):&lt;/p&gt;
-&lt;p&gt;$$ B_r(p) = { x \in \R^n: d(p, x) &amp;lt; r }$$&lt;/p&gt;
-&lt;p&gt;In other words, all points surrounding the point such that those points are less than a distance r from that point&lt;/p&gt;
-&lt;h3 id=&#34;coordinates-on-a-manifold&#34;&gt;Coordinates on a Manifold&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;A manifold is a topological space that &amp;ldquo;looks&amp;rdquo; Euclidean in a small neighborhood of any given point. How we define &amp;ldquo;small&amp;rdquo; depends on the nature of that space, but think of the Earth, which is an oblate spheroid, but appears to be a flat two dimensional (more or less) space to anybody floating on the ocean or walking on flatland. Manifolds are useful in physics because it abstracts our discussion of spaces away from the Euclidean realm typical of Newtonian physics. Relativity requires the concept of manifolds for example.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;We can abstract our typical Newtonian coordinate systems to a definition that also works for manifolds.&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s start most simply with a coordinate system. An abstract coordinate system for a system with $n$ dimensions on an n-manifold M (an n-dimensional manifoled) can be written:&lt;/p&gt;
-&lt;p&gt;$$ \vec{x^i}, i \in \N_{&amp;gt; 0}, i \leq n $$&lt;/p&gt;
-&lt;p&gt;We wish to create a &amp;ldquo;local basis&amp;rdquo; around a point via tangent vectors:&lt;/p&gt;
-&lt;p&gt;$$ \vec{e_i} = \frac{\partial}{\partial x^i} \equiv \partial_i, i \in \N_{&amp;gt; 0}, i \leq n $$&lt;/p&gt;
-&lt;p&gt;Unlike the previous definition of $x^i$ which was descriptive, this definition is prescriptive, that is, it is how to create the local basis at each point. To get the actual local basis, you need to calculate the tangents at each point. This also allows you to define a metric tensor&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; on the manifold as the dot product between the local basis vectors:&lt;/p&gt;
-&lt;p&gt;$$ g^{ij} = \vec{e}_i \cdot \vec{e}_j $$&lt;/p&gt;
-&lt;p&gt;The inverse of this metric tensor can then be used to define the daul basis&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; $g^{ij} = (g^{-1})_{ij}$:&lt;/p&gt;
-&lt;p&gt;$$ \vec{e^i} = \vec{e_j} g^{ij}, i \in \N_{&amp;gt; 0}, i \leq n $$&lt;/p&gt;
-&lt;p&gt;What do we need a dual basis for? In Euclidean space, to get the component of a function along a specific basis direction, say $\vec{e_i}$, all we need is $\vec{f(x)}\cdot \vec{e_i}$. But in more complicated spaces, we can have a scenario where $\vec{e_i \cdot e_j} \neq 0, \forall i \neq j$. With a dual basis and a local basis, we have the orthogonality we may need to extract components along specific dimensions.&lt;/p&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Topological_space#Examples_of_topologies&#34;&gt;Topology&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_topology&#34;&gt;Euclidean topology&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;A &lt;strong&gt;metric tensor&lt;/strong&gt; on a manifold is a way of defining distance and angles in a local area around each point on a manifold.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Dual_basis&#34;&gt;Dual basis&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-      
+      <description>Entry point</description>
     </item>
     
     <item>
@@ -107,11 +22,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.tdj28.org/physics-c/coordinate-systems/</guid>
-      
-      <description>&lt;h2 id=&#34;coordinate-systems&#34;&gt;Coordinate Systems&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.tdj28.org/physics-c/cs001&#34;&gt;0001: Generalizing away from standard Euclidean&lt;/a&gt;&lt;/p&gt;
-</description>
-      
+      <description>Coordinate Systems 0001: Generalizing away from standard Euclidean</description>
     </item>
     
     <item>
@@ -120,12 +31,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.tdj28.org/physics-c/general-notes/</guid>
-      
-      <description>&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.tdj28.org/physics-c/coordinate-systems/&#34;&gt;Coordinate Systems&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-      
+      <description> Coordinate Systems </description>
     </item>
     
   </channel>

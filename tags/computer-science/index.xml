@@ -2,18 +2,104 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>computer-science on tdj28</title>
-    <link>http://3implieschaos.org/tags/computer-science/</link>
+    <link>https://www.tdj28.org/tags/computer-science/</link>
     <description>Recent content in computer-science on tdj28</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Fri, 20 Jan 2017 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/computer-science/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <lastBuildDate>Fri, 20 Jan 2017 19:21:05 -0700</lastBuildDate><atom:link href="https://www.tdj28.org/tags/computer-science/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Python Uses Operational Chaining for Boolean Comparisons</title>
-      <link>http://3implieschaos.org/post/tech/comp_sci/python-operational-chaining/</link>
+      <link>https://www.tdj28.org/post/tech/comp_sci/python-operational-chaining/</link>
       <pubDate>Fri, 20 Jan 2017 19:21:05 -0700</pubDate>
       
-      <guid>http://3implieschaos.org/post/tech/comp_sci/python-operational-chaining/</guid>
-      <description>It is important to understand Python&amp;rsquo;s use of operational chaining to avoid programming errors.</description>
+      <guid>https://www.tdj28.org/post/tech/comp_sci/python-operational-chaining/</guid>
+      
+      <description>&lt;h2 id=&#34;a-python-feature&#34;&gt;A Python feature?&lt;/h2&gt;
+&lt;p&gt;A colleague noticed this behavior:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#d2413a;font-weight:bold&#34;&gt;TypeError&lt;/span&gt;: argument of &lt;span style=&#34;color:#a2f&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;bool&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;not&lt;/span&gt; iterable
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;offering a bucket of doubloons to anyone who can explain it. The final case is simply a typecasting problem, but the first two cases demonstrate Python&amp;rsquo;s operating chaining behavior.&lt;/p&gt;
+&lt;h2 id=&#34;explanation&#34;&gt;Explanation&lt;/h2&gt;
+&lt;h3 id=&#34;using-the-dis-module-to-dig-deeper&#34;&gt;Using the Dis Module to dig deeper&lt;/h3&gt;
+&lt;p&gt;Using the  &lt;code&gt;dis&lt;/code&gt;&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; module, we find:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#666&#34;&gt;7&lt;/span&gt;           &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;3&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;6&lt;/span&gt; DUP_TOP
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;7&lt;/span&gt; ROT_THREE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;8&lt;/span&gt; COMPARE_OP               &lt;span style=&#34;color:#666&#34;&gt;6&lt;/span&gt; (&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;11&lt;/span&gt; JUMP_IF_FALSE_OR_POP    &lt;span style=&#34;color:#666&#34;&gt;21&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;14&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;3&lt;/span&gt; (&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;17&lt;/span&gt; COMPARE_OP               &lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt; (&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;20&lt;/span&gt; RETURN_VALUE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;   &lt;span style=&#34;color:#666&#34;&gt;21&lt;/span&gt; ROT_TWO
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;22&lt;/span&gt; POP_TOP
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;23&lt;/span&gt; RETURN_VALUE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;15&lt;/span&gt;           &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;3&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;6&lt;/span&gt; COMPARE_OP               &lt;span style=&#34;color:#666&#34;&gt;6&lt;/span&gt; (&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;9&lt;/span&gt; JUMP_IF_FALSE_OR_POP    &lt;span style=&#34;color:#666&#34;&gt;21&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;12&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;15&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;3&lt;/span&gt; (&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;18&lt;/span&gt; COMPARE_OP               &lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt; (&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;   &lt;span style=&#34;color:#666&#34;&gt;21&lt;/span&gt; RETURN_VALUE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#666&#34;&gt;9&lt;/span&gt;           &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;3&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; (&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;6&lt;/span&gt; DUP_TOP
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;7&lt;/span&gt; ROT_THREE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#666&#34;&gt;8&lt;/span&gt; COMPARE_OP               &lt;span style=&#34;color:#666&#34;&gt;6&lt;/span&gt; (&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;11&lt;/span&gt; JUMP_IF_FALSE_OR_POP    &lt;span style=&#34;color:#666&#34;&gt;21&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;14&lt;/span&gt; LOAD_CONST               &lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt; (&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;17&lt;/span&gt; COMPARE_OP               &lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt; (&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;20&lt;/span&gt; RETURN_VALUE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;   &lt;span style=&#34;color:#666&#34;&gt;21&lt;/span&gt; ROT_TWO
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;22&lt;/span&gt; POP_TOP
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#666&#34;&gt;23&lt;/span&gt; RETURN_VALUE
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;in-words&#34;&gt;In words&lt;/h3&gt;
+&lt;p&gt;Parenthesis essential forces Python to do &amp;lsquo;something&amp;rsquo; first before doing anything else. I often use parenthesis out of habit even when not needed just to be 100% clear. The above behavior shows where that habit might come in handy if Python&amp;rsquo;s operation chaining isn&amp;rsquo;t the desired behavior. When we put &lt;code&gt;&#39;a&#39; in &#39;b&#39;&lt;/code&gt; inside parenthesis, Python is forced to evaluate that independently of the rest of line; this evaluates to &lt;code&gt;True&lt;/code&gt; or &lt;code&gt;False&lt;/code&gt;, and then the &lt;code&gt;== 0&lt;/code&gt; comparison acts as a Boolean comparison, giving expected behavior since Python sees False and 0 as equivalent here.&lt;/p&gt;
+&lt;p&gt;In the first instance above, however, Python is operator chaining. For &lt;code&gt;&#39;a&#39; in &#39;b&#39; == 0&lt;/code&gt;, it first loads a and b strings such that the stack is&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[ b, a ]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;it then &lt;code&gt;DUP_TOP&lt;/code&gt; duplicates &lt;code&gt;b&lt;/code&gt; so that it doesn’t have to waste time to load it again for the second evaluation, resulting in the stack:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[ b, b, a ]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;ROT_THREE&lt;/code&gt; lifts second and third stack item up and the top item down to third place, so now the stack is:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[ b, a, b ]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;COMPARE_OP&lt;/code&gt; acts on &lt;code&gt;[ b, a]&lt;/code&gt;, and since it is not true, &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt; forces it to jump and just returns False. This makes sense because it
+sees this as a compound AND statement, and when the first part of an AND statement is false, the entire thing is false and it is a waste of
+resources to compute further.&lt;/p&gt;
+&lt;p&gt;What is interesting is if you do &lt;code&gt;&#39;a&#39; in &#39;a&#39; == 1&lt;/code&gt;,  or &lt;code&gt;&#39;a&#39; in &#39;a&#39; == 0&lt;/code&gt;. Take the former, for example,
+which after &lt;code&gt;DUP_TOP&lt;/code&gt; gives us the stack:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[ a, a, a ]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Here &lt;code&gt;&#39;a&#39; in &#39;a&#39;&lt;/code&gt; is obviously true, and these two entries of the stack are replaced with the result of that evaluation, which is &lt;code&gt;True&lt;/code&gt;. This, now being the top of the stack, is popped off by &lt;code&gt;JUMP_IF_FALSE_OR_POP&lt;/code&gt;
+leaving the duplicated &amp;lsquo;a&amp;rsquo; on the top of the stack, where then &lt;code&gt;1&lt;/code&gt; is loaded for the next comparison, so the stack is now:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;, a]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and the &lt;code&gt;==&lt;/code&gt; comparison is applied which is indeed False.
+Thus &lt;code&gt;&#39;a&#39; in &#39;a&#39; == 0&lt;/code&gt; is chained as &lt;code&gt;&#39;a&#39; in &#39;a&#39; and &#39;a&#39; == 0&lt;/code&gt; and will also be false. Similarly, &lt;code&gt;&#39;a&#39; in &#39;b&#39; == 0&lt;/code&gt; is effectively the same as &lt;code&gt;&#39;a&#39; in &#39;b&#39; and &#39;b&#39; == 0&lt;/code&gt; which is false.&lt;/p&gt;
+&lt;p&gt;The following behavior, then, makes sense:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;code&gt;pip install dis&lt;/code&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+      
     </item>
     
   </channel>
