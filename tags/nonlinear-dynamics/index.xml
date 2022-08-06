@@ -2,78 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>nonlinear-dynamics on tdj28</title>
-    <link>https://www.tdj28.org/tags/nonlinear-dynamics/</link>
+    <link>http://3implieschaos.org/tags/nonlinear-dynamics/</link>
     <description>Recent content in nonlinear-dynamics on tdj28</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Sun, 03 Jul 2022 19:21:05 -0700</lastBuildDate><atom:link href="https://www.tdj28.org/tags/nonlinear-dynamics/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 03 Jul 2022 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/nonlinear-dynamics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Rössler Strange Attractor with Python: Part 1</title>
-      <link>https://www.tdj28.org/post/math_science/chaos/rossler_strange_attractor_with_python_series/rossler_strange_attractor_with_python_part1/</link>
+      <link>http://3implieschaos.org/post/math_science/chaos/rossler_strange_attractor_with_python_series/rossler_strange_attractor_with_python_part1/</link>
       <pubDate>Sun, 03 Jul 2022 19:21:05 -0700</pubDate>
       
-      <guid>https://www.tdj28.org/post/math_science/chaos/rossler_strange_attractor_with_python_series/rossler_strange_attractor_with_python_part1/</guid>
-      
-      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;p&gt;One of the most popular and widely known strange attractors is the Rössler strange attractor. We will explore
-this mathematical object using Python in a series of blog posts. Before we go into any detail about what it is, what
-is a strange attractor, and so on, let&amp;rsquo;s first take a quick look at it using some simple Python code.&lt;/p&gt;
-&lt;h2 id=&#34;simple-integration-using-eulers-method&#34;&gt;Simple Integration using Euler&amp;rsquo;s method&lt;/h2&gt;
-&lt;p&gt;This is a quick intro, and hopefully part of a longer series on using Python to analyze the Rössler Strange Attractor.&lt;/p&gt;
-&lt;p&gt;We begin by importing the basic libraries that we will use as follows:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#00f;font-weight:bold&#34;&gt;numpy&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#00f;font-weight:bold&#34;&gt;np&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#00f;font-weight:bold&#34;&gt;matplotlib&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt;matplotlib inline
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#00f;font-weight:bold&#34;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#00f;font-weight:bold&#34;&gt;plt&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#00f;font-weight:bold&#34;&gt;mpl_toolkits.mplot3d&lt;/span&gt; &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;import&lt;/span&gt; Axes3D
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;define-rössler-system&#34;&gt;Define Rössler System&lt;/h3&gt;
-&lt;p&gt;Next we define a python function which will define the Rössler equations for us to integrate and graph. The Rössler equestions are&lt;/p&gt;
-&lt;p&gt;$$ \dot{x} = -y -z $$
-$$ \dot{y} =  x + ay $$
-$$ \dot{z} = b + z(x-c) $$&lt;/p&gt;
-&lt;p&gt;They function over a number of parameters, something we will explore in more detail in future posts. For now, let&amp;rsquo;s just pick a pretty common set of parameters:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00a000&#34;&gt;rossler&lt;/span&gt;(x, y, z, a&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0.2&lt;/span&gt;, b&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0.2&lt;/span&gt;, c&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;5.7&lt;/span&gt;):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    x_dot &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; y &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; z
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    y_dot &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; x &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; a&lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt;y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    z_dot &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; b &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt;(x&lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;c)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;return&lt;/span&gt; x_dot, y_dot, z_dot
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;numerical-integration&#34;&gt;Numerical Integration&lt;/h3&gt;
-&lt;p&gt;These equations can&amp;rsquo;t be solved for non-trivial sets of parameters, so we must integrate them numerically. Here, we use a very simpler Euler&amp;rsquo;s method of integration to get us out the door. This method is &lt;em&gt;never&lt;/em&gt; a good idea to use for non-trivial applications, but is a quick easy way to get started.&lt;/p&gt;
-&lt;p&gt;Euler&amp;rsquo;s method makes use of the definition of a derivative:&lt;/p&gt;
-&lt;p&gt;$$\dot{x} = \frac{dx}{dt} = \lim_{\Delta \rightarrow 0} \frac{\Delta x}{\Delta t} $$&lt;/p&gt;
-&lt;p&gt;To create a simplistic way to numerical integrate where:&lt;/p&gt;
-&lt;p&gt;$$ \Delta x = \dot{x} \Delta t $$&lt;/p&gt;
-&lt;p&gt;This isn&amp;rsquo;t very accurate over the long term, but with small enough $\Delta t$ can give a fair approximation in the short term. For this simple demo, we choose to let $dt = 0.05 s$ and choose to plot 1000 points for a total of 50 seconds of data.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dt &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0.05&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;stepCnt &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Next we set up NUMPY arrays that will hold the 1000 points for each dimension, and then set intitial values (what initial values to use will be explained in more detail in a post where we discuss the parameters as well).&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# Need one more for the initial values&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;xs &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;empty((stepCnt &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;,))
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ys &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;empty((stepCnt &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;,))
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;zs &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;empty((stepCnt &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;,))
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# Setting initial values&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;xs[&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;], ys[&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;], zs[&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#666&#34;&gt;0.1&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;1.05&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Next, we run the Euler&amp;rsquo;s method integration to populate the arrays:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# Stepping through &amp;#34;time&amp;#34;.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a2f&#34;&gt;range&lt;/span&gt;(stepCnt):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#080;font-style:italic&#34;&gt;# Derivatives of the X, Y, Z state&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    x_dot, y_dot, z_dot &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; rossler(xs[i], ys[i], zs[i])
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    xs[i &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; xs[i] &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; (x_dot &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; dt)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ys[i &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; ys[i] &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; (y_dot &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; dt)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    zs[i &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; zs[i] &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; (z_dot &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; dt)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;plot&#34;&gt;Plot&lt;/h3&gt;
-&lt;p&gt;Our final step is to plot the results so that we can see the &lt;code&gt;trajetory&lt;/code&gt; of the Rössler system over these 50 seconds of integration.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;fig &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; plt&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;figure()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; plt&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;axes(projection&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;3d&amp;#39;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;plot3D(xs, ys, zs, &lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;gray&amp;#39;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#b44&#34;&gt;&amp;#39;Rössler&amp;#39;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;output_12_1.png&#34; alt=&#34;png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;whats-next&#34;&gt;What&amp;rsquo;s next&lt;/h3&gt;
-&lt;p&gt;OK, we have seen it, but what is it, and how deep does the rabbit hole go? Part 2 will explore this further.&lt;/p&gt;
-</description>
-      
+      <guid>http://3implieschaos.org/post/math_science/chaos/rossler_strange_attractor_with_python_series/rossler_strange_attractor_with_python_part1/</guid>
+      <description>Simple Integration using Euler&amp;rsquo;s method</description>
     </item>
     
   </channel>

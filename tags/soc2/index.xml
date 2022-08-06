@@ -2,29 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>soc2 on tdj28</title>
-    <link>https://www.tdj28.org/tags/soc2/</link>
+    <link>http://3implieschaos.org/tags/soc2/</link>
     <description>Recent content in soc2 on tdj28</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Sun, 24 Jun 2018 19:21:05 -0700</lastBuildDate><atom:link href="https://www.tdj28.org/tags/soc2/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 24 Jun 2018 19:21:05 -0700</lastBuildDate><atom:link href="http://3implieschaos.org/tags/soc2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>A Risk Analysis Bowtie Diagram in Latex</title>
-      <link>https://www.tdj28.org/post/tech/devops/risk-analysis-bowtie-diagram-latex/</link>
+      <link>http://3implieschaos.org/post/tech/devops/risk-analysis-bowtie-diagram-latex/</link>
       <pubDate>Sun, 24 Jun 2018 19:21:05 -0700</pubDate>
       
-      <guid>https://www.tdj28.org/post/tech/devops/risk-analysis-bowtie-diagram-latex/</guid>
-      
-      <description>&lt;h3 id=&#34;bowtie-diagram-in-latex&#34;&gt;Bowtie Diagram in LaTeX&lt;/h3&gt;
-&lt;p&gt;For folks who have to conduct risk analysis, there are
-very limited choices for the creation of &amp;ldquo;bowtie diagrams&amp;rdquo;.
-Searching the web for examples in LaTeX comes up pretty empty.
-So when googling comes up empty, its time to create:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/3implieschaos/latex-demos/blob/master/figures/bowtie/bowtie.tex&#34;&gt;Bowtie diagram in LaTeX example&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;This code results in a diagram that looks pretty acceptable
-in terms of quality, or at least an acceptable starting point:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;assets/bowtie.png&#34; alt=&#34;bowtie diagram&#34;&gt;&lt;/p&gt;
-</description>
-      
+      <guid>http://3implieschaos.org/post/tech/devops/risk-analysis-bowtie-diagram-latex/</guid>
+      <description>Couldn&amp;rsquo;t find a good example on the web, wrote one instead.</description>
     </item>
     
   </channel>
