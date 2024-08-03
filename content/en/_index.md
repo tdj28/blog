@@ -22,7 +22,7 @@ TJ has a PhD in Physics with a focus on Nonlinear Dynamics
 {{% /blocks/lead %}}
 
 {{% blocks/lead color="secondary" %}}
-TJ has experience in tech in the realm of DevOps, Visual ML, and LLM interface for the disabled
+TJ has experience in tech including projects in DevOps, AIML, and accessibility
 {{% /blocks/lead %}}
 
 

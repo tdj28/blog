@@ -48,7 +48,10 @@ languages:
     languageName: English
     title: TDJ28
     params:
-      description: A Docsy example site
+      description: Technical notes
+      ui:
+        showLightDarkModeMenu: true
+
 
 markup:
   goldmark:
@@ -60,6 +63,7 @@ markup:
   highlight:
     # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
     style: tango
+    noClasses: false
     # Uncomment if you want your chosen highlight style used for code blocks without a specified language
     # guessSyntax: true
 
@@ -127,7 +131,7 @@ params:
 
   copyright:
     authors: TJ | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
-    from_year: 2024
+    from_year: 2016
 
   # User interface configuration
   ui:
