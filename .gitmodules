@@ -1,3 +1,0 @@
-[submodule "DockerPelican/blog/plugins/ipynb"]
-	path = DockerPelican/blog/plugins/ipynb
-	url = https://github.com/danielfrg/pelican-ipynb.git

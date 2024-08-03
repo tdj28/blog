@@ -1,2 +1,0 @@
-User-agent: *
-Sitemap: https://www.tdj28.org/sitemap.xml
