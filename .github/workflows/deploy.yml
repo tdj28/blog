@@ -36,6 +36,8 @@ jobs:
         with:
           hugo-version: "latest"
           extended: true
+        env:
+          NODE_VERSION: '20'  # Specify Node.js version for Hugo setup
 
       - name: Setup Node
         uses: actions/setup-node@v4
