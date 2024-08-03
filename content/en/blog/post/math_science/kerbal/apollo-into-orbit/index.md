@@ -25,7 +25,7 @@ Kerbal Space Program (KSP) (1.0) is a semi-physics-realistic space exploration s
 
 #### Get KSP
 * Purchase and install the Kerbal Space Program (v 1.0) [here](https://www.kerbalspaceprogram.com/).
-* You'll also need the ["Making History" expansion](https://www.kerbalspaceprogram.com/games-kerbal-space-program-making-history-expansion) which has the Apollo rocket equivalent, unless you prefer to save some money and build an equivalent rocket yourself or find the ship file online. Note that this code is tested and verified to work with the Acopollo rocket found in this expansion, so you may have to make adjustments to get alternative rockets to work.
+* You'll also need the ["Making History" expansion](https://www.kerbalspaceprogram.com/games-kerbal-space-program-making-history-expansion) which has the Apollo rocket equivalent, unless you prefer to save some money and build an equivalent rocket yourself or find the ship file online. Note that this code is tested and verified to work with the "Acopollo" rocket (in Kerbal, the names of things are slightly altered from the real-world objects they are based on) found in this expansion, so you may have to make adjustments to get alternative rockets to work.
 
 #### Install the KRPC mod
 
@@ -208,7 +208,7 @@ mu = vessel.orbit.body.gravitational_parameter
 ```
 
 Back to Physics, we now have two equations from the basics of Newtonian physics, namely:
-* Cetripital Force: \\[ F\_c = \\frac{m\_0 v^2}{r}\\]
+* Centripetal Force: \\[ F\_c = \\frac{m\_0 v^2}{r}\\]
 * Gravitational Force: \\[ F\_g = \\frac{m\_0 GM}{r^2}\\]
 
 Since these must balance out for an object to be in stead orbit, we can solve to find the ideal velocity \\(v\\) for a given orbit at radius \\(r\\):
@@ -251,9 +251,9 @@ and with some rearrangement of these equations, we get,
 \\[ \\frac{1}{2}v\_a^2 = \\mu \\frac{r\_p}{r\_a \\left( r\_p + r\_a \\right)} \\]
 
 
-#### Relating this to elipses, the apoapsis and periapsis
+#### Relating this to ellipses, the apoapsis and periapsis
 
-From geometry of an ellipse that relates the semimajor axis to \\(r\_p\\) and \\(r\_a\\), \\(2a = r\_p + r\_a\\)
+From geometry of an ellipse that relates the semi-major axis to \\(r\_p\\) and \\(r\_a\\), \\(2a = r\_p + r\_a\\)
 
 
 ```python
@@ -364,7 +364,7 @@ If all went well, you should be in a fairly accurate (and we can make it even be
 
 ![an orbital view of the rocket showing a circularized orbit](assets/index-2e331.png)
 
-Now that we have circularized our orbit, we can do some house keeping and eject uneeded components from the rocket. In a future iteration, we will want to eject these as soon as we clear the atmosphere in order to reduce as much mass as soon as possible:
+Now that we have circularized our orbit, we can do some house keeping and eject un-needed components from the rocket. In a future iteration, we will want to eject these as soon as we clear the atmosphere in order to reduce as much mass as soon as possible:
 
 
 ```python
@@ -376,4 +376,4 @@ vessel.control.activate_next_stage()
 vessel.control.activate_next_stage()
 ```
 
-![showing the rocket against the milkyway with less stages](assets/index-50aec.png)
+![showing the rocket against the Milky Way Galaxy with less stages](assets/index-50aec.png)

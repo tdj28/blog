@@ -39,7 +39,7 @@ On the one hand, if you push a lot of cautionary information to the public, a nu
 
 How can we think about this carefully? This post is not medical instruction, but we can use data science tooling to help the average person better understand the complexities that public health officials face. 
 
-## Mathematical development
+## Definitions and grounding in reference
 
 {{% alert title="Note" color="primary" %}}
 In order to keep the mathematical discussion focused, we will have the following simplified assumptions:
@@ -84,7 +84,7 @@ The results summary in this journal article are informative to our discussion. W
 
 In the next section, we'll take a deeper dive into what this results summary may mean.
 
-## Deeper Dive
+## Mathematical analysis
 
 First, let's define some of the words used here that may be unfamiliar to those starting off in data science.
 
@@ -114,95 +114,88 @@ Suppose a test can have two results: positive or negative. Suppose that these re
 - **False Negative (FN)**: When a test result is negative, and the reality is that the person **is** indeed infected.
 {{< /alert >}}
 
+### Conditional Probability
 
 Given that conditional probability is defined as: 
 
-<!-- <div class="td-content" style="text-align:center"> -->
 
-<div class="venn-container">
-
-  <div id="venn" class="venn-diagram"></div>
-    <div>
+<div class="td-content">
+  <div class="inner-wrapper">
+    <div class="venn-container">
+      <div id="venn" class="venn-diagram"></div>
+      <div class="equation">
         $$ A \cap B = \{x \in \mathcal{U} \mid x \in A \text{ and } x \in B\}$$
         $$ P(B|A) = \frac{P(A \cap B)}{P(A)}$$
+      </div>
     </div>
   </div>
+</div>
 
 <script src="/js/d3.v4.min.js"></script>
 <script src="/js/venn.js"></script>
 <script>
-var sets = [
-  {sets:["A"], size: 12},
-  {sets:["B"], size: 12},
-  {sets: ["A", "B"], size: 4, label: "A ∩ B"},
-];
-var chart = venn.VennDiagram()
-  .wrap(false)
-  .width(320)
-  .height(320);
-var div = d3.select("#venn").datum(sets).call(chart);
-div.selectAll("text").style("fill", "white");
-div.selectAll(".venn-circle path").style("fill-opacity", .6);
+  var sets = [
+    {sets:["A"], size: 12},
+    {sets:["B"], size: 12},
+    {sets: ["A", "B"], size: 4, label: "A ∩ B"},
+  ];
+  var chart = venn.VennDiagram()
+    .wrap(false)
+    .width(250)  // Adjust width to fit within the container
+    .height(250);  // Adjust height if necessary
+  var div = d3.select("#venn").datum(sets).call(chart);
+  div.selectAll("text").style("fill", "white");
+  div.selectAll(".venn-circle path").style("fill-opacity", .6);
 </script>
 
 <style>
-.venn-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  align-items: center;
-}
+  .inner-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    box-sizing: border-box;
+  }
 
-.venn-diagram {
-  flex: -0.5 0 10px;
-  max-width: 50%;
-}
+  .venn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
+  .venn-diagram {
+    flex: 0 1 auto;
+    max-width: 250px;
+    box-sizing: border-box;
+  }
+
+  .equation {
+    flex: 0 1 auto;
+    text-align: center;
+    margin-left: 20px;
+    box-sizing: border-box;
+  }
 </style>
 
+* Consider a sample of two people whom we can definitively divide into a group whose test result was _negative_ (group A) and those who were actually _positive_ (group B). The group A might be those whose rapid test claimed negative, the group B might be those whose antibody test later showed they were actually infected.
 
-Given A means that we are most certainly within the sample pool corresponding to A. A ∩ B implies that there is some overlap with the sample pools of A and B, but given A means we are restricting ourselves to looking at just the pool of A including the region of overlap. Hence the probability that we are also in the pool B given that we are in A is equal to the portion of A ∩ B that overlaps with the entire pool A.
+* \\(A \cap B\\) is the intersection of Group A with Group B, that is, people who belong to both groups--people whose rapid test said negative but were actually positive, i.e. the False Negative group.
 
-Given A means that we are most certainly within the sample pool corresponding to A. A ∩ B implies that there is some overlap with the sample pools of A and B, but given A means we are restricting ourselves to looking at just the pool of A including the region of overlap. Hence the probability that we are also in the pool B given that we are in A is equal to the portion of A ∩ B that overlaps with the entire pool A.
+* \\(P(B | A)\\) is the mathematical way of stating the probability of being in group B (infected) _given_ that one is also in group A (tests negative).
 
-\noindent % Ensure alignment at the left margin
-\begin{minipage}{0.5\textwidth} % Adjust the width as needed
-    \begin{tikzpicture}
-        % Define colors
-        \definecolor{lightblue}{RGB}{173,216,250}
-        \definecolor{lightred}{RGB}{240,128,128}
-        \definecolor{lightpurple}{RGB}{147,112,219}
-        
-        % Draw the sets
-        \begin{scope}[blend group = soft light]
-            \fill[lightblue]  (90:1.2) circle (2);
-            \fill[lightred] (210:1.2) circle (2);
-        \end{scope}
-        
-        % Intersection label
-        \node at (150:0.5) {$A \cap B$};
-        
-        % Set labels
-        \node[above] at (90:2) {$A$};
-        \node[left] at (220:2) {$B$};
-    \end{tikzpicture}
-\end{minipage}%
-\begin{minipage}{0.5\textwidth} % Adjust the width as needed
-    \begin{equation}
-        A \cap B = \{x \in \mathcal{U} \mid x \in A \text{ and } x \in B\}
-    \end{equation}
-    \begin{equation}
-        P(B|A) = \frac{P(A \cap B)}{P(A)} \label{eqn:conditional-probabilities}
-    \end{equation}
+* We define \\(P(B | A)\\) as the ratio \\(P(B \cap A)\\) over \\(P(A)\\)
 
-    Given A means that we are most certainly within the sample pool corresponding to A. $A \cap B$ implies that there is some overlap with the sample pools of $A$ and $B$, but given $A$ means were are restricting ourselves to looking at just the pool of $A$ including the region of overlap. Hence the probability that we are also in the pool $B$ given that we are in $A$ is equal to the portion of $A\cap B$ that overlaps with the entire pool $A$.
-\end{minipage}
+* Hence, intuitively, the probability that of any randomly selected person in group A (infected) are also in the pool B (tests negative) given that we are in A (tested negative) is equal to the portion of people \\(A \cap B\\) that overlaps with the entire pool A.
 
-\begin{remark}
+{{% alert title="Remark" color="primary" %}}
 In what follows, we will be treating this equation and other like it as if this equivalence were true:
-\[ \mbox{Specificity} = P(TN|\neg D) = P(-|\neg D) \]
+
+$$ \text{Specificity} = P(TN|\neg D) = P(-|\neg D) $$
+
 In the context of disease as we are discussing it here, this equivalence is valid. Please note, though, that for more complicated discussions on probability, this equivalence may not hold. 
-\end{remark}
+{{% /alert %}}
 
 \begin{definition}{Sensitivity}
 Portion of test results which gave a true positive result out of the pool of all test subjects who were in fact infected (those who were infected and got an accurate positive result are TP, those who were infected but got a negative result were FN, the sum TP + FN gives us the total that was in fact infected). The probability is written as the probability of getting a positve result ($P(+)$) given ``$|$" that they are indeed infected ($P(D)$):
@@ -246,7 +239,7 @@ So what's happening here? One explanation the researchers propose is that those 
 \end{quote}
 
 
-\subsection{Synthesis}
+## Synthesis
 
 Let's imagine for a moment the unenviable task of being in charge of public health messaging. How might you relate the prior discussion to the general public? We can look at how some of this information was handled at the time. One example dated from August 2020 (well before the above journal article was published) was that the US FDA advised at the time that rapid test should not be given to people {\it without} symptoms \cite{NBCNews2020FDARapidTests}:
 

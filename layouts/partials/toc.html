@@ -2,7 +2,7 @@
   {{ with .TableOfContents -}}
     {{ if ne . `<nav id="TableOfContents"></nav>` -}}
       <div class="td-toc">
-        {{ . }}
+        {{ . | safeHTML }}
       </div>
     {{ end -}}
   {{ end -}}

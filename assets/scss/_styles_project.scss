@@ -1,8 +1,38 @@
 .td-toc {
+
     a.active {
       color: #0056b3; // Change this to match your theme's color scheme
       font-weight: bold;
     }
+
+    li {
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    ul {
+      list-style-type: disc; /* Use disc bullet points */
+      // padding-left: 20px; /* Indent for bullets */
+    }
+    
+    ul ul {
+      list-style-type: circle; /* Nested list style */
+      padding-left: 20px; /* Indent for nested bullets */
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    ul li ul li {
+      padding: 5px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    li ul li:last-child {
+      border-bottom: none;
+    }
+
   }
 
 @import 'td/code-dark'
