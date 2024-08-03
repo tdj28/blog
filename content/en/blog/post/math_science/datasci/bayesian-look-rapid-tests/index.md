@@ -116,7 +116,9 @@ Suppose a test can have two results: positive or negative. Suppose that these re
 
 ### Conditional Probability
 
-Given that conditional probability is defined as: 
+Suppose we wish to find out the probability that someone is actually infected when they have tested negative.
+
+Conditional probability is defined as: 
 
 
 <div class="td-content">
@@ -149,35 +151,49 @@ Given that conditional probability is defined as:
 </script>
 
 <style>
-  .inner-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 75%;
-    box-sizing: border-box;
-  }
+.inner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+  box-sizing: border-box;
+}
 
+.venn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap; /* Allows wrapping for smaller screens */
+}
+
+.venn-diagram {
+  flex: 0 1 auto;
+  max-width: 250px;
+  box-sizing: border-box;
+}
+
+.equation {
+  flex: 0 1 auto;
+  text-align: center;
+  margin-left: 20px;
+  box-sizing: border-box;
+}
+
+/* Media query for mobile screens */
+@media (max-width: 768px) {
   .venn-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .venn-diagram {
-    flex: 0 1 auto;
-    max-width: 250px;
-    box-sizing: border-box;
+    flex-direction: column; /* Stack items vertically */
   }
 
   .equation {
-    flex: 0 1 auto;
-    text-align: center;
-    margin-left: 20px;
-    box-sizing: border-box;
+    margin-left: 0;
+    margin-top: 20px; /* Add spacing between stacked items */
   }
+}
 </style>
+
 
 * Consider a sample of two people whom we can definitively divide into a group whose test result was _negative_ (group A) and those who were actually _positive_ (group B). The group A might be those whose rapid test claimed negative, the group B might be those whose antibody test later showed they were actually infected.
 
