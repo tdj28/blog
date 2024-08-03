@@ -84,7 +84,7 @@ The results summary in this journal article are informative to our discussion. W
 
 In the next section, we'll take a deeper dive into what this results summary may mean.
 
-## Mathematical analysis
+### Definitions of test results
 
 First, let's define some of the words used here that may be unfamiliar to those starting off in data science.
 
@@ -197,62 +197,75 @@ Conditional probability is defined as:
 
 * Consider a sample of two people whom we can definitively divide into a group whose test result was _negative_ (group A) and those who were actually _positive_ (group B). The group A might be those whose rapid test claimed negative, the group B might be those whose antibody test later showed they were actually infected.
 
-* \\(A \cap B\\) is the intersection of Group A with Group B, that is, people who belong to both groups--people whose rapid test said negative but were actually positive, i.e. the False Negative group.
+* \\(A \cap B\\) is the intersection of group A with group B, that is, people who belong to both groups--people whose rapid test said negative but were actually positive, i.e. the False Negative group.
 
-* \\(P(B | A)\\) is the mathematical way of stating the probability of being in group B (infected) _given_ that one is also in group A (tests negative).
+* \\(P(B | A)\\) is the mathematical way of stating the probability of being in group B (infected) _given_ that one is _also_ in group A (tests negative).
 
 * We define \\(P(B | A)\\) as the ratio \\(P(B \cap A)\\) over \\(P(A)\\)
 
-* Hence, intuitively, the probability that of any randomly selected person in group A (infected) are also in the pool B (tests negative) given that we are in A (tested negative) is equal to the portion of people \\(A \cap B\\) that overlaps with the entire pool A.
+* Hence, intuitively, the probability that of any randomly selected person in group A (test negative) are also in the pool B (is infected) is equal to the portion of people \\(A \cap B\\) that overlaps with the entire pool A.
+
+* This assumes a very large ensemble of people selected to study in either group, this doesn't work reliable for smaller sample sizes.
+
+### Sensitivity, Specificity, and Accuracy
+
+We now present some standard definitions:
+
+{{% alert title="Sensitivity" color="info" %}}
+
+Portion of test results which gave a true positive result out of the pool of all test subjects who were in fact infected (those who were infected and got an accurate positive result are TP, those who were infected but got a negative result were FN, the sum TP + FN gives us the total that was in fact infected). The probability is written as the probability of getting a positive result \\(P(+)\\) given "|" that they are indeed infected \\(P(D)\\):
+
+$$ P(+|D) = \frac{\text{TP}}{\text{TP} + \text{FN}} $$
+
+{{% /alert %}}
+
+{{% alert title="Specificity" color="info" %}}
+Portion of test results which gave a true negative result out of the pool of all test subjects who were in fact __NOT__ infected (those who were __NOT__ infected and got a positive result are FP, those who were __NOT__ infected and got an accurate negative result were TN, the sum TN + FP gives us the total that was in fact __NOT__ infected). The probability is written as the probability of getting an negative result \\(P(-)\\) given "|" that they are not infected \\(P(\neg D)\\):
+
+$$ P(-|\neg D) =  \frac{\text{TN}}{\text{TN} + \text{FP}} $$
+{{% /alert %}}
+
+{{% alert title="Accuracy" color="info" %}}
+Portion of all test results that were correctly identified, either as positive or negative, out of the total number of tests conducted. This includes both true positive results (TP, those who were infected and got an accurate positive result) and true negative results (TN, those who were __NOT__ infected and got an accurate negative result), divided by the total number of tests, which is the sum of true positives (TP), false positives (FP, those who were __NOT__ infected but got a positive result), true negatives (TN), and false negatives (FN, those who were infected but got a negative result).
+$$ \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} $$
+{{% /alert %}}
 
 {{% alert title="Remark" color="primary" %}}
 In what follows, we will be treating this equation and other like it as if this equivalence were true:
 
-$$ \text{Specificity} = P(TN|\neg D) = P(-|\neg D) $$
+$$ \text{Specificity} = P(\text{TN}|\neg D) = P(-|\neg D) $$
 
 In the context of disease as we are discussing it here, this equivalence is valid. Please note, though, that for more complicated discussions on probability, this equivalence may not hold. 
 {{% /alert %}}
 
-\begin{definition}{Sensitivity}
-Portion of test results which gave a true positive result out of the pool of all test subjects who were in fact infected (those who were infected and got an accurate positive result are TP, those who were infected but got a negative result were FN, the sum TP + FN gives us the total that was in fact infected). The probability is written as the probability of getting a positve result ($P(+)$) given ``$|$" that they are indeed infected ($P(D)$):
-\[ P(+|D) = \frac{\mbox{TP}}{\mbox{TP} + \mbox{FN}}\]
-\end{definition}
 
-\begin{definition}{Specificity}
-Portion of test results which gave a true negative result out of the pool of all test subjects who were in fact {\bf NOT} infected (those who were {\bf NOT} infected and got a positive result are FP, those who were {\bf NOT} infected and got an accurate negative result were TN, the sum TN + FP gives us the total that was in fact {\bf NOT} infected ). The probability is written as the probability of getting an negative result ($P(-)$) given ``$|$" that they are not infected ($P(\neg D)$):
-\[ P(-|\neg D) =  \frac{\mbox{TN}}{\mbox{TN} + \mbox{FP}}\]
-\end{definition}
+### Analysis of journal article
 
-\begin{definition}{Accuracy}
-Portion of all test results that were correctly identified, either as positive or negative, out of the total number of tests conducted. This includes both true positive results (TP, those who were infected and got an accurate positive result) and true negative results (TN, those who were {\bf NOT} infected and got an accurate negative result), divided by the total number of tests, which is the sum of true positives (TP), false positives (FP, those who were {\bf NOT} infected but got a positive result), true negatives (TN), and false negatives (FN, those who were infected but got a negative result).
-\[ \frac{\mbox{TP} + \mbox{TN}}{\mbox{TP} + \mbox{TN} + \mbox{FP} + \mbox{FN}}\]
-\end{definition}
+Given the above definitions, we can examine this statement of the results from our example reference (Mulchandani et al)[^Mulchandanim4262]:
 
-Given these definitions, we can examine this statement of the results from our example reference (Mulchandani et al)[^Mulchandanim4262]:
+> Using consensus readings, for known positive and negative samples sensitivity was 92.5\% (95\% confidence interval 88.8\% to 95.1\%) and specificity was 97.9\% (97.2\% to 98.4\%).
 
-\begin{quote}
-    Using consensus readings, for known positive and negative samples sensitivity was 92.5\% (95\% confidence interval 88.8\% to 95.1\%) and specificity was 97.9\% (97.2\% to 98.4\%).
-\end{quote}
 
 By consensus readings, the protocol they describe entailed having three readers evaluate each test (Mulchandani et al)[^Mulchandanim4262]:
 
-\begin{quote}
-    ``If the three independent readers disagreed on the positivity of a sample, the majority reading was taken as the “overall” or consensus test result in our primary analysis, as per the WHO protocol.''
-\end{quote}
+> If the three independent readers disagreed on the positivity of a sample, the majority reading was taken as the “overall” or consensus test result in our primary analysis, as per the WHO protocol.
 
-To determine who was true positive, the researchers used the baseline of truth for this consensus reading analysis to be ``participants who had had a positive PCR test for SARS-CoV-2'' (Mulchandani et al)[^Mulchandanim4262]. The PCR test itself lacks perfect accuracy, so this and other systematic potential errors results in a uncertainty interval. (As we keep repeating and will repeat many more times, it is complicated). Here's a quick summary of their sensitivity findings:
+To determine who was true positive, the researchers used the baseline of truth for this consensus reading analysis to be "participants who had had a positive PCR test for SARS-CoV-2'' (Mulchandani et al)[^Mulchandanim4262]. The PCR test, while more accurate than a rapid test, itself lacks perfect accuracy, so this and other systematic potential errors results in a uncertainty interval. Here's a quick summary of their sensitivity findings:
 
-\begin{itemize}
-    \item {\it Rapid Test Sensitivity} when baseline for true positives was self-reported PCR positives alone: $\approx92.5$\%
-    \item{\it Rapid Test Sensitivity} for those who had confirmed PCR positives when baseline for true positives was anitbody blood test: $\approx94.2$\%
-    \item {\it Rapid Test Sensitivity} for those who had no PCR test and hence had an unknown infection status, when baseline for true positives was antibody blood test: $\approx 84.7$\%
-\end{itemize}
+{{% alert title="Summary of findings" color="info" %}}
+- *Rapid Test Sensitivity* when baseline for true positives was self-reported PCR positives alone: ≈92.5%
+- *Rapid Test Sensitivity* for those who had confirmed PCR positives when baseline for true positives was antibody blood test: ≈94.2%
+- *Rapid Test Sensitivity* for those who had no PCR test and hence had an unknown infection status, when baseline for true positives was antibody blood test: ≈84.7%
+{{% /alert %}}
 
 So what's happening here? One explanation the researchers propose is that those individuals who had a more intense infection were more likely to experience more intense symptoms and more likely to get a PCR test. And since Rapid Tests are shown to be more accurate for those with more intense symptoms, and having more intense symptoms makes getting a PCR more likely (due to the inconvenience and discomfort of these tests as compared to Rapid Tests, those with fewer or less intense symptoms are less likely to make the effort), it then makes sense that these tests have higher sensitivity for those who got the PCR test. In the words of authors (Mulchandani et al)[^Mulchandanim4262]:
 
-\begin{quote}
-    ``This is consistent with AbC-19 being more sensitive when antibody concentrations are higher, as people with PCR confirmation tended to have more severe disease whereas only 62\% (218/354) of seropositive participants had had symptoms.''
-\end{quote}
+
+> This is consistent with AbC-19 being more sensitive when antibody concentrations are higher, as people with PCR confirmation tended to have more severe disease whereas only 62% (218/354) of seropositive participants had had symptoms.
+
+That is, of their sample group with whom they were certain had been positive due to the seropositive (anti-body blood test), only 62% had
+displayed symptoms. That leaves a large group of people who might have shown no symptoms and did not know they were exposed, and those who had no symptoms, knew they were exposed, but either didn't bother getting tested due to lack of symptoms or simply took a rapid test.
+
 
 
 ## Synthesis
