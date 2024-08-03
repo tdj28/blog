@@ -88,60 +88,82 @@ In the next section, we'll take a deeper dive into what this results summary may
 
 First, let's define some of the words used here that may be unfamiliar to those starting off in data science.
 
-\begin{center}
-\begin{tikzpicture}[
-    scale=0.7,
-    node distance=2.6cm and 0.5cm,
-    decision/.style={diamond, aspect=2, draw, text width=5em, text centered},
-    outcome/.style={rectangle, draw, text width=5em, text centered, rounded corners},
-    noninfected/.style={circle, draw, fill=gray!30, minimum size=1em},
-    arrow/.style={-{Latex[length=2mm]}, thick}
-]
+<div class="td-content" style="text-align:center">
 
-\node[decision] (test) {Test Result};
-\node[outcome, below left=of test] (pos) {Positive};
-\node[outcome, below right=of test] (neg) {Negative};
+```mermaid
+flowchart TD
+    A[Test Result] -->|+| B[Positive]
+    A -->|- | C[Negative]
+    B -->|Reality: Infected| D[True Positive]
+    B -->|Reality: Not Infected| E[False Positive]
+    C -->|Reality: Not Infected| F[True Negative]
+    C -->|Reality: Infected| G[False Negative]
+```
+</div>
 
-\node[outcome, below left=of pos] (tp) {True Positive};
-\node[outcome, below=of pos] (fp) {False Positive};
+{{% alert title="True/False Positive/Negative" color="primary" %}}
+We will define these in the context of our current discussion about epidemiology.
+Suppose a test can have two results: positive or negative. Suppose that these results map with some accuracy to a corresponding state, such as infected or not-infected. Then we can define the following terms:
 
-\node[outcome, below=of neg] (tn) {True Negative};
-\node[outcome, below right=of neg] (fn) {False Negative};
+- **True Positive (TP)**: When a test result is positive, and the reality is that the person **is** indeed infected.
 
-\draw[arrow] (test) -- node[above left] {+} (pos);
-\draw[arrow] (test) -- node[above right] {-} (neg);
-\draw[arrow] (pos) -- node[above left] {Reality: Infected} (tp);
-\draw[arrow] (pos) -- node[left] {} (fp);
-\draw[arrow] (neg) -- node[right] {} (tn);
-\draw[arrow] (neg) -- node[above right] {Reality: Infected} (fn);
+- **False Positive (FP)**: When a test result is positive, and the reality is that the person is **NOT** infected.
 
-\node[circle, below=of test] {Reality: Not Infected};
+- **True Negative (TN)**: When a test result is negative, and the reality is that the person is **NOT** infected.
 
-\end{tikzpicture}
-\end{center}
+- **False Negative (FN)**: When a test result is negative, and the reality is that the person **is** indeed infected.
+{{< /alert >}}
 
-
-
-\begin{definition}{Ture/False Positive/Negative}
-We will define these in the context of our current discussion about epidimiology.
-Suppose a test can have two results: positive or negative. Suppose that these results map with some accuracy to a corresponding state, such as infected or not-infected. Then we can define the following terms: 
-\begin{itemize}
-    \item{
-    {\bf True Positive (TP)}: When a test result is positive, and the reality is that the person is indeed infected.
-    }
-    \item{
-    {\bf False Positive (FP)}: When a test result is positive, and the reality is that the person is NOT infected.
-    }
-    \item{
-    {\bf True Negative (TN)}: When a test result is negative, and the reality is that the person is NOT infected.
-    }
-    \item{
-    {\bf False Negative (FN)}: When a test result is negative, and the reality is that the person is indeed infected.
-    }
-\end{itemize}
-\end{definition}
 
 Given that conditional probability is defined as: 
+
+<!-- <div class="td-content" style="text-align:center"> -->
+
+<div class="venn-container">
+
+  <div id="venn" class="venn-diagram"></div>
+    <div>
+        $$ A \cap B = \{x \in \mathcal{U} \mid x \in A \text{ and } x \in B\}$$
+        $$ P(B|A) = \frac{P(A \cap B)}{P(A)}$$
+    </div>
+  </div>
+
+<script src="/js/d3.v4.min.js"></script>
+<script src="/js/venn.js"></script>
+<script>
+var sets = [
+  {sets:["A"], size: 12},
+  {sets:["B"], size: 12},
+  {sets: ["A", "B"], size: 4, label: "A ∩ B"},
+];
+var chart = venn.VennDiagram()
+  .wrap(false)
+  .width(320)
+  .height(320);
+var div = d3.select("#venn").datum(sets).call(chart);
+div.selectAll("text").style("fill", "white");
+div.selectAll(".venn-circle path").style("fill-opacity", .6);
+</script>
+
+<style>
+.venn-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  align-items: center;
+}
+
+.venn-diagram {
+  flex: -0.5 0 10px;
+  max-width: 50%;
+}
+
+</style>
+
+
+Given A means that we are most certainly within the sample pool corresponding to A. A ∩ B implies that there is some overlap with the sample pools of A and B, but given A means we are restricting ourselves to looking at just the pool of A including the region of overlap. Hence the probability that we are also in the pool B given that we are in A is equal to the portion of A ∩ B that overlaps with the entire pool A.
+
+Given A means that we are most certainly within the sample pool corresponding to A. A ∩ B implies that there is some overlap with the sample pools of A and B, but given A means we are restricting ourselves to looking at just the pool of A including the region of overlap. Hence the probability that we are also in the pool B given that we are in A is equal to the portion of A ∩ B that overlaps with the entire pool A.
 
 \noindent % Ensure alignment at the left margin
 \begin{minipage}{0.5\textwidth} % Adjust the width as needed
