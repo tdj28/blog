@@ -15,6 +15,7 @@ categories:
   - physics
 toc: true
 math: true
+author: T Jones
 ---
 
 {{< math-inline >}}

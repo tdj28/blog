@@ -35,4 +35,44 @@
 
   }
 
+// .td-navbar {
+//     position: static !important; // Override the sticky positioning
+// }
+
+.navbar {
+  position: static !important; /* or relative */
+}
+  
+// body {
+//   padding-top: 4rem; // Adjust this value to match your navbar height
+// }
+
+/* Sidebar link styling */
+// #td-section-nav {
+//   li {
+//     padding: 10px 0;
+//     border-bottom: 1px solid #ddd; /* Line between links */
+//   }
+
+//   li:last-child {
+//     border-bottom: none; /* Remove line after the last link */
+//   }
+
+//   ul ul {
+//     list-style-type: none; /* Remove bullet points for nested lists */
+//     padding-left: 20px; /* Indent for nested links */
+//   }
+
+//   ul ul li {
+//     padding: 5px 0;
+//     border-bottom: 1px solid #ddd; /* Line between nested links */
+//   }
+
+//   ul ul li:last-child {
+//     border-bottom: none; /* Remove line after the last nested link */
+//   }
+// }
+
+// dark mode
+
 @import 'td/code-dark'

@@ -14,6 +14,7 @@ categories:
   - middle-dive
   - howto
 toc: true
+author: T Jones
 ---
 
 # Exploring Wikipedia page counts via additive models for seasonality decomposition

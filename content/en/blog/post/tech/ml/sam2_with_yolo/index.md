@@ -11,8 +11,9 @@ tags:
   - yolo
 categories:
   - demos
-  - ai/ml
+  - AIML
 toc: true
+author: T Jones
 ---
 
 ## Introduction

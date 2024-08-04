@@ -13,6 +13,7 @@ categories:
   - shallow-dive
   - howto
 toc: true
+author: T Jones
 ---
 
 ### Bowtie Diagram in LaTeX

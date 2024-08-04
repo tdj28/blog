@@ -1,8 +1,7 @@
 ---
 title: Blog
 menu: {main: {weight: 30}}
+summary: This blog containers shorter deep dives or quick technical notes on topics generally relating to physics or tech.
 ---
 
-This is the **blog** section. It has two categories: News and Releases.
 
-Files in these directories will be listed in reverse chronological order.

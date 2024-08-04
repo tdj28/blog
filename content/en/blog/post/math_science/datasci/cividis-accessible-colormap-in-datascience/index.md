@@ -12,6 +12,7 @@ categories:
   - middle-dive
   - howto
 toc: true
+author: T Jones
 ---
 
 Heat maps have become quite common in data science, and in science in general, and for good reason. For those who can see them, they succinctly summarize patterns in data. There are many color schemes used in the wild, with the Rainbow scheme being one of the more common ones.

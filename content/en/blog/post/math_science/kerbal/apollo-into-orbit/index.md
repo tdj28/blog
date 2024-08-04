@@ -12,6 +12,7 @@ tags:
   - space
 toc: true
 math: true
+author: T Jones
 ---
 
 ![A picture of the kerbal apollo rocket](assets/index-02bb3.png)

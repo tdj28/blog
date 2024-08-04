@@ -9,10 +9,12 @@ categories:
 tags:
   - math
   - statistics
-  - bayesian
+  - Bayesian
 toc: true
 math: true
 comments: false
+author: T Jones
+summary: A look at how Bayesian statistics can help us understand ways to make decisions (in the context of COVID-19 rapid test accuracy). This post will introduce concepts related to Bayesian statistics, but may still be interesting to individuals already familiar with the topic.
 ---
 
 In this post, we explore Bayesian probabilities through the lens of the accuracies of medical tests. We show how Bayesian priors can
@@ -194,7 +196,6 @@ Conditional probability is defined as:
 }
 </style>
 
-
 * Consider a sample of two people whom we can definitively divide into a group whose test result was _negative_ (group A) and those who were actually _positive_ (group B). The group A might be those whose rapid test claimed negative, the group B might be those whose antibody test later showed they were actually infected.
 
 * \\(A \cap B\\) is the intersection of group A with group B, that is, people who belong to both groups--people whose rapid test said negative but were actually positive, i.e. the False Negative group.
@@ -267,25 +268,21 @@ That is, of their sample group with whom they were certain had been positive due
 displayed symptoms. That leaves a large group of people who might have shown no symptoms and did not know they were exposed, and those who had no symptoms, knew they were exposed, but either didn't bother getting tested due to lack of symptoms or simply took a rapid test.
 
 
-
 ## Synthesis
 
-Let's imagine for a moment the unenviable task of being in charge of public health messaging. How might you relate the prior discussion to the general public? We can look at how some of this information was handled at the time. One example dated from August 2020 (well before the above journal article was published) was that the US FDA advised at the time that rapid test should not be given to people {\it without} symptoms \cite{NBCNews2020FDARapidTests}:
+Let's imagine for a moment the unenviable task of being in charge of public health messaging. How might you relate the prior discussion to the general public? (Please note, in reality you would want to synthesize many journal articles that replicate each other, but when there is a new virus on the scene, often one has to work with just the first to publish and decide whether or not to act on that information before replication is achieved by other labs). 
 
-\begin{quote}
-``People without symptoms of COVID-19 who haven’t been exposed to the virus shouldn’t get rapid tests to see if they are infected, according to guidance Friday from the Food and Drug Administration.
+We can look at how some of this information was handled at the time. One example dated from August 2020 (well before the above journal article was published) was that the US FDA advised at the time that rapid test should not be given to people _without_ symptoms (Mulchandani et al)[^Mulchandanim4262]:
 
-The guidance, added to the agency’s website, says that instead, highly sensitive tests, known as PCR tests, should be used for such individuals — if turnaround times are fast enough. These lab-based tests are known to be more accurate, but take hours to complete. Recent backlogs across the country have left some people waiting upward of 10 days for results.''
+>People without symptoms of COVID-19 who haven’t been exposed to the virus shouldn’t get rapid tests to see if they are infected, according to guidance Friday from the Food and Drug Administration.
 
-\end{quote}
+>The guidance, added to the agency’s website, says that instead, highly sensitive tests, known as PCR tests, should be used for such individuals — if turnaround times are fast enough. These lab-based tests are known to be more accurate, but take hours to complete. Recent backlogs across the country have left some people waiting upward of 10 days for results.
 
 At the time, rapid tests were approximately the same cost as PCR tests. From the University of Chicago News we can find a more recent recommendation from Assoc. Prof. Emily Landon \cite{UChicagoNews2020RapidCOVIDTest}:
 
-\begin{quote}
-    ``Rapid antigen tests – which you can buy in most pharmacies, big box stores and online retailers, are an excellent choice – but you may need to take multiple tests. Rapid antigen tests detect COVID-19 when people have a higher amount of virus particles in their system and are more contagious. But a negative antigen test doesn’t necessarily mean you don’t have COVID-19. Trust a positive antigen test, but be more skeptical about a negative one.''
-\end{quote}
+>Rapid antigen tests – which you can buy in most pharmacies, big box stores and online retailers, are an excellent choice – but you may need to take multiple tests. Rapid antigen tests detect COVID-19 when people have a higher amount of virus particles in their system and are more contagious. But a negative antigen test doesn’t necessarily mean you don’t have COVID-19. Trust a positive antigen test, but be more skeptical about a negative one.
 
-What are we to make of the suggestion to``trust a positive [rapid test]" given that the sensitivity has been found to be potentially as low as 84.7\%? We can argue from a public good perspective that this is an excellent example of public health messaging.
+What are we to make of the suggestion to``trust a positive [rapid test]" given that the sensitivity has been found to be potentially as low as 84.7%? We can argue from a public good perspective that this is an excellent example of public health messaging.
 
 Firstly, we have to accept that the scientific education of the general public is on a spectrum, and that the vast majority of the public lacks scientific education beyond what was provided in public schooling. This is not to sound elitist, but we have to understand our audience and what an audience may {\it hear} from their perspective. If enough of the public starts to think that because of their imperfections, the rapid tests aren't worth taking, then a powerful tool for slowing the spread of infection is reduced. For those who might have a non-Covid infection such as a cold and test positive with the rapid test, the likely worst outcome of the false positive is that they take extra precautions to not spread their infection. On the other hand, if they were actually positive and dismiss the test, they could potentially infect individuals who are vulnerable to severe disease, or at least be more likely to spread the disease than otherwise. 
 
