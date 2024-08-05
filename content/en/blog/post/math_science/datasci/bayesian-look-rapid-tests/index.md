@@ -2,7 +2,6 @@
 title: "Bayesian look at rapid tests"
 date: 2024-08-02T15:21:05-07:00
 draft: false
-summary: A look at what Bayesian statistics has to say about rapid test accuracy for COVID-19
 categories:
   - deep-dive
   - data-science
@@ -86,7 +85,9 @@ The results summary in this journal article are informative to our discussion. W
 
 In the next section, we'll take a deeper dive into what this results summary may mean.
 
-### Definitions of test results
+### Definitions
+
+#### Test results
 
 First, let's define some of the words used here that may be unfamiliar to those starting off in data science.
 
@@ -116,7 +117,7 @@ Suppose a test can have two results: positive or negative. Suppose that these re
 - **False Negative (FN)**: When a test result is negative, and the reality is that the person **is** indeed infected.
 {{< /alert >}}
 
-### Conditional Probability
+#### Conditional Probability
 
 Suppose we wish to find out the probability that someone is actually infected when they have tested negative.
 
@@ -208,7 +209,7 @@ Conditional probability is defined as:
 
 * This assumes a very large ensemble of people selected to study in either group, this doesn't work reliable for smaller sample sizes.
 
-### Sensitivity, Specificity, and Accuracy
+#### Sensitivity, Specificity, and Accuracy
 
 We now present some standard definitions:
 
@@ -282,107 +283,134 @@ At the time, rapid tests were approximately the same cost as PCR tests. From the
 
 >Rapid antigen tests – which you can buy in most pharmacies, big box stores and online retailers, are an excellent choice – but you may need to take multiple tests. Rapid antigen tests detect COVID-19 when people have a higher amount of virus particles in their system and are more contagious. But a negative antigen test doesn’t necessarily mean you don’t have COVID-19. Trust a positive antigen test, but be more skeptical about a negative one.
 
-What are we to make of the suggestion to``trust a positive [rapid test]" given that the sensitivity has been found to be potentially as low as 84.7%? We can argue from a public good perspective that this is an excellent example of public health messaging.
+### Discussion of journal article
 
-Firstly, we have to accept that the scientific education of the general public is on a spectrum, and that the vast majority of the public lacks scientific education beyond what was provided in public schooling. This is not to sound elitist, but we have to understand our audience and what an audience may {\it hear} from their perspective. If enough of the public starts to think that because of their imperfections, the rapid tests aren't worth taking, then a powerful tool for slowing the spread of infection is reduced. For those who might have a non-Covid infection such as a cold and test positive with the rapid test, the likely worst outcome of the false positive is that they take extra precautions to not spread their infection. On the other hand, if they were actually positive and dismiss the test, they could potentially infect individuals who are vulnerable to severe disease, or at least be more likely to spread the disease than otherwise. 
+We agree with the journal authors that it is advisable to "trust a positive [rapid test]", even though the sensitivity has been found to be potentially as low as 84.7% for the test in question at the time of testing. We can argue from a public good perspective that this is an excellent example of public health messaging:
 
-So instead of saying to the public: ``If you test positive with a rapid test, you have an approximately 90\% chance or so that you actually have COVID-19," a simple straight-forward message to "trust the positive result" maximizes the public good. On the other hand, although the specificity for these tests is fairly high, this is partially due to the fact that in the pool of test subjects, the vast majority of the subjects will not have COVID-19, and since the total number of False Positives will be small portion of the already relatively small number of positives, True Negatives will dominate the specificity equation; or to think about it in terms of limits:
+* Firstly, we have to accept that the scientific education of the general public is on a spectrum, and that the vast majority of the public lacks scientific education beyond what was provided in public schooling. This is not to sound elitist, but we have to understand our audience and what an audience may _hear_ from their perspective. 
+* If enough of the public starts to think that because of their imperfections, the rapid tests aren't worth taking, then a powerful tool for slowing the spread of infection is reduced. 
+* For those who might have a non-Covid infection, such as a cold, and test positive with the rapid test, the likely worst outcome of the false positive is that they take extra precautions to not spread their infection.
+* On the other hand, if they were actually positive and dismiss the test's positive results, they could potentially infect individuals who are vulnerable to severe disease, or at least be more likely to spread the disease than otherwise. 
 
-\[ \lim_{FP \rightarrow 0} \frac{TN}{TN + FP} = \frac{TN}{TN} = 1 \]
+So instead of saying to the public:  "If you test positive with a rapid test, you have an approximately 90% chance or so that you actually have COVID-19," a simple straight-forward message to "trust the positive result" likely maximizes the public good.
+
+On the other hand, although the specificity (portion of negatives that are true negatives) for these tests is fairly high, this is partially due to the fact that in the pool of test subjects, the vast majority of the subjects will not have COVID-19, and since the total number of False Positives will be small portion of the already relatively small number of positives, True Negatives will dominate the specificity equation; or to think about it in terms of limits:
+
+$$ \lim_{TN \rightarrow \infty} \frac{TN}{TN + FP} = 1 $$
 
 Things bring us to an important remark:
 
-\begin{remark}
-When evaluating the values of sensitivity and specificity, be mindful of the proportions of the pool being analyzed. For example, if a test is administered to a population of 1000 where only one single person is infected, and the test captures that positive and also gives a single false positive , then specificity becomes:
-\[ \frac{999}{998 + 1} = 1 \]
-and sensitivity becomes:
-\[ \frac{1}{1 + 0 } = 1 \]
+{{% alert title="Remark" color="primary" %}}
+When evaluating the values of sensitivity and specificity, be mindful of the proportions of the pool being analyzed. For example, if a test is administered to a population of 1000 where only one single person is infected, and the test captures that positive and also gives a single false positive, then specificity becomes:
+$$ P(-|\neg D) =  \frac{\text{TN}}{\text{TN} + \text{FP}} = \frac{999}{998 + 1} = 1$$
+That is, everyone who was negative was measured to by the test, but the sample size is so small that this measure is unlikely to be a reliable projection for a larger population.
+
+Similarly, sensitivity becomes:
+$$ P(+|D) = \frac{\text{TP}}{\text{TP} + \text{FN}} = \frac{1}{1 + 0 } = 1 $$
 However, these numbers are practically worthless because the sample set was so heavily unbalanced and there isn't enough subjects to form a clear statistical picture.
-\end{remark}
+
+Neither of these measures reflect that we had a single false positive, although accuracy would:
+
+$$ \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} = \frac{1 + 998}{1 + 998 + 1 + 0} = 0.999 $$
+
+But again, given the small sample size, these numbers are not likely to hold up upon replication with a larger sample size. 
+Statistics is about forming conclusions based on incomplete data, but there is a limit at which data is too incomplete to draw
+conclusions. How that limit is determined is beyond the scope of this post.
+{{% /alert %}}
 
 However, in the study cited, and a multitude of other studies, the results are statistically significant enough that we can, with some confidence, examine real world scenarios with the context of these findings. Let's return to our case of Person X and examine their situation given these numbers and assumptions above.
 
-\begin{example}
-What are the chances that Person X got a false negative and is indeed infected with SARS-COV-2?
+### Example
 
-\vspace{3mm}
+{{% alert title="Example" color="secondary" %}}
+
+>Suppose the Person X we started this post with, who has symptoms consistent with cold/flu/COVID-19, took a rapid test and got a negative result. What are the chances that Person X got a false negative and is indeed infected with SARS-COV-2?
+
+In the following discussion, D is short for disease, such that \\( P(D) \\) is the probability that someone who exhibits certain symptoms has the disease in question, in this case, COVID-19, vs having some other disease \\(P(D')\\), say, a flu. 
 
 Given the following assumptions and definitions:
-\begin{itemize}
-    \item Prevalence Rate of COVID-19 in the population of those currently exhibiting cold and flu symptoms (Prior Probability, $P(D)$): 35\%. This number is made up for the sake of this example and fluctuates in reality.
-    \item Sensitivity (True Positive Rate, $P(+|D)$, the probability of getting a positive result given that the person does have the disease.): 84.7\%.
-    \item Specificity (True Negative Rate, $P(-|\neg D)$, the probability of getting a negative result given that the individual does not have the disease.): 97.9\%.
-    \item $P(-|D)$: The probability of getting a false negative result given that the individual does have the disease (1-sensitivity).
-    \item $P(D|-)$ is the probability of disease given a negative test.
-\end{itemize}
+- Prevalence Rate of COVID-19 in the population of those currently exhibiting cold and flu symptoms (Prior Probability, P(D)): 35%. This means that of all the people displaying cold and flu symptoms, 35% will have COVID-19, the remainder will have some other virus. I've randomly selected the number 35% for the sake of this example, in reality this number will vary by region and current viral trends. It is also impossible to determine this number precisely since a number of individuals who are showing such symptoms do not get sick enough to enter the medical system for testing, and for many viruses people might get effected and have minimal or no symptoms (asymptomatic) and be missed entirely.
+- Sensitivity (True Positive Rate, P(+|D), the probability of getting a positive result given that the person does have the disease): 84.7%.
+- Specificity (True Negative Rate, P(-|¬D), the probability of getting a negative result given that the individual does not have the disease): 97.9%.
+- \\(P(-|D)\\): The probability of getting a false negative result given that the individual does have the disease (1-sensitivity).
+- \\(P(D|-)\\): The probability of the tested individual to have the disease given a negative test.
 
-Let's start by calculating $P(-)$, the probability of any member of the subject population receiving a negative test result from the rapid test (without knowing whether they have the disease or not). There are two probabilistic pathways for them to fall into this group. The first is that they don't have the disease and get a True Negative result from the test. The other pathway is that they have the disease but get a False Negative.
 
-\begin{center}
-\begin{tikzpicture}[>=Stealth, node distance=2cm and 3cm]
-    % Nodes
-    \node (population) {Population};
-    \node[below left of=population, xshift=-2cm] (disease) {Has Disease $(D)$};
-    \node[below right of=population, xshift=2cm] (noDisease) {No Disease $(\neg D)$};
-    \node[below of=disease] (fn) {False Negative};
-    \node[below of=noDisease] (tn) {True Negative};
-    \node[below of=population, yshift=-5.7cm] (negative) {Negative Result $(P(-))$};
+Let's start by calculating \\(P(-)\\), the probability of any member of the subject population receiving a negative test result from the rapid test (without knowing whether they have the disease or not). There are two probabilistic pathways for them to fall into this group. The first is that they don't have the disease and get a True Negative result from the test. The other pathway is that they have the disease but get a False Negative.
 
-    % Paths
-    \draw[->] (population) -- (disease) node[midway, above, sloped] {$P(D)$};
-    \draw[->] (population) -- (noDisease) node[midway, above, sloped] {$P(\neg D)$};
-    \draw[->] (disease) -- (fn) node[midway, left] {$P(-|D)$: 1-Sensitivity};
-    \draw[->] (noDisease) -- (tn) node[midway, right] {$P(-|\neg D)$: Specificity};
-    \draw[->] (fn) -- (negative) node[midway, below, sloped] {$(P(D) \cdot P(-|D))$};
-    \draw[->] (tn) -- (negative) node[midway, below, sloped] {$(P(\neg D) \cdot P(-|\neg D))$};
+<div class="td-content" style="text-align:center">
 
-\end{tikzpicture}
-\end{center}
+```mermaid
+graph TD
+    Population --> |"P(D)"| D["Has Disease (D)"]
+    Population --> |"P(¬D)"| ND["No Disease (¬D)"]
+    D --> |"P(-|D): 1-Sensitivity"| FN["False Negative"]
+    ND --> |"P(-|¬D): Specificity"| TN["True Negative"]
+    FN --> |"P(D) · P(-|D)"| N["Negative Result P(-)"]
+    TN --> |"P(¬D) · P(-|¬D)"| N
+```
+</div>
+
+The probability of getting a negative result is thus
+the sum of the probability of having the disease but getting a false negative given that one has the disease, 
+\\(P(D) \cdot P(-|D)\\), plus the probability of not having the disease
+and getting a true negative result given that one does not have the disease, \\(P(\neg D) · P(-|\neg D)\\).
 
 This gives us the equation
 
-\begin{eqnarray*}
+```math
+\begin{aligned}
 P(-) &=& P(\neg D) \cdot P(-|\neg D) + P(D) \cdot P(-|D) \\
- &=& \left(1 - P(D)\right) \cdot \left(P(-|\neg D)\right) + P(D) \cdot \left(1 - P(+|D)\right)\\
+ &=& \left(1 - P(D)\right) \cdot P(-|\neg D) + P(D) \cdot \left(1 - P(+|D)\right)\\
 &=& (1-0.35)(0.979) + (0.35)(1-0.847) \\
 &=& 0.6899
-\end{eqnarray*}
+\end{aligned}
+```
 
-So for our Person X, we would like to know: {\it given a negative test}, what is the probability that they actually {\it do} have COVID-19? That is, we would like to estimate $P(D|-)$. By the definition of conditional probabilities (Eq. \ref{eqn:conditional-probabilities}), 
+So for our Person X, we would like to know: __given a negative test__, what is the probability that they actually __do__ have COVID-19? That is, we would like to estimate \\(P(D|-)\\). By the definition of [conditional probabilities](#conditional-probability):
 
-\[ P(D|-) = \frac{P(D) \cap P(-)}{P(-)} \]
+<!-- $$ P(D|-) = \frac{P(D \cap -)}{P(-)} = \frac{P(D)\cdot P(-|D)}{P(-)}$$ -->
+<!-- 
+As we calculated \\(P(-)\\) prior, we saw that one term contained \\(P(\neg D)\\) and hence that term is excluded from the intersection of \\(P(D)\\), giving us -->
 
-As we calculated $P(-)$ prior, we saw that one term contained $P(\neg D)$ and hence that term is excluded from the intersection of $P(D)$, giving us
-
-\begin{eqnarray*}
-P(D|-) &=& \frac{ P(D) \cdot P(-|D) }{P(-)} \\
-P(D|-) &=& \frac{ P(D) \cdot \left( 1 - P(+|D)\right) }{P(-)} \\
+```math
+\begin{aligned}
+P(D|-) &=& \frac{P(D \cap -)}{P(-)} \\
+&=& \frac{P(D)\cdot P(-|D)}{P(-)} \\
+&=& \frac{ P(D) \cdot \left( 1 - P(+|D)\right) }{P(-)} \\
 &=& \frac{0.35 \cdot (1-0.847)}{0.6899}\\
 &=& 0.0776
-\end{eqnarray*}
+\end{aligned}
+```
 
-\end{example}
+That is, in this given scenario, assuming the numbers above, the probability that Person X has the disease despite the
+fact that their rapid test came back negative is around 7.76%. __Important: This number is particular to the scenario we imagined above, but is in no way representative for every case. For example, we picked a random percentage for \\(P(D)\\). Please do not use these numbers to make real world decisions or arguments. This was for demonstrative educational purposes only.__
 
-This is known as Bayes' Theorem, which is generically written:
+{{% /alert %}}
 
-\begin{equation}
-P(A | B)=\frac{P(B | A) \cdot P(A)}{P(B)} \label{eqn:bayes_theorem}
-\end{equation}
+## Bayes' Theorem
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.95\linewidth]{parts/part001/chapter001/sankey_001.png}
-    \caption{This type of diagram is called a Sankey diagram. Here we exaggerate the percentage of false positives and negatives for visual purposes. As can be seen, those who are infected but obtain a negative test and then do not self-isolate join the uninfected in non-isolation allowing the virus to spread and underlining the importance of accurate tests.}
-    \label{fig:enter-label}
-\end{figure}
+The above equation second line in the above question is known as Bayes' Theorem, which is generically written:
+
+$$P(A | B)=\frac{P(A) \cdot P(B | A) }{P(B)}$$
+
+## Discussion
+
+We can visualize the situation with a Sankey diagram. Here we exaggerate the percentage of false positives and negatives for visual purposes. As can be seen, those who are infected but obtain a negative test and then do not self-isolate join the uninfected in non-isolation allowing the virus to spread and underlining the importance of accurate tests. However, the test results are accurate enough to catch the majority 
+of people who are genuinely infected, and hence, reduces the rate of spread.
+
+![This type of diagram is called a Sankey diagram. Here we exaggerate the percentage of false positives and negatives for visual purposes. As can be seen, those who are infected but obtain a negative test and then do not self-isolate join the uninfected in non-isolation allowing the virus to spread and underlining the importance of accurate tests.](image.png)
+
+* This Bayesian analysis demonstrates that, under the given assumptions, an individual with symptoms who tests negative with a rapid COVID-19 test sometimes has a low but non-trivial probability of being actually positive for the virus.
+
+* However, diseases aren't just the story of an individual, they are fully stories of an ensemble of individuals.
+
+* So instead of saying that in this imagined scenario, Person X has a 7.76% chance of actually having COVID-19 despite the negative rapid test, we would more accurately have summarized it as follows: 
+  * _Given these (guessed) assumptions, including the test accuracy rates and prevalence of COVID-19 among those exhibiting flu or cold like symptoms, on average 7 to 8 out of every 100 people chosen from the wider population who have symptoms of a respiratory illness but test negative with this rapid test will in fact be positive and potentially capable of spreading the disease._ (__Again, please note that these numbers are not to be used in the real world, this is meant to demonstrate a first pass at calculating these probabilities.__)
 
 
-This Bayesian analysis demonstrates that, under the given assumptions, an individual with symptoms who tests negative with a rapid COVID-19 test has a low but non-trivial probability of being actually positive for the virus. In the case of Person X, they might have an approximately 7.76\% chance of actually having COVID-19 despite testing negative with the rapid test.
+* Hence we see the public health messaging challenges for scenarios such as this, where we need to underline the imperfections of the test in order to instill some caution in the public regarding negative tests results, while maintaining public trust in the positive results so that the population continues to take them seriously and self-isolate. 
+* Ultimately, the work of public health comes down to __minimizing__ the total number of deaths balanced against the negative impacts of public health mitigation efforts. It is a tough job, but one that benefits from public communications that are straight-forward to understand by the general population.
+* Understanding how these probabilities are calculated can help individuals spot misinformation.
 
-
-But diseases aren't just the story of an individual, they are fully stories of an ensemble of individuals. So how we might interpret this finding is that: {\it Given these assumptions, including the test accuracy rates and prevalence of COVID-19 among those exhibiting flu or cold like symptoms, 7 to 8 out of every 100 people who have symptoms of a respiratory illness but test negative with this rapid test will in fact be positive and potentially capable of spreading the disease.}
-
-Hence we see the public health messaging challenges for scenarios such as this, where we need to underline the imperfections of the test in order to instill some caution in the public regarding negative tests results, while maintaining public trust in the positive results so that the population continues to take them seriously and self-isolate. Ultimately, the job comes down to {\it minimizing} the total number of deaths, and unfortunately in the real world that often implies compromises that will result in some deaths that might otherwise be preventable with other means of prevention. You, as a Data Scientist, if hired to work on a problem of public health and are charged with providing public health experts guidance informed by expert modeling and research, need to take great care in advising decision makers about what the data {\it actually} tells us.
-
-
-
+It is a tough job, with no easy answers, and as is typical in statistics, there is never any perfect certainty. Accepting that this is true for almost every decision that must be made in human societies doesn't mean we just give up and let what happens happen. It means we do our very best with the limited information we have, and constantly refine our approach as more information is obtained.
