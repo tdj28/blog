@@ -370,7 +370,7 @@ $$ H(P) = -\sum_{i} p_i \log(p_i) $$
 
 where:
 - \\( p_i \\) is the probability of the \\( i \\)-th outcome.
-- The logarithm can via any base, but natural logarithms (base \\( e \\) is my preference due to a physics background).
+- The logarithm can use any base, but natural logarithms (base \\( e \\)) is my preference due to a physics background.
 
 #### Steps to Roughly Calculate Entropy
 
