@@ -107,7 +107,7 @@ graph LR
     E --> A
 ```
 
-## The resulting bigram dictionary 
+## #The resulting bigram dictionary 
 
 Let's take a look at the bigram dictionary to see why we got stuck in a loop with Lil' LLM v0.1.
 We recreate the dictionary here in part (missing items are count 1 and do not end up in the cycle
