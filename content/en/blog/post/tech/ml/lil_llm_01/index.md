@@ -47,7 +47,7 @@ and varying the seed can help vary the output, as we will see with Lil' LLM.
 Let's start with the most simple program we could. 
 
 * We provide it text to train on, which is pretty nonsensical but will demonstrate the problem with having such a simple model.
-* We tokenize by simply splitting the text by space.
+* We tokenize by simply splitting the text by word, where for example "alice is" results in ["alice", "is"] and "alice, said" results in ["alice,", "said"], and "alice" and "alice," are not considered the same token.
 * We will use bigrams here, that is, we train only on pairs of words.
     * We create a dictionary called `bigrams` whose key is the word pairs and whose value is the count.
 * Our seed is the word "hello", which is found multiple times in the training text.
