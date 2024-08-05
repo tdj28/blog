@@ -19,10 +19,6 @@ summary: A look at how Bayesian statistics can help us understand ways to make d
 In this post, we explore Bayesian probabilities through the lens of the accuracies of medical tests. We show how Bayesian priors can
 help refine our projections, and how to do this accurately.
 
-<!-- {{% blocks/lead color="dark" %}}
-This post is about _math_ not _medicine_.
-{{% /blocks/lead %}} -->
-
 {{% alert title="Warning" color="warning" %}}
 This post is for a mathematical discussion, not a medical discussion. The intent is to inform the reader about how
 probability works in relation to tests that can have false positives/negatives. The author has no medical training nor
@@ -338,6 +334,7 @@ Given the following assumptions and definitions:
 
 Let's start by calculating \\(P(-)\\), the probability of any member of the subject population receiving a negative test result from the rapid test (without knowing whether they have the disease or not). There are two probabilistic pathways for them to fall into this group. The first is that they don't have the disease and get a True Negative result from the test. The other pathway is that they have the disease but get a False Negative.
 
+
 <div class="td-content" style="text-align:center">
 
 ```mermaid
@@ -399,7 +396,11 @@ $$P(A | B)=\frac{P(A) \cdot P(B | A) }{P(B)}$$
 We can visualize the situation with a Sankey diagram. Here we exaggerate the percentage of false positives and negatives for visual purposes. As can be seen, those who are infected but obtain a negative test and then do not self-isolate join the uninfected in non-isolation allowing the virus to spread and underlining the importance of accurate tests. However, the test results are accurate enough to catch the majority 
 of people who are genuinely infected, and hence, reduces the rate of spread.
 
+<div class="td-content" style="text-align:center">
+
 ![This type of diagram is called a Sankey diagram. Here we exaggerate the percentage of false positives and negatives for visual purposes. As can be seen, those who are infected but obtain a negative test and then do not self-isolate join the uninfected in non-isolation allowing the virus to spread and underlining the importance of accurate tests.](image.png)
+
+</div>
 
 * This Bayesian analysis demonstrates that, under the given assumptions, an individual with symptoms who tests negative with a rapid COVID-19 test sometimes has a low but non-trivial probability of being actually positive for the virus.
 

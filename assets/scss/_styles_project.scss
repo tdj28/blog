@@ -35,13 +35,77 @@
 
   }
 
-// .td-navbar {
-//     position: static !important; // Override the sticky positioning
-// }
-
-.navbar {
-  position: static !important; /* or relative */
+/* Block-level equations */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden; /* Prevent vertical scrolling */
+  white-space: nowrap;
+  display: block;
 }
+
+.katex-display > .katex {
+  display: inline-block;
+}
+
+/* Inline equations */
+.katex {
+  white-space: nowrap;
+}
+
+.post-content {
+  overflow-x: auto;
+}
+
+.post-content .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden; /* Prevent vertical scrolling */
+}
+
+/* General navbar styles */
+.td-navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1030;
+}
+
+.td-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.td-navbar-nav-scroll {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 991.98px) {
+  .td-navbar-nav-scroll {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .td-light-dark-menu .dropdown-menu {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+}
+
+
+
+.td-navbar {
+    position: static !important; // Override the sticky positioning
+}
+
+// .navbar {
+//   position: static !important; /* or relative */
+// }
   
 // body {
 //   padding-top: 4rem; // Adjust this value to match your navbar height
