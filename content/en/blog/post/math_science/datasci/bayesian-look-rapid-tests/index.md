@@ -209,7 +209,7 @@ Conditional probability is defined as:
 
 We now present some standard definitions:
 
-{{% alert title="Sensitivity" color="info" %}}
+{{% alert title="Sensitivity" color="success" %}}
 
 Portion of test results which gave a true positive result out of the pool of all test subjects who were in fact infected (those who were infected and got an accurate positive result are TP, those who were infected but got a negative result were FN, the sum TP + FN gives us the total that was in fact infected). The probability is written as the probability of getting a positive result \\(P(+)\\) given "|" that they are indeed infected \\(P(D)\\):
 
@@ -217,13 +217,13 @@ $$ P(+|D) = \frac{\text{TP}}{\text{TP} + \text{FN}} $$
 
 {{% /alert %}}
 
-{{% alert title="Specificity" color="info" %}}
+{{% alert title="Specificity" color="success" %}}
 Portion of test results which gave a true negative result out of the pool of all test subjects who were in fact __NOT__ infected (those who were __NOT__ infected and got a positive result are FP, those who were __NOT__ infected and got an accurate negative result were TN, the sum TN + FP gives us the total that was in fact __NOT__ infected). The probability is written as the probability of getting an negative result \\(P(-)\\) given "|" that they are not infected \\(P(\neg D)\\):
 
 $$ P(-|\neg D) =  \frac{\text{TN}}{\text{TN} + \text{FP}} $$
 {{% /alert %}}
 
-{{% alert title="Accuracy" color="info" %}}
+{{% alert title="Accuracy" color="success" %}}
 Portion of all test results that were correctly identified, either as positive or negative, out of the total number of tests conducted. This includes both true positive results (TP, those who were infected and got an accurate positive result) and true negative results (TN, those who were __NOT__ infected and got an accurate negative result), divided by the total number of tests, which is the sum of true positives (TP), false positives (FP, those who were __NOT__ infected but got a positive result), true negatives (TN), and false negatives (FN, those who were infected but got a negative result).
 $$ \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} $$
 {{% /alert %}}
@@ -250,7 +250,7 @@ By consensus readings, the protocol they describe entailed having three readers 
 
 To determine who was true positive, the researchers used the baseline of truth for this consensus reading analysis to be "participants who had had a positive PCR test for SARS-CoV-2'' (Mulchandani et al)[^Mulchandanim4262]. The PCR test, while more accurate than a rapid test, itself lacks perfect accuracy, so this and other systematic potential errors results in a uncertainty interval. Here's a quick summary of their sensitivity findings:
 
-{{% alert title="Summary of findings" color="info" %}}
+{{% alert title="Summary of findings" color="success" %}}
 - *Rapid Test Sensitivity* when baseline for true positives was self-reported PCR positives alone: ≈92.5%
 - *Rapid Test Sensitivity* for those who had confirmed PCR positives when baseline for true positives was antibody blood test: ≈94.2%
 - *Rapid Test Sensitivity* for those who had no PCR test and hence had an unknown infection status, when baseline for true positives was antibody blood test: ≈84.7%
