@@ -207,7 +207,7 @@ for temp in temperature_values:
 print(all_tables)
 ```
 
-This is a simplified version of the code for v0.2 that can be found on [github](https://github.com/tdj28/lil-llm/releases/tag/v0.2).
+This is a simplified version of the code for v0.2 that can be found on [github](https://github.com/tdj28/lil-llm/tree/v0.2).
 
 Let's break these changes down:
 
