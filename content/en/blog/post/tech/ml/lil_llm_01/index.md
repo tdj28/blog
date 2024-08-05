@@ -140,8 +140,6 @@ that has multiple mappings (e.g. `bob → because`, `bob → are`) so Lil' LLM s
 the very first mapping in the list since they are all otherwise equal (that is, in
 the training text, the first example of the word bob followed by another word).
 
-* Note how "`bob,`" is _distinct_ from "`bob`" in this scheme.
-
 * This process will always be hopelessly caught in loops given the finitude of human created texts.
 
 ## Lil' LLM v 0.2
@@ -321,6 +319,10 @@ entropy.
 
 * If we use entropy as a measure of the  unpredictability of the distribution, we know that maximum entropy corresponds to a uniform distribution where each choice is as likely as any other choice. So we should expect to see entropy reach an asymptotic climb towards
 the theoretical maximum for the training text we use.
+
+* Because probabilities are being raised by \\( 1/T \\), as T gets larger and larger, \\( 1/T \rightarrow 0 \\), and so 
+the probabilities for each word in a training text of N words \\( \rightarrow 1/N \\). The larger the text, the closer it can get
+to uniform distribution as both \\( N \rightarrow \infty \\) and \\(T \rightarrow \infty \\).
 
 ### Larger training text
 
