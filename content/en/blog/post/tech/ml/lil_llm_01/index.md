@@ -37,7 +37,7 @@ An __n-gram__ is a contiguous sequence of n items from a given text input. The t
 In the context of natural language processing, a __token__ is a single, atomic unit of text where the atomicity differs depends on the choice of those training the model. 
 {{% /alert %}}
 
-{{% alert title="token" color="success" %}}
+{{% alert title="seed" color="success" %}}
 A __seed__ refers to the initial input given to the model to generate text. The seed is provided to the model in order to initiate its output,
 and varying the seed can help vary the output, as we will see with Lil' LLM.
 {{% /alert %}}
@@ -219,7 +219,7 @@ Let's break these changes down:
 
 * As before, we are constructing probabilities based on how frequently
 one word is followed by another, but in this case, we __raise__ the 
-probability by the temperature T: \\(p_i^{\prime} = p_i^{1/T} \\)
+probability by the inverse of the temperature T: \\(p_i^{\prime} = p_i^{1/T} \\)
 
 ```python
    prob_sum = sum(adjusted_probs)
@@ -397,3 +397,5 @@ def calculate_entropy(texts):
     word_probs = np.array(list(word_counts.values())) / sum(word_counts.values())
     return entropy(word_probs)
 ```
+
+The `scipy.stats` entropy function uses the natural log (base `e`).
