@@ -140,7 +140,7 @@ that has multiple mappings (e.g. `bob → because`, `bob → are`) so Lil' LLM s
 the very first mapping in the list since they are all otherwise equal (that is, in
 the training text, the first example of the word bob followed by another word).
 
-* Note how "`bob,`" is _distinct_ from "`bob`" in this schemed.
+* Note how "`bob,`" is _distinct_ from "`bob`" in this scheme.
 
 * This process will always be hopelessly caught in loops given the finitude of human created texts.
 
