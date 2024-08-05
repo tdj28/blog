@@ -34,7 +34,7 @@ An __n-gram__ is a contiguous sequence of n items from a given text input. The t
 {{% /alert %}}
 
 {{% alert title="token" color="success" %}}
-In the context of natural language processing, a __token__ is a single, atomic unit of text where the atomicity differs depends on the choice of those training the model. 
+In the context of natural language processing, a __token__ is a single, atomic unit of text where the atomicity is chosen by those training the model. 
 {{% /alert %}}
 
 {{% alert title="seed" color="success" %}}
