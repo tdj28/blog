@@ -20,6 +20,12 @@ In order to conduct quantum mechanics oriented experiments or operate ion-trap b
 we have to have a way to manipulate small particles. For example, if we want to see the 
 behavior of an ion when we hit it with lasers of certain frequency, we will need to keep it confined in a small area. How can we do so?
 
+To get _closer_ to understanding that answer takes us through some rougher than usual (for a blog post) mathematical woods, but anyone spending enough time with mathematics knows that difficult journeys are often rewarded with beauty. Look at this image below, one we will earn the right to admire not just aesthetically,
+but also mathematically. This image answers the question about how we can keep ion trapped, and this post will outline the mathematical reason why this answer is found in something so unexpectedly interesting.
+
+{{< figure src="peak.png" width="100%">}}
+
+
 ## What is the Quadrupole Ion Trap (AKA the RF Paul ion trap)?
 
 One way to confine an atomic ion is to provide a force of the form \\(F = -kr\\). 
@@ -559,7 +565,7 @@ Our code finds all such iso-\\( \mu \\) by looping through the \\(a\\) and \\(q\
 
 For the quadrupole field, the rf linear Paul trap, we have the following stability regime: The original stability diagram is simply reflected about the x-axis as \\(a \rightarrow -a\\) between the two (note, we also have to multiple by 2 the q and a values for $z$ due to the multiple of 2 on \\(z\\) in our earlier derivation).
 
-{{< figure src="mathieu_stability_diagram_rf.png" caption="Stability diagram for linear rf Paul trap; stable regions are those in which the two stability diagrams intersect.">}} 
+{{< figure src="mathieu_stability_diagram_rf_gpu.png" caption="Stability diagram for linear rf Paul trap; stable regions are those in which the two stability diagrams intersect.">}} 
 
 
 For the chamber rf Paul trap, we recall that for the z direction we must allow for \\( (a, q)  \rightarrow (-a, q) \\), and then map these back to the 
