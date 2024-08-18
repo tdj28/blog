@@ -101,6 +101,14 @@
     position: static !important; // Override the sticky positioning
 }
 
+.figure-container {
+  position: relative;
+  max-width: 80%;
+  font-size: 0.8em;  /* Adjust this value to make the caption as small as you want */
+
+}
+
+
 // .navbar {
 //   position: static !important; /* or relative */
 // }
