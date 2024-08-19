@@ -13,9 +13,15 @@ tags:
 summary: Dealing with low fps video can make re-identification of individuals between frames more difficult as the potential targets tend to "jump" between frames in a way that throws off trackers. Here, I show how applying a Gaussian jitter or wiggle to artificially increase the fps of the video can improve tracking.
 ---
 
-In the realm of computer vision, dealing with low-frame-rate (FPS) video presents unique challenges, especially when attempting to maintain consistent object tracking. One approach involves applying small, random shifts to each frame in order to artificially generate higher FPS video. 
+In the realm of computer vision, dealing with low-frame-rate (FPS) video presents unique challenges, especially when attempting to maintain consistent object tracking. 
 
-Here I take a look at how introducing this wiggle can improve detection identification/tracking in low FPS video (detections via YOLO, tracking via the `supervision` implementation of ByteTrack). ByteTrack is an efficient tracking algorithm designed for multi-object tracking (MOT). It builds on top of the popular SORT (Simple Online and Realtime Tracking) and DeepSORT algorithms.
+Here I try an approach that involves applying small, random shifts to each frame in order to artificially generate higher FPS video. 
+Let's look at how introducing this wiggle can improve detection identification/tracking in low FPS video, where:
+
+* detections of people are done via YOLO
+    * YOLO is a widely used family of models for object detection.
+* object tracking via the `supervision` implementation of ByteTrack
+    * ByteTrack is an efficient tracking algorithm designed for multi-object tracking (MOT). It builds on top of the popular SORT (Simple Online and Realtime Tracking) and DeepSORT algorithms.
 
 ### Method
 
