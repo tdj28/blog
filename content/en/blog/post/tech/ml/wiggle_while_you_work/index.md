@@ -129,11 +129,12 @@ be solved by binning over N frames and taking the majority detections.
 
 Even though this method is substantially less intensive to run than any attempts to morph between frames, it will likely be less accurate than those methods. However, this method showed substantial improvement in tracking over the original low frame-rate video. Ways this could be refined include:
 
-* Trying to find the optimal jitter magnitude
+* Explore how many artificial frames we need to create for this trick to work effectively
+* Trying to find the optimal jitter magnitude and frequency, minimizing the number of artificial frames we need to create
+* Reducing the jitter to just regions that cover bounding boxes of detection (saving CPU/GPU cycles)
 * Doing an ensemble over the artificial extra frames and go with the id that was most frequently attached to the detection
 * Combining ByteTrack with some further augmentations such as assistance with dropped IDs in some frames by forcing it to assume a most likely id based on the presence of that id in prior and future parts of the video in the same vicinity.
-* More sophisticated solutions such as improving the models
-* ???
+* More sophisticated solutions such as...?
 
 ## Code samples
 
