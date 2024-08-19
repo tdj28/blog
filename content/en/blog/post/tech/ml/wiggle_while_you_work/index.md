@@ -13,10 +13,24 @@ tags:
 summary: Dealing with low fps video can make re-identification of individuals between frames more difficult as the potential targets tend to "jump" between frames in a way that throws off trackers. Here, I show how applying a Gaussian jitter or wiggle to artificially increase the fps of the video can improve tracking.
 ---
 
-In the realm of computer vision, dealing with low-frame-rate (FPS) video presents unique challenges, especially when attempting to maintain consistent object tracking. 
+In the realm of computer vision, dealing with low FPS (frames per second) video presents unique challenges, especially when attempting to maintain consistent object tracking. 
 
-Here I try an approach that involves applying small, random shifts to each frame in order to artificially generate higher FPS video. 
-Let's look at how introducing this wiggle can improve detection identification/tracking in low FPS video, where:
+Here I try an approach that involves cloning multiple copies of each low FPS video's frames and applying small, 
+random positional shifts to each clone in order to artificially generate higher FPS video. By adding these minor wiggles, the tracker
+gains more samples of an identified individual--each with a slight perturbation in the location of the individual relative to the original source frame. This seems (not verified yet) to provide the lost_track_buffer with more frames allowing the model to build better confidence in its identifications. The precise mechanisms behind why this jitter improves tracking are beyond the scope of this brief demo, but well worth investigating.
+
+The key variables we control when setting up the ByteTrack instance are:
+
+
+| Name                        | Type   | Description                                                                                       | Default |
+|-----------------------------|--------|---------------------------------------------------------------------------------------------------|---------|
+| track_activation_threshold  | float  | Confidence threshold for track activation. Higher values improve stability but may miss detections.| 0.25    |
+| lost_track_buffer            | int    | Frames to buffer when a track is lost. Higher values reduce the chance of track fragmentation.     | 30      |
+| minimum_matching_threshold  | float  | Threshold for matching tracks with detections. Higher values reduce false positives but may cause fragmentation. | 0.8     |
+| frame_rate                  | int    | The frame rate of the video.                                                                       | 30      |
+| minimum_consecutive_frames  | int    | Frames needed to consider a track valid. Higher values prevent false tracks but may miss short tracks.| 1       |
+
+These variables can be set with some reasonable guesses, but future work might also run scans across different values of these variables to find the optimal ranges for their use cases. To that end, the reader may find just as much if not more value in fine tuning the variables for ByteTrack than introducing jitter. This demo only shows one example of how jitter improved tracking.
 
 * detections of people are done via YOLO
     * YOLO is a widely used family of models for object detection.
