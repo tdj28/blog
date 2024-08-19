@@ -60,7 +60,7 @@ We can downscale that to 1fps with this ffmpeg command:
 ffmpeg -i input_video.mp4 -vf "fps=1" -c:v libx264 -crf 23 -preset veryslow -an output_1fps.mp4
 ```
 
-resulting in this video low frame rate video:
+resulting in this much lower frame rate video:
 
 {{< youtube y6ZGks7tYoo >}}
 
@@ -128,7 +128,7 @@ def increase_fps(input_video_filename, target_fps):
     print(f"Processed video saved as {output_filename}")
 ```
 
-this produces the jittered equivalent of the original 1fps video:
+This produces the jittered equivalent of the original 1fps video:
 
 {{< youtube EE3uRB8FVzA >}}
 
@@ -138,22 +138,24 @@ Next we run the same detection against the jittered video, finding substantially
 
 {{< youtube sBnNw92_AOo >}}
 
-We can see this graphed here, where the YOLO detections and the ByteTrack detections line up far better, albeit not perfectly:
+We can see this graphed here, where the YOLO detections and the ByteTrack detections line up far better, albeit not perfectly. The in/out metrics aren't perfect either, though better than the original 1fps; however, fine tuning these detections was not the focus of the demo.
+The false detections for the in/out metric seem to coincide with dropouts in the ByteTrack detections, something that could likely be improved greatly by binning over detections rather than letting every single frame dictate a bump in the in/out metrics.
 
 ![jitter results show YOLO detections and the ByteTrack detections line up far better](image-2.png)
 
-There is an inverse spiky behavior when the ByteTrack detections drop out in one or two of the 23 synthetic frames; this can
-be solved by binning over N frames and taking the majority detections.
+There is an inverse spiky behavior when the ByteTrack detections drop out in a small percentage of the synthetic frames; this could possibly be solved by binning over N frames and taking the majority detection as the bin's detection.
 
 ## Next steps
 
-Even though this method is substantially less intensive to run than any attempts to morph between frames, it will likely be less accurate than those methods. However, this method showed substantial improvement in tracking over the original low frame-rate video. Ways this could be refined include:
+Even though this method is substantially less intensive to run than any attempts to morph between frames, and it will likely be less accurate than those methods, this trick demonstrates in this example a substantial improvement in tracking over the original low frame-rate video. Ways this could be refined include:
 
-* Explore how many artificial frames we need to create for this trick to work effectively
+* Could this improve detections in some higher fps video as well?
+* Explore how many artificial frames we need to create for this trick to work effectively; the less the better to preserve cpu/gpu cycles
 * Trying to find the optimal jitter magnitude and frequency, minimizing the number of artificial frames we need to create
 * Reducing the jitter to just regions that cover bounding boxes of detection (saving CPU/GPU cycles)
-* Doing an ensemble over the artificial extra frames and go with the id that was most frequently attached to the detection
-* Combining ByteTrack with some further augmentations such as assistance with dropped IDs in some frames by forcing it to assume a most likely id based on the presence of that id in prior and future parts of the video in the same vicinity.
+* Doing an bin-ensemble analysis over the artificial extra frame identification results, instead of letting every single frame's results have a say (which leads to more false positive/negative results)
+* Combining ByteTrack with some further augmentations, or making improvements to ByteTrack
+* Exploring other models
 * More sophisticated solutions such as...?
 
 ## Code samples
