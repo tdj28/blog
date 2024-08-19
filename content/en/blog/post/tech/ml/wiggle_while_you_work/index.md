@@ -15,7 +15,7 @@ summary: Dealing with low fps video can make re-identification of individuals be
 
 In the realm of computer vision, dealing with low-frame-rate (FPS) video presents unique challenges, especially when attempting to maintain consistent object tracking. One approach involves applying small, random shifts to each frame in order to artificially generate higher FPS video. 
 
-Here I take a look at how introducing this wiggle can improve detection identification/tracking in low FPS video (detections via YOLO, tracking via the `supervision` implementation of ByteTrack). ByteTrack is an efficient tracking algorithm designed for multi-object tracking (MOT). It builds on top of the popular SORT (Simple Online and Realtime Tracking) and DeepSORT algorithms
+Here I take a look at how introducing this wiggle can improve detection identification/tracking in low FPS video (detections via YOLO, tracking via the `supervision` implementation of ByteTrack). ByteTrack is an efficient tracking algorithm designed for multi-object tracking (MOT). It builds on top of the popular SORT (Simple Online and Realtime Tracking) and DeepSORT algorithms.
 
 ### Method
 
