@@ -21,7 +21,7 @@ Here I take a look at how introducing this wiggle can improve detection identifi
 
 ### Getting low FPS demo video
 
-First, generate an image using a GenAI tooling. Here is an example of an image of an apartment courtyard with a few people walking using DALLE:
+First, generate an image using a GenAI tooling. Here is an example of an image of an apartment courtyard with a few people walking, created using DALLE:
 
 ![GenAI generated image (via DALLE)](image.png)
 
