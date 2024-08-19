@@ -13,8 +13,7 @@ tags:
 summary: Dealing with low fps video can make re-identification of individuals between frames more difficult as the potential targets tend to "jump" between frames in a way that throws off trackers. Here, I show how applying a Gaussian jitter or wiggle to artificially increase the fps of the video can improve tracking.
 ---
 
-
-In the realm of computer vision, dealing with low-frame-rate (FPS) video presents unique challenges, especially when attempting to maintain consistent object tracking. One novel approach involves applying small, random shifts to each frame artificially generate higher FPS video. 
+In the realm of computer vision, dealing with low-frame-rate (FPS) video presents unique challenges, especially when attempting to maintain consistent object tracking. One approach involves applying small, random shifts to each frame artificially generate higher FPS video. 
 
 Here I take a look at the `supervision` implementation of ByteTrack. ByteTrack is an efficient tracking algorithm designed for multi-object tracking (MOT). It builds on top of the popular SORT (Simple Online and Realtime Tracking) and DeepSORT algorithms
 
@@ -26,13 +25,15 @@ First, generate an image using a GenAI tooling. Here is an example of an image o
 
 ![GenAI generated image (via DALLE)](image.png)
 
-The video isn't perfect, with weird artifacts such as two people forming from one. However, it suffices to demonstrate the power of
-jittering.
+
 
 We next create a synthetic video via RunwayML using this image as the starting frame. As of the writing of this post, Alpha 3 turbo generates ten seconds of video at 24 fps:
 
 
 {{< youtube S5doxU8cw4Y >}}
+
+The video isn't perfect, with weird artifacts such as two people forming from one. However, it suffices to demonstrate the power of
+jittering.
 
 We can downscale that to 1fps with this ffmpeg command:
 
