@@ -1,46 +1,33 @@
 baseURL: https://www.tdj28.org
 title: "TDJ28"
 
-# cSpell:ignore goldmark github hugo readingtime docsy subdir lastmod pygments linenos catmullrom norsk gu
-
 # Language settings
 contentDir: content/en
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
-# Useful when translating.
 enableMissingTranslationPlaceholders: true
 
 enableRobotsTXT: true
-
-# Will give values to .Lastmod etc.
 enableGitInfo: true
 
-# Comment out to enable taxonomies in Docsy
-disableKinds: [taxonomy, taxonomyTerm]
-
-# You can add your own taxonomies
+# Taxonomies
 taxonomies:
   tag: tags
   category: categories
 
-# Highlighting config
-pygmentsCodeFences: true
-pygmentsUseClasses: false
-# Use the new Chroma Go highlighter in Hugo.
-pygmentsUseClassic: false
-# pygmentsOptions: "linenos=table"
-# See https://help.farbox.com/pygments.html
-pygmentsStyle: tango
-
-# Configure how URLs look like per section.
+# Configure how URLs look like per section
 permalinks:
   blog: /:section/:year/:month/:day/:slug/
 
-# Image processing configuration.
+# Image processing configuration
 imaging:
   resampleFilter: CatmullRom
   quality: 75
   anchor: smart
+
+# Pagination
+pagination:
+  pagerSize: 10
 
 # Language configuration
 languages:
@@ -48,9 +35,9 @@ languages:
     languageName: English
     title: TDJ28
     params:
-      description: Technical notes
+      description: Technical notes on data science, physics, math, and engineering
 
-
+# Markup configuration
 markup:
   goldmark:
     parser:
@@ -59,147 +46,89 @@ markup:
     renderer:
       unsafe: true
   highlight:
-    # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
-    style: tango
+    style: gruvbox
     noClasses: false
-    # Uncomment if you want your chosen highlight style used for code blocks without a specified language
-    # guessSyntax: true
+  tableOfContents:
+    endLevel: 6
+    ordered: false
+    startLevel: 2
 
-# Everything below this are Site Params
+# Build configuration
+build:
+  transpiler: libsass
 
-# Comment out if you don't want the "print entire section" link enabled.
-# outputs:
-#   section: [HTML, print, RSS]
+# Menu configuration
+menu:
+  main:
+    - identifier: blog
+      name: Blog
+      url: /blog/
+      pre: |
+        <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17,11H16a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm0,4H16a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2ZM11,9h6a1,1,0,0,0,0-2H11a1,1,0,0,0,0,2ZM21,3H7A1,1,0,0,0,6,4V7H3A1,1,0,0,0,2,8V18a3,3,0,0,0,3,3H18a4,4,0,0,0,4-4V4A1,1,0,0,0,21,3ZM6,18a1,1,0,0,1-2,0V9H6Zm14-1a2,2,0,0,1-2,2H7.82A3,3,0,0,0,8,18V5H20Zm-9-4h1a1,1,0,0,0,0-2H11a1,1,0,0,0,0,2Zm0,4h1a1,1,0,0,0,0-2H11a1,1,0,0,0,0,2Z"/></svg>
+      weight: 1
+    - identifier: rss
+      name: RSS
+      url: /index.xml
+      pre: |
+        <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2.88,16.88a3,3,0,0,0,0,4.24,3,3,0,0,0,4.24,0,3,3,0,0,0-4.24-4.24Zm2.83,2.83a1,1,0,0,1-1.42-1.42,1,1,0,0,1,1.42,0A1,1,0,0,1,5.71,19.71ZM5,12a1,1,0,0,0,0,2,5,5,0,0,1,5,5,1,1,0,0,0,2,0,7,7,0,0,0-7-7ZM5,8a1,1,0,0,0,0,2,9,9,0,0,1,9,9,1,1,0,0,0,2,0,11.08,11.08,0,0,0-3.22-7.78A11.08,11.08,0,0,0,5,8Zm10.61.39A15.11,15.11,0,0,0,5,4,1,1,0,0,0,5,6,13,13,0,0,1,18,19a1,1,0,0,0,2,0A15.11,15.11,0,0,0,15.61,8.39Z"/></svg>
+      weight: 2
+    - identifier: github
+      name: GitHub
+      url: https://github.com/tdj28
+      pre: |
+        <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+        <path d="M10.07031,20.50291a1.00008,1.00008,0,0,0-1.18115-.9834c-1.30908.24024-2.96191.27637-3.40137-.958a5.70754,5.70754,0,0,0-1.83691-2.415,1.20073,1.20073,0,0,1-.1665-.10938,1,1,0,0,0-.93067-.64551H2.54883a.99965.99965,0,0,0-1,.99512c-.00391.81543.811,1.33789,1.1416,1.51465a4.4408,4.4408,0,0,1,.92383,1.35937c.36426,1.02344,1.42285,2.57617,4.46582,2.376.001.03516.00195.06836.00244.09863l.00439.26758a1,1,0,0,0,2,0l-.00488-.31836C10.07715,21.4951,10.07031,21.22068,10.07031,20.50291Zm10.667-15.126c.03174-.125.063-.26367.09034-.41992a6.27792,6.27792,0,0,0-.40821-3.293,1.002,1.002,0,0,0-.61572-.58007c-.356-.12012-1.67041-.35645-4.18408,1.25a13.86918,13.86918,0,0,0-6.354,0C6.76221.751,5.45459.9658,5.10205,1.07908a.99744.99744,0,0,0-.63135.584,6.3003,6.3003,0,0,0-.40332,3.35644c.02442.12793.05078.2461.07813.35449A6.26928,6.26928,0,0,0,2.89014,9.20311a8.42168,8.42168,0,0,0,.04248.92187c.334,4.60254,3.334,5.98438,5.42431,6.459-.04345.125-.083.25878-.11816.40039a1.00023,1.00023,0,0,0,1.94238.47851,1.6784,1.6784,0,0,1,.46778-.87793.99947.99947,0,0,0-.5459-1.74512c-3.4541-.39453-4.95362-1.80175-5.1792-4.89843a6.61076,6.61076,0,0,1-.03369-.73828,4.25769,4.25769,0,0,1,.91943-2.71289,3.022,3.022,0,0,1,.1958-.23145.99988.99988,0,0,0,.188-1.02441,3.3876,3.3876,0,0,1-.15527-.55567A4.09356,4.09356,0,0,1,6.1167,3.06346a7.54263,7.54263,0,0,1,2.415,1.17968,1.00877,1.00877,0,0,0,.82764.13282,11.77716,11.77716,0,0,1,6.17285.001,1.00549,1.00549,0,0,0,.83056-.13769,7.572,7.572,0,0,1,2.40528-1.19043,4.03977,4.03977,0,0,1,.0874,1.57812,3.205,3.205,0,0,1-.16895.60743.9999.9999,0,0,0,.188,1.02441c.07715.08691.1543.18066.22363.26855A4.12186,4.12186,0,0,1,20,9.20311a7.03888,7.03888,0,0,1-.0376.77734c-.22021,3.05566-1.72558,4.46387-5.1958,4.85937a1,1,0,0,0-.54541,1.7461,1.63079,1.63079,0,0,1,.46631.9082,3.06079,3.06079,0,0,1,.09229.81934v2.334C14.77,21.2949,14.77,21.78025,14.77,22.00291a1,1,0,1,0,2,0c0-.2168,0-.69238.00977-1.33984V18.31346a4.8815,4.8815,0,0,0-.15479-1.31153,4.25638,4.25638,0,0,0-.11621-.416,6.51258,6.51258,0,0,0,5.44531-6.42383A8.69677,8.69677,0,0,0,22,9.20311,6.13062,6.13062,0,0,0,20.7373,5.37693Z"/></svg>
+      weight: 3
+    - identifier: twitter
+      name: Twitter
+      url: https://x.com/tdj11100
+      pre: |
+        <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.70,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z"/></svg>
+      weight: 4
 
+# Site Params
 params:
+  title: TDJ28
+  author: TJ
+  description: Technical notes on data science, physics, math, and engineering
+  footnote: |
+    Powered by <a class=link href=https://gohugo.io target=_blank rel=noopener>Hugo</a> | 
+    Theme <a class=link href=https://github.com/michaelneuper/hugo-texify3 target=_blank rel=noopener>TeXify3</a>
   
-  taxonomy:
-    # set taxonomyCloud = [] to hide taxonomy clouds
-    taxonomyCloud: [tags, categories]
-
-    # If used, must have same length as taxonomyCloud
-    taxonomyCloudTitle: [Tag Cloud, Categories]
-
-    # set taxonomyPageHeader = [] to hide taxonomies on the page headers
-    taxonomyPageHeader: [tags, categories]
-
-  #privacy_policy: https://policies.google.com/privacy
-
-  # First one is picked as the Twitter card image if not set on page.
-  # images: [images/project-illustration.png]
-
-  # Menu title if your navbar has a versions selector to access old versions of your site.
-  # This menu appears only if you have at least one [params.versions] set.
-  version_menu: Releases
-
-  # Flag used in the "version-banner" partial to decide whether to display a
-  # banner on every page indicating that this is an archived version of the docs.
-  # Set this flag to "true" if you want to display the banner.
-  archived_version: false
-
-  # The version number for the version of the docs represented in this doc set.
-  # Used in the "version-banner" partial to display a version number for the
-  # current doc set.
-  version: 0.0
-
-  # A link to latest version of the docs. Used in the "version-banner" partial to
-  # point people to the main doc site.
-  url_latest_version: https://tdj28.org
-
-  # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
-  github_repo: https://github.com/tdj28/blog
-
-  # An optional link to a related project repo. For example, the sibling repository where your product code lives.
-  # github_project_repo: https://github.com/google/docsy
-
-  # Specify a value here if your content directory is not in your repo's root directory
-  # github_subdir: ""
-
-  # Uncomment this if your GitHub repo does not have "main" as the default branch,
-  # or specify a new value if you want to reference another branch in your GitHub links
-  github_branch: main
-
-  # Google Custom Search Engine ID. Remove or comment out to disable search.
-  #gcs_engine_id: NA
-
-  # Enable Lunr.js offline search
-  offlineSearch: true
-
-  # Enable syntax highlighting and copy buttons on code blocks with Prism
-  prism_syntax_highlighting: false
+  # TeXify3 specific parameters
+  dateFormat: "2 January 2006"
+  emphasisWithDots: true
+  toc: true
+  showWordCount: true
+  showReadingTime: true
+  rootFontSize: "115%"
+  math: true
+  enableDuckDuckGoSearchBox: true
+  numberedSubtitles: true
+  
+  # Sharing buttons configuration
+  sharingbuttons:
+    facebook: false
+    twitter: true
+    email: true
+    linkedin: true
+    reddit: true
+    whatsapp: false
+    hackernews: true
+    telegram: false
 
   copyright:
     authors: TJ | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
     from_year: 2016
 
-  # User interface configuration
-  ui:
-    # Set to true to disable breadcrumb navigation.
-    breadcrumb_disable: false
-    # Set to false if you don't want to display a logo (/assets/icons/logo.svg) in the top navbar
-    navbar_logo: false
-    # Set to true if you don't want the top navbar to be translucent when over a `block/cover`, like on the homepage.
-    navbar_translucent_over_cover_disable: false
-    # Enable to show the side bar menu in its compact state.
-    sidebar_menu_compact: false
-    # Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
-    sidebar_search_disable: true
-    showLightDarkModeMenu: true
-    # Adds a H2 section titled "Feedback" to the bottom of each doc. The responses are sent to Google Analytics as events.
-    # This feature depends on [services.googleAnalytics] and will be disabled if "services.googleAnalytics.id" is not set.
-    # If you want this feature, but occasionally need to remove the "Feedback" section from a single page,
-    # add "hide_feedback: true" to the page's front matter.
-    feedback:
-      enable: true
-      # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
-      'yes': >-
-        Glad to hear it! Please <a href="https://github.com/USERNAME/REPOSITORY/issues/new">tell us how we can improve</a>.
-      'no': >-
-        Sorry to hear that. Please <a href="https://github.com/USERNAME/REPOSITORY/issues/new">tell us how we can improve</a>.
-
-    # Adds a reading time to the top of each doc.
-    # If you want this feature, but occasionally need to remove the Reading time from a single page,
-    # add "hide_readingtime: true" to the page's front matter
-    readingtime:
-      enable: true
-
-  links:
-    # End user relevant links. These will show up on left side of footer and in the community page if you have one.
-    user:
-      # - name: User mailing list
-      #   url: https://example.org/mail
-      #   icon: fa fa-envelope
-      #   desc: Discussion and help from your fellow users
-      - name: Twitter
-        url: https://x.com/tdj11100
-        icon: fab fa-twitter
-        desc: Twitter/X
-      # - name: Stack Overflow
-      #   url: https://example.org/stack
-      #   icon: fab fa-stack-overflow
-      #   desc: Practical questions and curated answers
-    # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
-    developer:
-      - name: GitHub
-        url: https://github.com/tdj28
-        icon: fab fa-github
-        desc: Source code, issues, and pull requests
-      # - name: Slack
-      #   url: https://example.org/slack
-      #   icon: fab fa-slack
-      #   desc: Chat with other project developers
-      # - name: Developer mailing list
-      #   url: https://example.org/mail
-      #   icon: fa fa-envelope
-      #   desc: Discuss development issues around the project
-
+# Module configuration
 module:
-  # Uncomment the next line to build and serve using local docsy clone declared in the named Hugo workspace:
-  # workspace: docsy.work
   hugoVersion:
     extended: true
     min: 0.110.0
   imports:
-    - path: github.com/google/docsy
+    - path: github.com/michaelneuper/hugo-texify3
       disable: false
-    - path: github.com/martignoni/hugo-notice

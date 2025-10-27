@@ -1,0 +1,32 @@
+// Center all images in blog posts
+
+.content {
+  // Center all images
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  // Center figure containers
+  figure,
+  .figure-container {
+    text-align: center;
+    margin: 2rem auto;
+    
+    img {
+      display: inline-block;
+      max-width: 100%;
+      height: auto;
+    }
+    
+    figcaption {
+      text-align: center;
+      font-style: italic;
+      color: var(--fg2);
+      margin-top: 0.5rem;
+      font-size: 0.9em;
+    }
+  }
+}
+

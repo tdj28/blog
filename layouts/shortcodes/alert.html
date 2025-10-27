@@ -1,0 +1,6 @@
+{{ $color := .Get "color" | default "info" }}
+{{ $title := .Get "title" }}
+<div class="alert alert-{{ $color }}">
+  {{ with $title }}<strong class="alert-title">{{ . }}:</strong> {{ end }}
+  <div class="alert-content">{{ .Inner | markdownify }}</div>
+</div>

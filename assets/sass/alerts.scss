@@ -1,0 +1,114 @@
+@import "gruvbox.scss";
+
+.alert {
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid;
+  border-radius: 4px;
+  background-color: var(--bg1);
+  
+  .alert-title {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--fg);
+  }
+  
+  .alert-content {
+    p:first-child {
+      margin-top: 0;
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  // Warning - yellow/orange tones
+  &.alert-warning {
+    border-color: var(--yellow);
+    background-color: var(--bg1);
+    
+    .alert-title {
+      color: var(--yellow);
+    }
+  }
+  
+  // Primary/Info - blue tones
+  &.alert-primary,
+  &.alert-info {
+    border-color: var(--blue);
+    background-color: var(--bg1);
+    
+    .alert-title {
+      color: var(--blue);
+    }
+  }
+  
+  // Success - green tones
+  &.alert-success {
+    border-color: var(--green);
+    background-color: var(--bg1);
+    
+    .alert-title {
+      color: var(--green);
+    }
+  }
+  
+  // Note - aqua/teal tones
+  &.alert-note {
+    border-color: var(--aqua);
+    background-color: var(--bg1);
+    
+    .alert-title {
+      color: var(--aqua);
+    }
+  }
+  
+  // Secondary - gray tones
+  &.alert-secondary {
+    border-color: var(--gray);
+    background-color: var(--bg1);
+    
+    .alert-title {
+      color: var(--gray);
+    }
+  }
+  
+  // Error/Danger - red tones
+  &.alert-danger,
+  &.alert-error {
+    border-color: var(--red);
+    background-color: var(--bg1);
+    
+    .alert-title {
+      color: var(--red);
+    }
+  }
+}
+
+// Make alerts look slightly different in dark mode for better contrast
+.darkmode .alert {
+  background-color: var(--bg_s);
+  
+  &.alert-warning .alert-title {
+    color: var(--yellow-dim);
+  }
+  
+  &.alert-primary .alert-title,
+  &.alert-info .alert-title {
+    color: var(--blue-dim);
+  }
+  
+  &.alert-success .alert-title {
+    color: var(--green-dim);
+  }
+  
+  &.alert-note .alert-title {
+    color: var(--aqua-dim);
+  }
+  
+  &.alert-danger .alert-title,
+  &.alert-error .alert-title {
+    color: var(--red-dim);
+  }
+}
+

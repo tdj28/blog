@@ -1,0 +1,37 @@
+@import "vars.scss";
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  
+  li {
+    margin: 1.5rem 0;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  .post-date {
+    font-family: 'Latin Modern Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--meta);
+    margin-right: 1rem;
+    display: inline-block;
+    min-width: 6em;
+  }
+  
+  a {
+    color: var(--text);
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+      color: var(--link);
+    }
+  }
+}
+

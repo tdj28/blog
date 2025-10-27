@@ -1,0 +1,69 @@
+{{ define "head" }}
+{{ $options := dict "transpiler" "libsass" "targetPath" "css/index.css" }}
+{{ with resources.Get "sass/layouts/index.scss" | toCSS $options | postCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+{{ end }}
+{{ $blogOptions := dict "transpiler" "libsass" "targetPath" "css/blog-list.css" }}
+{{ with resources.Get "sass/blog-list.scss" | toCSS $blogOptions | postCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+{{ end }}
+{{ end }}
+
+{{ define "main" }}
+<main class="grid-container">
+    <div id="content" class="index">
+        {{ with .Site.GetPage "_index.md" }}
+            {{ .Content }}
+        {{ end }}
+        
+        <ul class="post-list">
+        {{ range first 10 (where .Site.RegularPages "Type" "blog").ByPublishDate.Reverse }}
+            <li>
+                <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
+                <a href="{{ .Permalink }}">{{ .Title }}</a>
+            </li>
+        {{ end }}
+        </ul>
+        
+        <p style="margin-top: 2rem;">
+            <a href="/blog/">View all posts →</a>
+        </p>
+    </div>
+
+    <div class="sidebar">
+        {{ if .Site.Taxonomies.categories }}
+        <h3 class="taxonomy">
+            <span class="icon">
+                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="taxonomy-svg">
+                    <path d="M3.71,16.29a1,1,0,0,0-.33-.21,1,1,0,0,0-.76,0,1,1,0,0,0-.33.21,1,1,0,0,0-.21.33,1,1,0,0,0,.21,1.09,1.15,1.15,0,0,0,.33.21.94.94,0,0,0,.76,0,1.15,1.15,0,0,0,.33-.21,1,1,0,0,0,.21-1.09A1,1,0,0,0,3.71,16.29ZM7,8H21a1,1,0,0,0,0-2H7A1,1,0,0,0,7,8ZM3.71,11.29a1,1,0,0,0-1.09-.21,1.15,1.15,0,0,0-.33.21,1,1,0,0,0-.21.33.94.94,0,0,0,0,.76,1.15,1.15,0,0,0,.21.33,1.15,1.15,0,0,0,.33.21.94.94,0,0,0,.76,0,1.15,1.15,0,0,0,.33-.21,1.15,1.15,0,0,0,.21-.33.94.94,0,0,0,0-.76A1,1,0,0,0,3.71,11.29ZM21,11H7a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2ZM3.71,6.29a1,1,0,0,0-.33-.21,1,1,0,0,0-1.09.21,1.15,1.15,0,0,0-.21.33.94.94,0,0,0,0,.76,1.15,1.15,0,0,0,.21.33,1.15,1.15,0,0,0,.33.21,1,1,0,0,0,1.09-.21,1.15,1.15,0,0,0,.21-.33.94.94,0,0,0,0-.76A1.15,1.15,0,0,0,3.71,6.29ZM21,16H7a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z"/></svg>
+            </span>
+            <a href="/categories/">Categories</a>
+        </h3>
+        <ul class="nav-list sidenav">
+            {{range first 10 ($.Site.GetPage "taxonomyTerm" "categories").Pages }}
+            <li>
+                <a href="{{ .Permalink }}">{{.Title}}</a>
+            </li>
+            {{ end }}
+        </ul>
+        {{ end }}
+        {{ if .Site.Taxonomies.tags }}
+        <p></p>
+        <h3 class="taxonomy">
+            <span class="icon">
+                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="taxonomy-svg">
+                    <path d="M21.41,8.64s0,0,0-.05a1.23,1.23,0,0,0-.1-.18l0,0a1,1,0,0,0-.09-.14l0,0a.91.91,0,0,0-.12-.09h0a1,1,0,0,0-.14-.08l-.12,0a.85.85,0,0,0-.16,0l-18,0a1,1,0,0,0-1,1.05,1,1,0,0,0,.29.68L8.9,16.62a1,1,0,1,0,1.47-1.35L4.12,8.59,20,8.61a1,1,0,0,0,1-.45A1,1,0,0,0,21.41,8.64ZM15.1,7.38a1,1,0,0,0,1.47,1.35L22.82,2a1,1,0,0,0,0-1.41,1,1,0,0,0-1.41,0L15.1,7.38ZM3,22a1,1,0,0,0,1,1H20a1,1,0,0,0,0-2H4A1,1,0,0,0,3,22Z"/></svg>
+            </span>
+            <a href="/tags/">Tags</a>
+        </h3>
+        <ul class="nav-list sidenav">
+            {{range first 10 ($.Site.GetPage "taxonomyTerm" "tags").Pages }}
+            <li>
+                <a href="{{ .Permalink }}">{{.Title}}</a>
+            </li>
+            {{ end }}
+        </ul>
+        {{ end }}
+    </div>
+</main>
+{{ end }}

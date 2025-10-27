@@ -297,21 +297,27 @@ $$ \lim_{TN \rightarrow \infty} \frac{TN}{TN + FP} = 1 $$
 Things bring us to an important remark:
 
 {{% alert title="Remark" color="primary" %}}
-When evaluating the values of sensitivity and specificity, be mindful of the proportions of the pool being analyzed. For example, if a test is administered to a population of 1000 where only one single person is infected, and the test captures that positive and also gives a single false positive, then specificity becomes:
-$$ P(-|\neg D) =  \frac{\text{TN}}{\text{TN} + \text{FP}} = \frac{999}{998 + 1} = 1$$
-That is, everyone who was negative was measured to by the test, but the sample size is so small that this measure is unlikely to be a reliable projection for a larger population.
+When evaluating the values of sensitivity and specificity, be mindful of the proportions of the pool being analyzed. For example, if a test is administered to a population of 1000 where only one single person is infected, and the test captures that positive and also gives a single false positive, then we have:
+- TP = 1 (the infected person tests positive)
+- FP = 1 (one uninfected person tests positive)
+- TN = 998 (the remaining uninfected people test negative)
+- FN = 0 (no infected person tests negative)
+
+Specificity becomes:
+$$ P(-|\neg D) =  \frac{\text{TN}}{\text{TN} + \text{FP}} = \frac{998}{998 + 1} = \frac{998}{999} \approx 0.999$$
 
 Similarly, sensitivity becomes:
 $$ P(+|D) = \frac{\text{TP}}{\text{TP} + \text{FN}} = \frac{1}{1 + 0 } = 1 $$
+
 However, these numbers are practically worthless because the sample set was so heavily unbalanced and there isn't enough subjects to form a clear statistical picture.
 
-Neither of these measures reflect that we had a single false positive, although accuracy would:
+Accuracy would be:
 
-$$ \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} = \frac{1 + 998}{1 + 998 + 1 + 0} = 0.999 $$
+$$ \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} = \frac{1 + 998}{1 + 998 + 1 + 0} = \frac{999}{1000} = 0.999 $$
 
-But again, given the small sample size, these numbers are not likely to hold up upon replication with a larger sample size. 
-Statistics is about forming conclusions based on incomplete data, but there is a limit at which data is too incomplete to draw
-conclusions. How that limit is determined is beyond the scope of this post.
+Note that while accuracy appears high (99.9%), this doesn't reflect that we had a false positive rate of 50% among the positives (1 FP out of 2 total positive results), which is quite poor. This demonstrates why specificity and sensitivity are more informative metrics than accuracy alone when dealing with imbalanced datasets.
+
+Statistics is about forming conclusions based on incomplete data, but there is a limit at which data is too incomplete to draw conclusions. How that limit is determined is beyond the scope of this post.
 {{% /alert %}}
 
 However, in the study cited, and a multitude of other studies, the results are statistically significant enough that we can, with some confidence, examine real world scenarios with the context of these findings. Let's return to our case of Person X and examine their situation given these numbers and assumptions above.
@@ -353,16 +359,16 @@ the sum of the probability of having the disease but getting a false negative gi
 \\(P(D) \cdot P(-|D)\\), plus the probability of not having the disease
 and getting a true negative result given that one does not have the disease, \\(P(\neg D) · P(-|\neg D)\\).
 
-This gives us the equation
+This gives us the equation:
 
-```math
+$$
 \begin{aligned}
-P(-) &=& P(\neg D) \cdot P(-|\neg D) + P(D) \cdot P(-|D) \\
- &=& \left(1 - P(D)\right) \cdot P(-|\neg D) + P(D) \cdot \left(1 - P(+|D)\right)\\
-&=& (1-0.35)(0.979) + (0.35)(1-0.847) \\
-&=& 0.6899
+P(-) &= P(\neg D) \cdot P(-|\neg D) + P(D) \cdot P(-|D) \\\\
+ &= \left(1 - P(D)\right) \cdot P(-|\neg D) + P(D) \cdot \left(1 - P(+|D)\right)\\\\
+&= (1-0.35)(0.979) + (0.35)(1-0.847) \\\\
+&= 0.6899
 \end{aligned}
-```
+$$
 
 So for our Person X, we would like to know: __given a negative test__, what is the probability that they actually __do__ have COVID-19? That is, we would like to estimate \\(P(D|-)\\). By the definition of [conditional probabilities](#conditional-probability):
 
@@ -370,15 +376,15 @@ So for our Person X, we would like to know: __given a negative test__, what is t
 <!-- 
 As we calculated \\(P(-)\\) prior, we saw that one term contained \\(P(\neg D)\\) and hence that term is excluded from the intersection of \\(P(D)\\), giving us -->
 
-```math
+$$
 \begin{aligned}
-P(D|-) &=& \frac{P(D \cap -)}{P(-)} \\
-&=& \frac{P(D)\cdot P(-|D)}{P(-)} \\
-&=& \frac{ P(D) \cdot \left( 1 - P(+|D)\right) }{P(-)} \\
-&=& \frac{0.35 \cdot (1-0.847)}{0.6899}\\
-&=& 0.0776
+P(D|-) &= \frac{P(D \cap -)}{P(-)} \\\\
+&= \frac{P(D)\cdot P(-|D)}{P(-)} \\\\
+&= \frac{ P(D) \cdot \left( 1 - P(+|D)\right) }{P(-)} \\\\
+&= \frac{0.35 \cdot (1-0.847)}{0.6899}\\\\
+&= 0.0776
 \end{aligned}
-```
+$$
 
 That is, in this given scenario, assuming the numbers above, the probability that Person X has the disease despite the
 fact that their rapid test came back negative is around 7.76%. __Important: This number is particular to the scenario we imagined above, but is in no way representative for every case. For example, we picked a random percentage for \\(P(D)\\). Please do not use these numbers to make real world decisions or arguments. This was for demonstrative educational purposes only.__

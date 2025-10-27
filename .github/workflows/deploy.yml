@@ -46,7 +46,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install -D autoprefixer postcss-cli postcss
+          npm ci
 
       - name: Build
         run: |

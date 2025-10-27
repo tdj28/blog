@@ -1,0 +1,20 @@
+// LibSass-compatible version (no @use sass:math)
+
+@import "gruvbox.scss";
+
+// https://grtcalculator.com/math/
+// Golden ratio calculations done manually for LibSass compatibility
+
+$sqrt5: 2.236067977; // sqrt(5)
+$phi: (1 + $sqrt5) / 2; // ~1.618
+$phi-squared: $phi * $phi; // ~2.618
+$sqrt-phi: 1.272; // sqrt($phi)
+$phi-to-1-5: $phi * $sqrt-phi; // $phi^1.5
+$f: 2.4rem / $phi-squared;
+
+$radius: 0.25rem;
+$margin: 1rem;
+$max-width: 70vw;
+$padding: (100vw - $max-width) / 2;
+$border: 2px;
+$mobile-breakpoint: 768px;
