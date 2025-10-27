@@ -1,0 +1,417 @@
+<!doctype html><html lang=en style=font-size:115%><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content><meta name=description content="A quick and dirty example of creating a chef cookbook with rspec tests."><link rel=apple-touch-icon sizes=180x180 href=https://www.tdj28.org//images/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=https://www.tdj28.org//images/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=https://www.tdj28.org//images/favicon-16x16.png><meta name=keywords content='hugo latex theme blog texify texify2 texify3 michael neuper'><link rel=stylesheet href=/katex/katex.min.css><script defer defer src=/katex/katex.min.js></script><script defer src=/katex/contrib/auto-render.min.js></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],throwOnError:!1})})</script><meta property="og:url" content="https://www.tdj28.org/blog/2017/01/28/devops-101-chef-cookbook-with-testing/"><meta property="og:site_name" content="TDJ28"><meta property="og:title" content="DevOps 101: Chef Cookbook with Testing"><meta property="og:description" content="A quick and dirty example of creating a chef cookbook with rspec tests."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="blog"><meta property="article:published_time" content="2017-01-28T19:21:05-07:00"><meta property="article:modified_time" content="2024-08-04T15:17:06-07:00"><meta property="article:tag" content="Devops"><meta property="article:tag" content="Sre"><link rel=canonical href=https://www.tdj28.org/blog/2017/01/28/devops-101-chef-cookbook-with-testing/><meta itemprop=name content="DevOps 101: Chef Cookbook with Testing"><meta itemprop=description content="A quick and dirty example of creating a chef cookbook with rspec tests."><meta itemprop=datePublished content="2017-01-28T19:21:05-07:00"><meta itemprop=dateModified content="2024-08-04T15:17:06-07:00"><meta itemprop=wordCount content="2311"><meta itemprop=keywords content="Devops,Sre"><link rel=stylesheet href=/css/common.min.34f60e2333422e738b86e195a0bf4d119a27c761ea0e3f065acc94818eb81b78.css integrity="sha256-NPYOIzNCLnOLhuGVoL9NEZonx2HqDj8GWsyUgY64G3g=" crossorigin=anonymous><link rel=stylesheet href=/css/content.min.abafa49a3586683e185d210e8ce738faf8e41ad0649c62dd0193ad3e113d4f58.css integrity="sha256-q6+kmjWGaD4YXSEOjOc4+vjkGtBknGLdAZOtPhE9T1g=" crossorigin=anonymous><link rel=stylesheet href=/css/alerts.min.352561072eb67d9a0ed2b2302cd947c2a2472565dcec07f7aaaa378f4cb1cd48.css integrity="sha256-NSVhBy62fZoO0rIwLNlHwqJHJWXc7Af3qqo3j0yxzUg=" crossorigin=anonymous><title>DevOps 101: Chef Cookbook with Testing - TDJ28</title><meta name=twitter:card content="summary"><meta name=twitter:title content="DevOps 101: Chef Cookbook with Testing"><meta name=twitter:description content="A quick and dirty example of creating a chef cookbook with rspec tests."><link rel=stylesheet href=/css/single.min.2c2574d9e8af69a9179e48afd33ba67bcdb66b6b016348527ee45ae452fe03d2.css integrity="sha256-LCV02eivaakXnkiv0zume822a2sBY0hSfuRa5FL+A9I=" crossorigin=anonymous><link rel=stylesheet href=/css/single.min.78a121b7d7a160420f9daab0ea13add66c37b9c44f27bba07b27207e2b0975d2.css integrity="sha256-eKEht9ehYEIPnaqw6hOt1mw3ucRPJ7ugeycgfisJddI=" crossorigin=anonymous><link rel=stylesheet href=/css/alerts.min.352561072eb67d9a0ed2b2302cd947c2a2472565dcec07f7aaaa378f4cb1cd48.css integrity="sha256-NSVhBy62fZoO0rIwLNlHwqJHJWXc7Af3qqo3j0yxzUg=" crossorigin=anonymous><link rel=stylesheet href=/css/blog-images.min.393fdc10547572cb9729b3ee9dbf63390d39cdc54c4594ff0b5655766997f533.css integrity="sha256-OT/cEFR1csuXKbPunb9jOQ05zcVMRZT/C1ZVdmmX9TM=" crossorigin=anonymous></head><body><div id=wrapper><header id=header><h1><a href=https://www.tdj28.org/>TDJ28</a>
+<button id=dark-mode-toggle class=dark-mode-toggle aria-label="Toggle theme">
+<svg width="2rem" height="2rem" viewBox="0 0 496 496"><path fill="currentColor" d="M8 256C8 393 119 504 256 504S504 393 504 256 393 8 256 8 8 119 8 256zM256 440V72a184 184 0 010 368z" transform="translate(-8 -8)"/></svg></button></h1><nav><span class=nav-bar-item><span class=icon><svg width="1em" height="1em" viewBox="0 0 24 24"><path d="M17 11H16a1 1 0 000 2h1a1 1 0 000-2zm0 4H16a1 1 0 000 2h1a1 1 0 000-2zM11 9h6a1 1 0 000-2H11a1 1 0 000 2zM21 3H7A1 1 0 006 4V7H3A1 1 0 002 8V18a3 3 0 003 3H18a4 4 0 004-4V4A1 1 0 0021 3zM6 18a1 1 0 01-2 0V9H6zm14-1a2 2 0 01-2 2H7.82A3 3 0 008 18V5H20zm-9-4h1a1 1 0 000-2H11a1 1 0 000 2zm0 4h1a1 1 0 000-2H11a1 1 0 000 2z"/></svg>
+</span><a class=link href=/blog/>Blog</a>
+</span><span class=nav-bar-item><span class=icon><svg width="1em" height="1em" viewBox="0 0 24 24"><path d="M2.88 16.88a3 3 0 000 4.24 3 3 0 004.24.0 3 3 0 00-4.24-4.24zm2.83 2.83a1 1 0 01-1.42-1.42 1 1 0 011.42.0 1 1 0 010 1.42zM5 12a1 1 0 000 2 5 5 0 015 5 1 1 0 002 0 7 7 0 00-7-7zM5 8a1 1 0 000 2 9 9 0 019 9 1 1 0 002 0 11.08 11.08.0 00-3.22-7.78A11.08 11.08.0 005 8zm10.61.39A15.11 15.11.0 005 4 1 1 0 005 6 13 13 0 0118 19a1 1 0 002 0A15.11 15.11.0 0015.61 8.39z"/></svg>
+</span><a class=link href=/index.xml>RSS</a>
+</span><span class=nav-bar-item><span class=icon><svg width="1em" height="1em" viewBox="0 0 24 24" data-name="Layer 1"><path d="M10.07031 20.50291a1.00008 1.00008.0 00-1.18115-.9834c-1.30908.24024-2.96191.27637-3.40137-.958a5.70754 5.70754.0 00-1.83691-2.415 1.20073 1.20073.0 01-.1665-.10938 1 1 0 00-.93067-.64551H2.54883a.99965.99965.0 00-1 .99512c-.00391.81543.811 1.33789 1.1416 1.51465a4.4408 4.4408.0 01.92383 1.35937c.36426 1.02344 1.42285 2.57617 4.46582 2.376.001.03516.00195.06836.00244.09863l.00439.26758a1 1 0 002 0l-.00488-.31836C10.07715 21.4951 10.07031 21.22068 10.07031 20.50291zm10.667-15.126c.03174-.125.063-.26367.09034-.41992a6.27792 6.27792.0 00-.40821-3.293 1.002 1.002.0 00-.61572-.58007c-.356-.12012-1.67041-.35645-4.18408 1.25a13.86918 13.86918.0 00-6.354.0C6.76221.751 5.45459.9658 5.10205 1.07908a.99744.99744.0 00-.63135.584 6.3003 6.3003.0 00-.40332 3.35644c.02442.12793.05078.2461.07813.35449A6.26928 6.26928.0 002.89014 9.20311a8.42168 8.42168.0 00.04248.92187c.334 4.60254 3.334 5.98438 5.42431 6.459-.04345.125-.083.25878-.11816.40039a1.00023 1.00023.0 001.94238.47851 1.6784 1.6784.0 01.46778-.87793.99947.99947.0 00-.5459-1.74512c-3.4541-.39453-4.95362-1.80175-5.1792-4.89843a6.61076 6.61076.0 01-.03369-.73828 4.25769 4.25769.0 01.91943-2.71289 3.022 3.022.0 01.1958-.23145.99988.99988.0 00.188-1.02441A3.3876 3.3876.0 016.0381 4.6787 4.09356 4.09356.0 016.1167 3.06346a7.54263 7.54263.0 012.415 1.17968 1.00877 1.00877.0 00.82764.13282 11.77716 11.77716.0 016.17285.001 1.00549 1.00549.0 00.83056-.13769 7.572 7.572.0 012.40528-1.19043 4.03977 4.03977.0 01.0874 1.57812 3.205 3.205.0 01-.16895.60743.9999.9999.0 00.188 1.02441c.07715.08691.1543.18066.22363.26855A4.12186 4.12186.0 0120 9.20311a7.03888 7.03888.0 01-.0376.77734c-.22021 3.05566-1.72558 4.46387-5.1958 4.85937a1 1 0 00-.54541 1.7461 1.63079 1.63079.0 01.46631.9082 3.06079 3.06079.0 01.09229.81934v2.334C14.77 21.2949 14.77 21.78025 14.77 22.00291a1 1 0 102 0c0-.2168.0-.69238.00977-1.33984V18.31346a4.8815 4.8815.0 00-.15479-1.31153 4.25638 4.25638.0 00-.11621-.416 6.51258 6.51258.0 005.44531-6.42383A8.69677 8.69677.0 0022 9.20311 6.13062 6.13062.0 0020.7373 5.37693z"/></svg>
+</span><a class=link href=https://github.com/tdj28>GitHub</a>
+</span><span class=nav-bar-item><span class=icon><svg width="1em" height="1em" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69C20.88 6.16 21.56 5.32 21.88 4.31 21.05 4.81 20.13 5.16 19.16 5.36 18.37 4.5 17.26 4 16 4c-2.35.0-4.27 1.92-4.27 4.29C11.73 8.63 11.77 8.96 11.84 9.27 8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15.0 1.49.75 2.81 1.91 3.56C3.62 10.5 2.96 10.3 2.38 10V10.03c0 2.08 1.48 3.82 3.44 4.21C5.46 14.34 5.08 14.39 4.69 14.39 4.42 14.39 4.15 14.36 3.89 14.31c.54 1.69 2.11 2.95 4 2.98-1.46 1.16-3.31 1.84-5.33 1.84C2.22 19.13 1.88 19.11 1.54 19.07 3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79 20.33 8.6 20.33 8.42 20.32 8.23 21.16 7.63 21.88 6.87 22.46 6z"/></svg>
+</span><a class=link href=https://x.com/tdj11100>Twitter</a></span></nav></header><hr class=head-rule></hr><main id=main class=post><article class="content numbered-subtitles"><h2 id=introduction>Introduction</h2><h3 id=yet-another-chef-tutorial>Yet another chef tutorial</h3><p>You can of course skip this step if you are familiar with Chef to a great enough degree, but in the spirit of making this a self-contained walkthrough, we will start from the ground up.</p><h4 id=getting-started>Getting started</h4><h5 id=installing-chefdk>Installing ChefDK</h5><p>It is widely considered best practice to use <a href=https://downloads.chef.io/chefdk>ChefDK</a>, and this walkthrough uses ChefDK exclusively.</p><ul><li>On Mac, install <a href=http://brew.sh/>HomeBrew</a> and run <code>brew cask install chefdk</code></li><li>On Linux, <a href=https://downloads.chef.io/chefdk>download a package</a> corresponding to your distro and install accordingly.</li><li>On Windows: Run Linux as a Virtual Machine, get Docker for Windows, or <em>try</em> using Bash on Windows, but this walkthrough doesn&rsquo;t support Windows-based development.</li></ul><h5 id=initiating-your-cookbook>Initiating your cookbook</h5><p>Let&rsquo;s start with the following command:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chef generate cookbook c9_ide_chef
+</span></span></code></pre></div><p>This command generates a template for a cookbook. Note that we use and underline in the name instead of a hyphen as hyphens can be problematic for chef in some circumstances. We now have a folder with the following content:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>├── .gitignore
+</span></span><span class=line><span class=cl>├── .kitchen.yml
+</span></span><span class=line><span class=cl>├── Berksfile
+</span></span><span class=line><span class=cl>├── README.md
+</span></span><span class=line><span class=cl>├── chefignore
+</span></span><span class=line><span class=cl>├── metadata.rb
+</span></span><span class=line><span class=cl>├── recipes
+</span></span><span class=line><span class=cl>│   └── default.rb
+</span></span><span class=line><span class=cl>├── spec
+</span></span><span class=line><span class=cl>│   ├── spec_helper.rb
+</span></span><span class=line><span class=cl>│   └── unit
+</span></span><span class=line><span class=cl>│       └── recipes
+</span></span><span class=line><span class=cl>│           └── default_spec.rb
+</span></span><span class=line><span class=cl>└── <span class=nb>test</span>
+</span></span><span class=line><span class=cl>    └── smoke
+</span></span><span class=line><span class=cl>        └── default
+</span></span><span class=line><span class=cl>            └── default_test.rb
+</span></span></code></pre></div><p>It also creates a <code>.delivery</code> and a <code>.git</code> folder whose contents are omitted here for clarity.</p><p>The second command creates an attribute folder which we can populate with default attributes for our cookbook, and the third line creates a default template for a &ldquo;message of the day&rdquo; to be displayed when first logging in.</p><p>The <code>.git</code> directory is useful and we will use it as the basis for a new repo in github repo.</p><h5 id=pushing-to-github>Pushing to GitHub</h5><p>Now that we have the skeleton for our cookbook, we should start pushing to GitHub for version-control. On GitHub, create a public repo called c9_ide. Then run the following commands:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>git add .
+</span></span><span class=line><span class=cl>git commit -m <span class=s2>&#34;First commit&#34;</span>
+</span></span><span class=line><span class=cl>git remote add origin git@github.com:YOUR_GITHUB_USERNAME/c9_ide_chef.git
+</span></span><span class=line><span class=cl>git push -u origin master
+</span></span></code></pre></div><p>Now the stage is set and we are ready to make the cookbook actually do something.</p><h4 id=create-the-core-configuration>Create the core configuration</h4><h5 id=creating-a-story-for-the-cookbook>Creating a story for the cookbook</h5><p>So far we&rsquo;ve seen how to set up the cookbook, but we don&rsquo;t quite know what we are going to do with it. Now is a good time to set up some goals for our cookbook:</p><ul><li>It should update all packages before doing anything else</li><li>It should create a message of the day that gives basic information about the server to a user logging in</li><li>It should install basic security packages and other utilities</li><li>It should install the packages needed to run Cloud 9 IDE</li><li>It should pull and install Cloud 9 IDE</li></ul><h6 id=updating-all-packages>Updating all packages</h6><p>Just for fun, we are going to make our cookbook work for both Debian and RHEL variations of Linux. Under the recipes folder, let&rsquo;s create a recipe file called <code>update.rb</code> and give it contents:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=c1># Update system to start with</span>
+</span></span><span class=line><span class=cl><span class=k>case</span> <span class=n>node</span><span class=o>[</span><span class=s1>&#39;platform&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>when</span> <span class=s1>&#39;debian&#39;</span><span class=p>,</span> <span class=s1>&#39;ubuntu&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>execute</span> <span class=s1>&#39;AptUpdateUpgrade&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>command</span> <span class=s2>&#34;apt-get update &amp;&amp; DEBIAN_FRONTEND=noninteractive apt-get upgrade -y&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>when</span> <span class=s1>&#39;redhat&#39;</span><span class=p>,</span> <span class=s1>&#39;centos&#39;</span><span class=p>,</span> <span class=s1>&#39;fedora&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>     <span class=c1># Update all packages</span>
+</span></span><span class=line><span class=cl>    <span class=n>execute</span> <span class=s1>&#39;UpdateYum&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>command</span> <span class=s2>&#34;yum -y update&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Add Fedora&#39;s Extra Packages for Enterprise Linux</span>
+</span></span><span class=line><span class=cl>    <span class=n>execute</span> <span class=s1>&#39;GetEPELRepo&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>command</span> <span class=s2>&#34;rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=n>not_if</span> <span class=s2>&#34;rpm -qa | grep -qx &#39;epel-release-7-9.noarch&#39;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><p>in the <code>default.rb</code> recipe, add the line:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;c9_ide::update&#39;</span>
+</span></span></code></pre></div><p>That&rsquo;s it for now! Before we go any further, let&rsquo;s test this. Chef has automatically added some basis for testing to your repo. Let&rsquo;s start with kitchen. This assumes you have <a href=https://www.virtualbox.org/wiki/Downloads>VirtualBox</a> and <a href=https://www.vagrantup.com/>Vagrant</a> installed (if you don&rsquo;t, install them). At the base directory, run:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kitchen create
+</span></span><span class=line><span class=cl>kitchen converge
+</span></span></code></pre></div><p>The first command creates the virtual machines for us to work with, and teh second command cooks Chef inside of them. It is a very convenient way to do a full test of your code before pushing to github. The converge command may take quite a while as we are updating all packages on the systems and doing it for two VMs, and Ubuntu one and a CentOS one. If all goes well, the final output looks like:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>Chef Client finished, 1/1 resources updated in <span class=m>02</span> minutes <span class=m>21</span> seconds
+</span></span></code></pre></div><h6 id=creating-a-c9-user>Creating a C9 User</h6><p>It is rarely a good idea to run a program as root. As such, our next step is to create a user for running the Cloud 9 IDE. We start by creating a data bag. First, install knife-solo and <a href=https://github.com/thbishop/knife-solo_data_bag>knife-solo data bag</a>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chef gem install knife-solo
+</span></span><span class=line><span class=cl>chef gem install knife-solo_data_bag
+</span></span></code></pre></div><p>This is not entirely necessary, but that tool can be useful in other ways for making chef solo cookbooks. Then we can generate a databag and databag item:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mkdir data_bags
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>EDITOR</span><span class=o>=</span><span class=s2>&#34;vi&#34;</span>
+</span></span><span class=line><span class=cl>knife solo data bag create users c9ide
+</span></span></code></pre></div><p>In the editor that pops up, paste the following content:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;id&#34;</span><span class=p>:</span> <span class=s2>&#34;c9ide&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;comment&#34;</span><span class=p>:</span> <span class=s2>&#34;c9ide User&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;ssh_keys&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>],</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;home&#34;</span><span class=p>:</span> <span class=s2>&#34;/home/c9ide&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;ssh_keygen&#34;</span><span class=p>:</span> <span class=kc>false</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>Next, back to <code>recipe/default.rb</code>, we can invoke the external chef recipe &ldquo;users&rdquo; to have this user installed on our system:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;user::data_bag&#39;</span>
+</span></span></code></pre></div><p>To create an attributes file:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chef generate attribute default
+</span></span></code></pre></div><p>and in <code>attributes/default.rb</code> add the line:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>default</span><span class=o>[</span><span class=s1>&#39;users&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=s1>&#39;c9ide&#39;</span>
+</span></span></code></pre></div><p>This of course shows the fantastic power and utility of Chef since we can call upon a wide range of libraries already created by the chef community. Now we need to tell Chef that we are using an external library, so in our <code>metadata.rb</code> file at the top level we add the line at the end:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>depends</span>          <span class=s1>&#39;user&#39;</span>
+</span></span></code></pre></div><p>At the same level there is a Berksfile with the content:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>source</span> <span class=s1>&#39;https://supermarket.chef.io&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>metadata</span>
+</span></span></code></pre></div><p>which tells chef to check this <code>metadata.rb</code> file for dependencies (such as the user dependency we just added) that we need to pull and make available during cooking. We&rsquo;ll show how this is done manually a bit later, but for now <code>kitchen converge</code> takes care of that.</p><p>Now run <code>kitchen converge</code> one more time, and you should see that the user is created.</p><p>Let&rsquo;s create a quick smoke test item, add:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>describe</span> <span class=n>user</span><span class=p>(</span><span class=s1>&#39;c9ide&#39;</span><span class=p>)</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=n>it</span> <span class=p>{</span> <span class=n>should</span> <span class=n>exist</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><p>to <code>test/default/default_test.rb</code> and run</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kitchen verify
+</span></span></code></pre></div><p>if all went well you will see:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl> User c9ide
+</span></span><span class=line><span class=cl>     ✔  should exist
+</span></span></code></pre></div><p>Now is a good time to push to github:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>git add .
+</span></span><span class=line><span class=cl>git commit -m <span class=s2>&#34;Adds update and users&#34;</span>
+</span></span><span class=line><span class=cl>git push origin master
+</span></span></code></pre></div><h6 id=installing-motd>Installing MOTD</h6><p>First, let&rsquo;s generate a blank template file:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chef generate template motd
+</span></span></code></pre></div><p>fill with content:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>&lt;%<span class=o>=</span> node<span class=o>[</span><span class=s1>&#39;motd-attributes&#39;</span><span class=o>][</span><span class=s1>&#39;message&#39;</span><span class=o>]</span> %&gt;
+</span></span><span class=line><span class=cl>The hostname of this node is &lt;%<span class=o>=</span> node<span class=o>[</span><span class=s1>&#39;hostname&#39;</span><span class=o>]</span> %&gt;
+</span></span><span class=line><span class=cl>The IP address of this node is &lt;%<span class=o>=</span> node<span class=o>[</span><span class=s1>&#39;ipaddress&#39;</span><span class=o>]</span> %&gt;
+</span></span></code></pre></div><p>and create a recipe file <code>recipes/motd.rb</code> with contents:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>template <span class=s1>&#39;/etc/motd&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>      <span class=nb>source</span> <span class=s1>&#39;motd.erb&#39;</span>
+</span></span><span class=line><span class=cl>      mode <span class=s1>&#39;0644&#39;</span>
+</span></span><span class=line><span class=cl>end
+</span></span></code></pre></div><p>and finally add this line to the <code>attributes/default.rb</code> file:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>default</span><span class=o>[</span><span class=s1>&#39;motd-attributes&#39;</span><span class=o>][</span><span class=s1>&#39;message&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=s2>&#34;A Cloud 9 IDE server&#34;</span>
+</span></span></code></pre></div><p>We add the following tests at <code>test/smoke/default/motd_test.rb</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>describe</span> <span class=n>directory</span><span class=p>(</span><span class=s1>&#39;/etc/motd&#39;</span><span class=p>)</span> <span class=k>do</span>  <span class=c1># describe this directory</span>
+</span></span><span class=line><span class=cl>	<span class=n>its</span><span class=p>(</span><span class=ss>:content</span><span class=p>)</span> <span class=p>{</span> <span class=n>should</span> <span class=n>match</span> <span class=sr>/A Cloud 9 IDE server/</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><p>We run <code>kitchen converge</code> and <code>kitchen verify</code> again to make sure the recipe is fine, and then push to github as before.</p><h6 id=installing-packages>Installing Packages</h6><p>We are getting close to installing the Cloud9 IDE. Before doing so, we need to install some packages. Some of these packages are for security purposes, or convenience in administration, while others are needed for the Cloud 9 IDE system.</p><p>Create a file <code>recipe/packages.rb</code> with content:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=k>case</span> <span class=n>node</span><span class=o>[</span><span class=s1>&#39;platform&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=k>when</span> <span class=s1>&#39;debian&#39;</span><span class=p>,</span> <span class=s1>&#39;ubuntu&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>req_packages</span> <span class=o>=</span> <span class=o>[</span><span class=s1>&#39;fail2ban&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;gcc&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;g++&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;git&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;htop&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;make&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nodejs&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nmap&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;npm&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;sysstat&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;unattended-upgrades&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;apt-listchanges&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>req_packages</span><span class=o>.</span><span class=n>each</span> <span class=k>do</span> <span class=o>|</span><span class=n>packs</span><span class=o>|</span>
+</span></span><span class=line><span class=cl>      <span class=no>Chef</span><span class=o>::</span><span class=no>Log</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=s2>&#34;Installing: &#34;</span> <span class=o>+</span> <span class=n>packs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=n>package</span> <span class=n>packs</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span> <span class=ss>:install</span>
+</span></span><span class=line><span class=cl>      <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>template</span> <span class=s1>&#39;/etc/apt/apt.conf.d/50unattended-upgrades&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>owner</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>group</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>mode</span> <span class=s1>&#39;0644&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>source</span> <span class=s1>&#39;50unattended-upgrades.erb&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>template</span> <span class=s1>&#39;/etc/apt/apt.conf.d/20auto-upgrades&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>owner</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>group</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>mode</span> <span class=s1>&#39;0644&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>source</span> <span class=s1>&#39;20auto-upgrades.erb&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>when</span> <span class=s1>&#39;redhat&#39;</span><span class=p>,</span> <span class=s1>&#39;centos&#39;</span><span class=p>,</span> <span class=s1>&#39;fedora&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>req_packages</span> <span class=o>=</span> <span class=o>[</span><span class=s1>&#39;fail2ban&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;gcc-c++&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;git&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;glibc-static&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;htop&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;make&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nodejs&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nmap&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;npm&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;sysstat&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;yum-cron&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>req_packages</span><span class=o>.</span><span class=n>each</span> <span class=k>do</span> <span class=o>|</span><span class=n>packs</span><span class=o>|</span>
+</span></span><span class=line><span class=cl>      <span class=no>Chef</span><span class=o>::</span><span class=no>Log</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=s2>&#34;Installing: &#34;</span> <span class=o>+</span> <span class=n>packs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>      <span class=n>package</span> <span class=n>packs</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span> <span class=ss>:install</span>
+</span></span><span class=line><span class=cl>      <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>template</span> <span class=s1>&#39;/etc/yum/yum-cron.conf&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=n>owner</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>group</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>mode</span> <span class=s1>&#39;0644&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>source</span> <span class=s1>&#39;yum-cron.conf.erb&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>execute</span> <span class=s1>&#39;systemctl enable yum-cron&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>execute</span> <span class=s1>&#39;systemctl start yum-cron&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><p>Notice that we have sneaked in automated security updates as well. For that, we require the following templates:</p><p><code>templates/50unattended-upgrades.erb</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>// Automatically upgrade packages from these <span class=o>(</span>origin, archive<span class=o>)</span> pairs
+</span></span><span class=line><span class=cl>Unattended-Upgrade::Allowed-Origins <span class=o>{</span>
+</span></span><span class=line><span class=cl>  &lt;% node<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;origins&#39;</span><span class=o>]</span>.each <span class=k>do</span> <span class=p>|</span>origin<span class=p>|</span> %&gt;
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;&lt;%= origin %&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  &lt;% end %&gt;
+</span></span><span class=line><span class=cl><span class=o>}</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>// List of packages to not update
+</span></span><span class=line><span class=cl>Unattended-Upgrade::Package-Blacklist <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;apache2&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=s2>&#34;nginx&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>//  <span class=s2>&#34;libc6-dev&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>//  <span class=s2>&#34;libc6-i686&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>// Send email to this address <span class=k>for</span> problems or packages upgrades
+</span></span><span class=line><span class=cl>// If empty or <span class=nb>unset</span> <span class=k>then</span> no email is sent, make sure that you
+</span></span><span class=line><span class=cl>// have a working mail setup on your system. The package <span class=s1>&#39;mailx&#39;</span>
+</span></span><span class=line><span class=cl>// must be installed or anything that provides /usr/bin/mail.
+</span></span><span class=line><span class=cl>&lt;%<span class=o>=</span> node<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;send_email&#39;</span><span class=o>]</span> ? <span class=s2>&#34;&#34;</span> : <span class=s2>&#34;// &#34;</span> %&gt;Unattended-Upgrade::Mail <span class=s2>&#34;&lt;%= node[&#39;unattended-upgrades&#39;][&#39;email_address&#39;] %&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>// Do automatic removal of new unused dependencies after the upgrade
+</span></span><span class=line><span class=cl>// <span class=o>(</span>equivalent to apt-get autoremove<span class=o>)</span>
+</span></span><span class=line><span class=cl>Unattended-Upgrade::Remove-Unused-Dependencies <span class=s2>&#34;&lt;%= node[&#39;unattended-upgrades&#39;][&#39;auto_remove&#39;] ? &#34;</span>true<span class=s2>&#34; : &#34;</span>false<span class=s2>&#34; %&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>// Automatically reboot *WITHOUT CONFIRMATION* <span class=k>if</span> a
+</span></span><span class=line><span class=cl>// the file /var/run/reboot-required is found after the upgrade
+</span></span><span class=line><span class=cl>Unattended-Upgrade::Automatic-Reboot <span class=s2>&#34;&lt;%= node[&#39;unattended-upgrades&#39;][&#39;auto_reboot&#39;] ? &#34;</span>true<span class=s2>&#34; : &#34;</span>false<span class=s2>&#34; %&gt;&#34;</span><span class=p>;</span>
+</span></span></code></pre></div><p><code>templates/20auto-upgrades.erb</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>APT::Periodic::Update-Package-Lists <span class=s2>&#34;&lt;%=node[&#39;unattended-upgrades&#39;][&#39;update_package_lists_interval&#39;]%&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>APT::Periodic::Unattended-Upgrade <span class=s2>&#34;&lt;%=node[&#39;unattended-upgrades&#39;][&#39;upgrade_interval&#39;]%&gt;&#34;</span><span class=p>;</span>
+</span></span></code></pre></div><p>and</p><p><code>templates/yum-cron.conf.erb</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>update_cmd</span> <span class=o>=</span> security
+</span></span><span class=line><span class=cl><span class=nv>apply_updates</span> <span class=o>=</span> yes
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>default<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;update_package_lists_interval&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=s2>&#34;1&#34;</span>
+</span></span><span class=line><span class=cl>default<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;upgrade_interval&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=s2>&#34;1&#34;</span>
+</span></span><span class=line><span class=cl>default<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;origins&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=o>[</span><span class=s1>&#39;${distro_id} ${distro_codename}-security&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>default<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;send_email&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=nb>false</span>
+</span></span><span class=line><span class=cl>default<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;email_address&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=s2>&#34;test@example.com&#34;</span>
+</span></span><span class=line><span class=cl>default<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;auto_remove&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=nb>false</span>
+</span></span><span class=line><span class=cl>default<span class=o>[</span><span class=s1>&#39;unattended-upgrades&#39;</span><span class=o>][</span><span class=s1>&#39;auto_reboot&#39;</span><span class=o>]</span> <span class=o>=</span> <span class=nb>false</span>
+</span></span></code></pre></div><p>and of course, our inspec test in <code>test/smoke/default/packages_test.rb</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=k>if</span> <span class=n>os</span><span class=o>[</span><span class=ss>:family</span><span class=o>]</span> <span class=o>==</span> <span class=s1>&#39;debian&#39;</span>
+</span></span><span class=line><span class=cl>  	<span class=n>req_packages</span> <span class=o>=</span> <span class=o>[</span><span class=s1>&#39;fail2ban&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;gcc&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;g++&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;git&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;htop&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;make&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nodejs&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nmap&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;npm&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;sysstat&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;unattended-upgrades&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;apt-listchanges&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>req_packages</span><span class=o>.</span><span class=n>each</span> <span class=k>do</span> <span class=o>|</span><span class=n>packs</span><span class=o>|</span>
+</span></span><span class=line><span class=cl>      <span class=n>describe</span> <span class=n>package</span><span class=p>(</span><span class=n>packs</span><span class=p>)</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>      	<span class=n>it</span> <span class=p>{</span> <span class=n>should</span> <span class=n>be_installed</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>req_packages</span> <span class=o>=</span> <span class=o>[</span><span class=s1>&#39;fail2ban&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;gcc-c++&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;git&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;glibc-static&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;htop&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;make&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nodejs&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;nmap&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;npm&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;sysstat&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s1>&#39;yum-cron&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>req_packages</span><span class=o>.</span><span class=n>each</span> <span class=k>do</span> <span class=o>|</span><span class=n>packs</span><span class=o>|</span>
+</span></span><span class=line><span class=cl>      <span class=n>describe</span> <span class=n>package</span><span class=p>(</span><span class=n>packs</span><span class=p>)</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>      	<span class=n>it</span> <span class=p>{</span> <span class=n>should</span> <span class=n>be_installed</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><h6 id=installing-cloud-9-ide>Installing Cloud 9 IDE</h6><p>Chef has a built-in git resource that we can use to pull the Cloud 9 IDE code.</p><p>The test for this section will be rather brief:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>describe</span> <span class=n>directory</span><span class=p>(</span><span class=s1>&#39;/home/c9ide/core/README.md&#39;</span><span class=p>)</span> <span class=k>do</span>  <span class=c1># describe this directory</span>
+</span></span><span class=line><span class=cl>	<span class=n>its</span><span class=p>(</span><span class=ss>:content</span><span class=p>)</span> <span class=p>{</span> <span class=n>should</span> <span class=n>match</span> <span class=sr>/^Cloud9/</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><p>and the reason is that we can really verify whether or not this section succeeded in the next section on running via supervisor.</p><p>The code for this section, in <code>/recipes/c9ide.rb</code>, is:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>git</span> <span class=s2>&#34;/home/c9ide/core&#34;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>   <span class=n>repository</span> <span class=s1>&#39;https://github.com/c9/core.git&#39;</span>
+</span></span><span class=line><span class=cl>   <span class=n>reference</span> <span class=s1>&#39;master&#39;</span>
+</span></span><span class=line><span class=cl>   <span class=n>action</span> <span class=ss>:sync</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>case</span> <span class=n>node</span><span class=o>[</span><span class=s1>&#39;platform&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=k>when</span> <span class=s1>&#39;debian&#39;</span><span class=p>,</span> <span class=s1>&#39;ubuntu&#39;</span>
+</span></span><span class=line><span class=cl>	<span class=n>bash</span> <span class=s1>&#39;create nodejs link&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>		<span class=n>code</span> <span class=s>&lt;&lt;-EOH
+</span></span></span><span class=line><span class=cl><span class=s></span>		<span class=n>ln</span> <span class=o>-</span><span class=n>s</span> <span class=sr>/usr/</span><span class=n>bin</span><span class=o>/</span><span class=n>nodejs</span> <span class=sr>/usr/</span><span class=n>bin</span><span class=o>/</span><span class=n>node</span>
+</span></span><span class=line><span class=cl>		<span class=no>EOH</span>
+</span></span><span class=line><span class=cl>		<span class=n>not_if</span> <span class=p>{</span> <span class=o>::</span><span class=no>File</span><span class=o>.</span><span class=n>exist?</span><span class=p>(</span><span class=s1>&#39;/usr/bin/node&#39;</span><span class=p>)</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>bash</span> <span class=s1>&#39;install_cloud9ide&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>   <span class=n>cwd</span> <span class=s1>&#39;/home/c9ide/core/&#39;</span>
+</span></span><span class=line><span class=cl>   <span class=n>user</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>   <span class=n>code</span> <span class=s>&lt;&lt;-EOH
+</span></span></span><span class=line><span class=cl><span class=s></span>     <span class=n>scripts</span><span class=o>/</span><span class=n>install</span><span class=o>-</span><span class=n>sdk</span><span class=o>.</span><span class=n>sh</span>
+</span></span><span class=line><span class=cl>     <span class=no>EOH</span>
+</span></span><span class=line><span class=cl>   <span class=n>environment</span> <span class=s1>&#39;PREFIX&#39;</span> <span class=o>=&gt;</span> <span class=s1>&#39;/usr/local&#39;</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><h6 id=installing-supervisor>Installing Supervisor</h6><p>Finally, we want to leave our server running Cloud 9 IDE after provisioning it. Supervisor is a fantastic way to do so, though of course not the only way and perhaps not even the best way, but it is a convenient and production-ready solution (though this development kit version of Cloud 9 IDE is not production material and is meant for development purposes).</p><p>In <code>recipes/supervisor.rb</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>package</span> <span class=s1>&#39;supervisor&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=n>action</span> <span class=ss>:install</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>case</span> <span class=n>node</span><span class=o>[</span><span class=s1>&#39;platform&#39;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=k>when</span> <span class=s1>&#39;debian&#39;</span><span class=p>,</span> <span class=s1>&#39;ubuntu&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>cookbook_file</span> <span class=s1>&#39;/etc/supervisor/conf.d/cloud9ide.conf&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	  <span class=n>source</span> <span class=s1>&#39;c9ide.conf&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>owner</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>group</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>mode</span> <span class=s1>&#39;0755&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>action</span> <span class=ss>:create</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>execute</span> <span class=s1>&#39;start supervisor&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	  <span class=n>command</span> <span class=s1>&#39;service supervisor start&#39;</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>execute</span> <span class=s1>&#39;reload supervisor&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	  <span class=n>command</span> <span class=s1>&#39;supervisorctl update&#39;</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>when</span> <span class=s1>&#39;redhat&#39;</span><span class=p>,</span> <span class=s1>&#39;centos&#39;</span><span class=p>,</span> <span class=s1>&#39;fedora&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>cookbook_file</span> <span class=s1>&#39;/etc/supervisord.d/cloud9ide.ini&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	  <span class=n>source</span> <span class=s1>&#39;c9ide.conf&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>owner</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>group</span> <span class=s1>&#39;root&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>mode</span> <span class=s1>&#39;0755&#39;</span>
+</span></span><span class=line><span class=cl>	  <span class=n>action</span> <span class=ss>:create</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>execute</span> <span class=s1>&#39;start supervisor&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	  <span class=n>command</span> <span class=s1>&#39;service supervisord start&#39;</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>execute</span> <span class=s1>&#39;reload supervisor&#39;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	  <span class=n>command</span> <span class=s1>&#39;supervisorctl update&#39;</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><p>and finally add this to the <code>c9ide_test.rb</code> test file:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>describe</span> <span class=n>port</span><span class=p>(</span><span class=mi>9999</span><span class=p>)</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=n>it</span> <span class=p>{</span> <span class=n>should</span> <span class=n>be_listening</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></div><h5 id=putting-it-all-together>Putting it all together</h5><p>The default recipe should now look like this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ruby data-lang=ruby><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;c9_ide::update&#39;</span>
+</span></span><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;user::data_bag&#39;</span>
+</span></span><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;c9_ide::motd&#39;</span>
+</span></span><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;c9_ide::packages&#39;</span>
+</span></span><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;c9_ide::cloud9ide&#39;</span>
+</span></span><span class=line><span class=cl><span class=n>include_recipe</span> <span class=s1>&#39;c9_ide::supervisor&#39;</span>
+</span></span></code></pre></div><p>we run a final <code>kitchen converge</code>; if all goes well, we follow up with a final <code>kitchen verify</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>-----&gt; Starting Kitchen <span class=o>(</span>v1.14.2<span class=o>)</span>
+</span></span><span class=line><span class=cl>-----&gt; Setting up &lt;default-ubuntu-1604&gt;...
+</span></span><span class=line><span class=cl>       Finished setting up &lt;default-ubuntu-1604&gt; <span class=o>(</span>0m0.00s<span class=o>)</span>.
+</span></span><span class=line><span class=cl>-----&gt; Verifying &lt;default-ubuntu-1604&gt;...
+</span></span><span class=line><span class=cl>       Loaded
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Target:  ssh://vagrant@127.0.0.1:2222
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  File /home/c9ide/core/README.md
+</span></span><span class=line><span class=cl>     ✔  content should match /^Cloud9/
+</span></span><span class=line><span class=cl>  Port <span class=m>9999</span>
+</span></span><span class=line><span class=cl>     ✔  should be listening
+</span></span><span class=line><span class=cl>  User c9ide
+</span></span><span class=line><span class=cl>     ✔  should exist
+</span></span><span class=line><span class=cl>  File /etc/motd
+</span></span><span class=line><span class=cl>     ✔  content should match /A Cloud <span class=m>9</span> IDE server/
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  fail2ban should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  gcc should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  g++ should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  git should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  htop should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  make should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  nodejs should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  nmap should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  npm should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  sysstat should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  unattended-upgrades should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  apt-listchanges should be installed
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Test Summary: <span class=m>16</span> successful, <span class=m>0</span> failures, <span class=m>0</span> skipped
+</span></span><span class=line><span class=cl>       Finished verifying &lt;default-ubuntu-1604&gt; <span class=o>(</span>0m1.28s<span class=o>)</span>.
+</span></span><span class=line><span class=cl>-----&gt; Setting up &lt;default-centos-72&gt;...
+</span></span><span class=line><span class=cl>       Finished setting up &lt;default-centos-72&gt; <span class=o>(</span>0m0.00s<span class=o>)</span>.
+</span></span><span class=line><span class=cl>-----&gt; Verifying &lt;default-centos-72&gt;...
+</span></span><span class=line><span class=cl>       Loaded
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Target:  ssh://vagrant@127.0.0.1:2200
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  File /home/c9ide/core/README.md
+</span></span><span class=line><span class=cl>     ✔  content should match /^Cloud9/
+</span></span><span class=line><span class=cl>  Port <span class=m>9999</span>
+</span></span><span class=line><span class=cl>     ✔  should be listening
+</span></span><span class=line><span class=cl>  User c9ide
+</span></span><span class=line><span class=cl>     ✔  should exist
+</span></span><span class=line><span class=cl>  File /etc/motd
+</span></span><span class=line><span class=cl>     ✔  content should match /A Cloud <span class=m>9</span> IDE server/
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  fail2ban should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  gcc-c++ should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  git should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  glibc-static should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  htop should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  make should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  nodejs should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  nmap should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  npm should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  sysstat should be installed
+</span></span><span class=line><span class=cl>  System Package
+</span></span><span class=line><span class=cl>     ✔  yum-cron should be installed
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Test Summary: <span class=m>15</span> successful, <span class=m>0</span> failures, <span class=m>0</span> skipped
+</span></span><span class=line><span class=cl>       Finished verifying &lt;default-centos-72&gt; <span class=o>(</span>0m13.80s<span class=o>)</span>.
+</span></span><span class=line><span class=cl>-----&gt; Kitchen is finished. <span class=o>(</span>0m16.47s<span class=o>)</span>
+</span></span></code></pre></div><p>Congratulations, you have a basic working chef recipe for installing Cloud 9 IDE, tested and provisioned on both major families of Linux.</p><h3 id=source-code>Source Code</h3><p>You can find the source code for this recipe on my github account <a href=https://github.com/3implieschaos/c9_ide_chef/tree/PartI>here</a>.</p><h3 id=future-steps>Future Steps</h3><p>We took some shortcuts and avoided some best practices for convenience here. Ideally we would like some unit tests and to pull in more community recipes. For example, the supervisor chef cookbook could be used here instead of dealing with that in a platform case.</p><p>In the forthcoming Part II, we will use Puppet, a widely used alternative to Chef, to provision a server that runs the Cloud 9 IDE SDK as we have here with Chef.</p></article></main><footer id=footer><div><span>Powered by <a class=link href=https://gohugo.io target=_blank rel=noopener>Hugo</a> |
+Theme <a class=link href=https://github.com/michaelneuper/hugo-texify3 target=_blank rel=noopener>TeXify3</a></span></div><div><span>Copyright © 2025</span></div></footer></div><script src=https://www.tdj28.org/js/script.js defer></script></body></html>
