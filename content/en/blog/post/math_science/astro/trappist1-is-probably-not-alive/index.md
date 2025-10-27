@@ -13,7 +13,6 @@ tags:
 categories:
   - shallow-dive
   - physics
-toc: true
 math: true
 author: T Jones
 ---
