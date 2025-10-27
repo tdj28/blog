@@ -320,9 +320,7 @@ entropy.
 * If we use entropy as a measure of the  unpredictability of the distribution, we know that maximum entropy corresponds to a uniform distribution where each choice is as likely as any other choice. So we should expect to see entropy reach an asymptotic climb towards
 the theoretical maximum for the training text we use.
 
-* Because probabilities are being raised by \\( 1/T \\), as T gets larger and larger, \\( 1/T \rightarrow 0 \\), and so 
-the probabilities for each word in a training text of N words \\( \rightarrow 1/N \\). The larger the text, the closer it can get
-to uniform distribution as both \\( N \rightarrow \infty \\) and \\(T \rightarrow \infty \\).
+* Because probabilities are being raised by \\( 1/T \\), as T gets larger and larger, \\( 1/T \rightarrow 0 \\). Since any positive number raised to the power of 0 equals 1, all adjusted probabilities \\( p_i^{1/T} \rightarrow 1 \\). After normalization, each probability for a word in a training text of N words \\( \rightarrow 1/N \\). The larger the text, the closer it can get to uniform distribution as both \\( N \rightarrow \infty \\) and \\(T \rightarrow \infty \\).
 
 ### Larger training text
 
