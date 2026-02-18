@@ -11,7 +11,7 @@ categories:
   - deep-dive
   - software
 toc: true
-author: T Jones
+authors: ["t-jones"]
 ---
 ## Introduction
 

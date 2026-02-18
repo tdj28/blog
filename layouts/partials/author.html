@@ -1,0 +1,15 @@
+{{- $authorsData := .Site.Data.authors -}}
+{{- $authors := .Page.Params.authors -}}
+{{- if $authors -}}
+<div class="text-sm text-neutral-500 dark:text-neutral-400">
+{{- if gt (len $authors) 1 -}}
+<div class="font-medium text-neutral-600 dark:text-neutral-400 mb-1">Authors:</div>
+{{- end -}}
+{{- range $author := $authors -}}
+{{- $authorData := index $authorsData $author -}}
+{{- if $authorData -}}
+<div>{{ $authorData.name }}{{ with $authorData.bio }} <span class="text-xs text-neutral-400 dark:text-neutral-500">({{ . }})</span>{{ end }}</div>
+{{- end -}}
+{{- end -}}
+</div>
+{{- end -}}

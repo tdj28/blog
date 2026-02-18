@@ -2,6 +2,7 @@
 title: "Headless Python Selenium With Behave"
 date: 2018-08-26T19:21:05-07:00
 draft: false
+authors: ["t-jones"]
 comments: false
 summary: Selenium Testing a Web App can be a quick and productive win.
 tags:

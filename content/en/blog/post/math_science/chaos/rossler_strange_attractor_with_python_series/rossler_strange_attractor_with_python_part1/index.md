@@ -13,7 +13,7 @@ categories:
   - howto
 toc: true
 math: true
-author: T Jones
+authors: ["t-jones"]
 ---
 
 ## Introduction

@@ -2,6 +2,7 @@
 title: "The Mathematics of Vector Search"
 date: 2026-02-17
 draft: false
+authors: ["t-jones", "gemini-pro"]
 comments: true
 showMath: true
 summary: "A comprehensive deep dive into the mathematical foundations and algorithms of modern vector search, including HNSW, DiskANN, Quantization, and the Curse of Dimensionality."

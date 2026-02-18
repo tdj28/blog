@@ -13,7 +13,7 @@ categories:
   - demos
   - AIML
 toc: true
-author: T Jones
+authors: ["t-jones"]
 ---
 
 ## Introduction

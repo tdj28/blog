@@ -16,6 +16,18 @@ taxonomies:
   author: authors
   series: series
 
+author:
+  name: "TJ"
+  headline: "Data Science | Physics | Math | Engineering"
+  bio: "Technical notes and deep dives."
+  links:
+    - icon: github
+      link: "https://github.com/tdj28"
+    - icon: twitter
+      link: "https://x.com/tdj11100"
+    - icon: rss
+      link: "/index.xml"
+
 params:
   colorScheme: blowfish
   defaultAppearance: light # valid options: light, dark, auto
@@ -40,14 +52,12 @@ params:
 
   article:
     showDate: true
-    showViews: true
+    showViews: false
     showReadingTime: true
     showTableOfContents: true
     showRelatedContent: true
     relatedContentLimit: 5
     showAuthor: true
-    showWordCount: true
-    showWordCount: true
     showWordCount: true
     showShare: true
     showTaxonomies: true
@@ -64,19 +74,6 @@ params:
   customCSS: ["css/custom.css"]
   customJS: ["js/tabs.js"]
 
-  # Author details for profile layout
-  author:
-    name: "TJ"
-    image: "images/profile.jpg" # Optional: ensure this file exists or remove
-    headline: "Data Science | Physics | Math | Engineering"
-    bio: "Technical notes and deep dives."
-    links:
-      - icon: github
-        link: "https://github.com/tdj28"
-      - icon: twitter
-        link: "https://x.com/tdj11100"
-      - icon: rss
-        link: "/index.xml"
 
 markup:
   goldmark:

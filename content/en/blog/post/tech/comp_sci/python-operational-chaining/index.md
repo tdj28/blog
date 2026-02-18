@@ -2,6 +2,7 @@
 title: "Python Uses Operational Chaining for Boolean Comparisons"
 date: 2017-01-20T19:21:05-07:00
 draft: false
+authors: ["t-jones"]
 comments: false
 summary: It is important to understand Python's use of operational chaining to avoid programming errors.
 tags:

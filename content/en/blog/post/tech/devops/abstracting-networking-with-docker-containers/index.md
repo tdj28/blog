@@ -11,7 +11,7 @@ tags:
 categories:
   - deep-dive
   - software
-author: T Jones
+authors: ["t-jones"]
 ---
 
 # Goal:

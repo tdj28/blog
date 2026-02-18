@@ -14,7 +14,7 @@ categories:
   - shallow-dive
   - physics
 math: true
-author: T Jones
+authors: ["t-jones"]
 ---
 
 

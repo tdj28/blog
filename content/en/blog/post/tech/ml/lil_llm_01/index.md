@@ -11,7 +11,7 @@ tags:
 toc: true
 math: true
 comments: false
-author: T Jones
+authors: ["t-jones"]
 summary: In this first part in a multipart series, we build a little model LLM that can construct basic phrases and display the effects of temperature. This first version doesn't use neural networks but does demonstrate some fundamentals of LLM terminology.
 ---
 

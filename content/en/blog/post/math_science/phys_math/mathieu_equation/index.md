@@ -1,6 +1,6 @@
 ---
 title: "Quantum Computers:  Mathieu's Equations and the Quadrupole Ion Traps"
-author: "T Jones"
+authors: ["t-jones"]
 date: "2024-08-17"
 draft: false
 categories:

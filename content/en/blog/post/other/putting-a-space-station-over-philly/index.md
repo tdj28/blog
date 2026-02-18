@@ -12,7 +12,7 @@ categories:
   - software
 #url: "posts/puttingspacestationoverphilly"
 toc: true
-author: T Jones
+authors: ["t-jones"]
 ---
 
 ## Quick overview

@@ -12,7 +12,7 @@ tags:
 toc: true
 math: true
 comments: false
-author: T Jones
+authors: ["t-jones"]
 image: image.png
 summary: A look at how Bayesian statistics can help us understand ways to make decisions (in the context of COVID-19 rapid test accuracy). This post will introduce concepts related to Bayesian statistics, but may still be interesting to individuals already familiar with the topic.
 ---

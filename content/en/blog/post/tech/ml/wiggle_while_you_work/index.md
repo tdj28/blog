@@ -1,6 +1,6 @@
 ---
 title: "Wiggle while you work: using jittering to augment object tracking in low fps videos"
-author: "T Jones"
+authors: ["t-jones"]
 date: "2024-08-18"
 draft: false
 categories:
