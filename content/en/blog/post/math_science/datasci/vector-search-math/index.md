@@ -1518,20 +1518,24 @@ graph TD
 
 | Service | HNSW | IVF-Flat | IVF-PQ | IVF-PQFS | DiskANN | ScaNN | Flat / Brute-Force |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Google Vertex AI** | — | — | — | — | — | ✅ | — |
-| **Google AlloyDB** | ✅ | — | — | — | — | ✅ | ✅ |
-| **Google Cloud Spanner** | — | — | — | — | — | ✅ | ✅ |
-| **Azure AI Search** | ✅ | — | — | — | — | — | ✅ |
-| **Azure Cosmos DB** | — | — | — | — | ✅ | — | — |
-| **SQL Server** | — | — | — | — | ✅ | — | — |
-| **Milvus / Zilliz** | ✅ | ✅ | ✅ | — | ✅ | — | ✅ |
-| **Pinecone** | ✅ | — | — | — | — | — | — |
-| **Weaviate** | ✅ | — | — | — | — | — | ✅ |
-| **SingleStore** | ✅ | ✅ | ✅ | ✅ | — | — | — |
-| **LanceDB** | — | ✅ | ✅ | — | 🔜 | — | — |
-| **pgvector (PostgreSQL)** | ✅ | ✅ | — | — | — | — | ✅ |
+| **Google Vertex AI** <a id="cite-6"></a>[[6]](#ref-6) | — | — | — | — | — | ✅ | — |
+| **Google AlloyDB** <a id="cite-13"></a>[[13]](#ref-13) <a id="cite-14"></a>[[14]](#ref-14) | ✅ | ✅ | — | — | — | ✅ | ✅ |
+| **Google Cloud Spanner** <a id="cite-15"></a>[[15]](#ref-15) <a id="cite-16"></a>[[16]](#ref-16) | — | — | — | — | — | ✅ | ✅ |
+| **Azure AI Search** <a id="cite-17"></a>[[17]](#ref-17) | ✅ | — | — | — | — | — | ✅ |
+| **Azure Cosmos DB** <a id="cite-18"></a>[[18]](#ref-18) | — | — | — | — | ✅ | — | ✅ |
+| **SQL Server** <a id="cite-7"></a>[[7]](#ref-7) | — | — | — | — | ✅ | — | — |
+| **Milvus / Zilliz** <a id="cite-19"></a>[[19]](#ref-19) <a id="cite-20"></a>[[20]](#ref-20) | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ |
+| **Pinecone** <a id="cite-21"></a>[[21]](#ref-21) | *(opaque)* | — | — | — | — | — | — |
+| **Weaviate** <a id="cite-22"></a>[[22]](#ref-22) | ✅ | — | — | — | — | — | ✅ |
+| **SingleStore** <a id="cite-11"></a>[[11]](#ref-11) <a id="cite-23"></a>[[23]](#ref-23) | ✅ | ✅ | ✅ | ✅ | — | — | — |
+| **LanceDB** <a id="cite-24"></a>[[24]](#ref-24) | ✅ | ✅ | ✅ | — | — | — | — |
+| **pgvector (PostgreSQL)** <a id="cite-25"></a>[[25]](#ref-25) | ✅ | ✅ | — | — | — | — | ✅ |
 
-*✅ = Supported, 🔜 = Emerging/Roadmap, — = Not available or not documented.*
+*✅ = Supported, (opaque) = Not publicly specified, — = Not available or not documented.*
+
+{{< alert "circle-info" >}}
+**Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with distinct algorithm choices. Lightweight or embedded vector stores like **ChromaDB** and **Qdrant** primarily wrap **HNSW** (via `hnswlib`) with a brute-force buffer for small batch ingestion, they are excellent for prototyping and small-to-medium workloads but don't expose the breadth of indexing strategies seen above. Similarly, **Faiss** is a *library*, not a managed service, it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
+{{< /alert >}}
 
 ## 8. References
 
@@ -1547,3 +1551,16 @@ graph TD
 10. **<a id="ref-10"></a>LanceDB.** *[Add LanceDB to ANN benchmarks · Issue #220](https://github.com/lancedb/lancedb/issues/220).* GitHub. [↩](#cite-10)
 11. **<a id="ref-11"></a>SingleStore.** *[Announcing SingleStore Indexed ANN Vector Search](https://www.singlestore.com/blog/singlestore-indexed-ann-vector-search/).* [↩](#cite-11)
 12. **<a id="ref-12"></a>SingleStore.** *[Tuning Vector Indexes and Queries](https://docs.singlestore.com/cloud/developer-resources/functional-extensions/tuning-vector-indexes-and-queries/).* [↩](#cite-12)
+13. **<a id="ref-13"></a>Google Cloud.** *[Create an IVFFlat index | AlloyDB for PostgreSQL](https://docs.cloud.google.com/alloydb/docs/ai/create-ivfflat-index).* [↩](#cite-13)
+14. **<a id="ref-14"></a>Google Cloud.** *[ScaNN for AlloyDB: How it compares to pgvector HNSW](https://cloud.google.com/blog/products/databases/how-scann-for-alloydb-vector-search-compares-to-pgvector-hnsw).* [↩](#cite-14)
+15. **<a id="ref-15"></a>Google Cloud.** *[Create and manage vector indexes | Spanner](https://docs.cloud.google.com/spanner/docs/vector-indexes).* [↩](#cite-15)
+16. **<a id="ref-16"></a>Google Cloud.** *[Perform vector similarity search in Spanner by finding the K-nearest neighbors](https://docs.cloud.google.com/spanner/docs/find-k-nearest-neighbors).* [↩](#cite-16)
+17. **<a id="ref-17"></a>Microsoft.** *[Create a Vector Index - Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-create-index).* [↩](#cite-17)
+18. **<a id="ref-18"></a>Microsoft.** *[Vector search in Azure Cosmos DB for NoSQL](https://learn.microsoft.com/en-us/azure/cosmos-db/vector-search).* [↩](#cite-18)
+19. **<a id="ref-19"></a>Milvus.** *[In-memory Index | Milvus Documentation](https://milvus.io/docs/index.md).* [↩](#cite-19)
+20. **<a id="ref-20"></a>Milvus.** *[Index Vector Fields | Milvus Documentation](https://milvus.io/docs/index-vector-fields.md).* [↩](#cite-20)
+21. **<a id="ref-21"></a>Pinecone.** *[Nearest Neighbor Indexes for Similarity Search](https://www.pinecone.io/learn/series/faiss/vector-indexes/).* [↩](#cite-21)
+22. **<a id="ref-22"></a>Weaviate.** *[Vector index | Weaviate Documentation](https://docs.weaviate.io/weaviate/config-refs/indexing/vector-index).* [↩](#cite-22)
+23. **<a id="ref-23"></a>SingleStore.** *[Vector Indexing | SingleStore Documentation](https://docs.singlestore.com/cloud/reference/sql-reference/vector-functions/vector-indexing/).* [↩](#cite-23)
+24. **<a id="ref-24"></a>LanceDB.** *[Vector Indexes | LanceDB Documentation](https://docs.lancedb.com/indexing/vector-index).* [↩](#cite-24)
+25. **<a id="ref-25"></a>pgvector.** *[pgvector: Open-source vector similarity search for PostgreSQL](https://github.com/pgvector/pgvector).* GitHub. [↩](#cite-25)
