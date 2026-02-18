@@ -1,6 +1,7 @@
 baseURL: https://www.tdj28.org
 title: TDJ28
 theme: blowfish
+timeout: 120s
 
 languageCode: en-us
 defaultContentLanguage: en

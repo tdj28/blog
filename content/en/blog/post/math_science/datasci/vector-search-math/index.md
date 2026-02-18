@@ -2,7 +2,7 @@
 title: "The Mathematics of Vector Search"
 date: 2026-02-17
 draft: false
-authors: ["t-jones", "gemini-pro"]
+authors: ["t-jones", "gemini-3-pro", "gpt-5-pro-review"]
 comments: true
 showMath: true
 summary: "A comprehensive deep dive into the mathematical foundations and algorithms of modern vector search, including HNSW, DiskANN, Quantization, and the Curse of Dimensionality."
@@ -17,6 +17,14 @@ categories:
   - datasci
 toc: true
 ---
+
+{{< alert "circle-info" >}}
+Creation of this blog post was driven by the 
+human author who has many years of experience 
+in education. AI tooling was used to acclerate 
+content creation and peer review the
+accuracy of the content.
+{{< /alert >}}
 
 The rise of Large Language Models (LLMs) and other Machine Learning tools such as CLIP and semantic search has made **Vector Databases** a critical component of modern infrastructure. But unlike traditional databases that search for exact substring matches, vector databases search for *meaning*.
 
