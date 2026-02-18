@@ -197,18 +197,17 @@ class MBR:
         self.max = max_coords  # [x_max, y_max, ...]
 
     def intersects(self, query_point, radius):
-        # Check collision for every dimension
+        # Accumulate squared distances across ALL dimensions
+        dist_sq = 0
         for i in range(len(query_point)):
-            # Dist to box in dim i
-            dist = 0
+            # Per-dimension distance to the box
+            delta = 0
             if query_point[i] < self.min[i]:
-                dist = self.min[i] - query_point[i]
+                delta = self.min[i] - query_point[i]
             elif query_point[i] > self.max[i]:
-                dist = query_point[i] - self.max[i]
-            
-            if dist > radius:
-                return False # Too far in this dimension
-        return True
+                delta = query_point[i] - self.max[i]
+            dist_sq += delta * delta
+        return dist_sq <= radius * radius
 ```
 {{% /tab %}}
 {{% tab "Go" %}}
@@ -219,19 +218,17 @@ type MBR struct {
 }
 
 func (m MBR) Intersects(query []float64, radius float64) bool {
+    distSq := 0.0
     for i := range query {
-        dist := 0.0
+        delta := 0.0
         if query[i] < m.Min[i] {
-            dist = m.Min[i] - query[i]
+            delta = m.Min[i] - query[i]
         } else if query[i] > m.Max[i] {
-            dist = query[i] - m.Max[i]
+            delta = query[i] - m.Max[i]
         }
-
-        if dist > radius {
-            return false // Too far in at least one dimension
-        }
+        distSq += delta * delta
     }
-    return true
+    return distSq <= radius*radius
 }
 ```
 {{% /tab %}}
@@ -242,17 +239,17 @@ struct MBR {
     std::vector<double> max_coords;
 
     bool intersects(const std::vector<double>& query, double radius) {
+        double dist_sq = 0.0;
         for (size_t i = 0; i < query.size(); ++i) {
-            double dist = 0.0;
+            double delta = 0.0;
             if (query[i] < min_coords[i]) {
-                dist = min_coords[i] - query[i];
+                delta = min_coords[i] - query[i];
             } else if (query[i] > max_coords[i]) {
-                dist = query[i] - max_coords[i];
+                delta = query[i] - max_coords[i];
             }
-
-            if (dist > radius) return false;
+            dist_sq += delta * delta;
         }
-        return true;
+        return dist_sq <= radius * radius;
     }
 };
 ```
@@ -600,7 +597,7 @@ double cosine_similarity(const std::vector<double>& v1, const std::vector<double
 **HNSW (Hierarchical Navigable Small World) <a id="cite-1"></a>[[1]](#ref-1)** is currently the industry standard for in-memory vector search. It works by constructing a **multi-layered proximity graph**.
 
 ### The Small World Phenomenon
-A **navigable small world** graph has a special property: even though each node connects to only a few neighbors (low degree), the graph is structured so that you can hop between any two nodes in very few steps ($O(\log N)$).
+A **navigable small world** graph has a special property: even though each node connects to only a few neighbors (low degree), the graph is structured so that you can hop between any two nodes in very few steps (empirically near $O(\log N)$ for typical data distributions).
 *   **Intuition**: Think of the "Six Degrees of Kevin Bacon." You can connect any actor to Kevin Bacon in less than 6 steps knowing only who worked with whom.
 
 ### Multi-Layered Architecture
@@ -677,7 +674,7 @@ graph TD
     *   Add them to `W` if they are closer than the worst candidate in `W` (and **drop** the worst one to keep `W` at size `ef`).
     *   Stop when no candidate in `W` yields a closer neighbor.
 
-### Mathematical Complexity: Why $O(\log N)$?
+### Mathematical Complexity: Why ~$O(\log N)$?
 
 Why is HNSW so fast? It comes down to the probability of layer promotion, similar to a **Skip List**.
 
@@ -839,13 +836,15 @@ graph TD
 
 To understand why $p \approx 1/M$ is optimal, we need to balance the "width" of the search at each layer against the total "height" of the graph.
 
-1.  **The Goal**: We want the total number of hops to be logarithmic, i.e., $O(\log N)$.
+1.  **The Goal**: We want the total number of hops to be logarithmic, i.e., approximately $O(\log N)$ (empirically observed for most data distributions; worst-case can degrade toward linear).
 2.  **The Constraint**: At each layer, we have on average $M$ connections. This means a single hop can traverse a "distance" proportional to the density of that layer.
 
 If layer $L$ has $N_L$ nodes and layer $L+1$ has $N_{L+1}$ nodes, the "skip length" at layer $L+1$ is effectively $N_L / N_{L+1}$ times larger than at layer $L$. To utilize the $M$ connections most efficiently, the skip length should match the branching factor (the average number of neighbors each node connects to, $M$). This implies we want a reduction factor (the ratio by which the number of nodes decreases from one layer to the next) of $M$:
 $$N_{L+1} \approx \frac{N_L}{M}$$
 
 This means the probability of a node being promoted to the next layer is simply $p = 1/M$.
+
+> **Note on $M$ in practice:** In HNSW implementations, $M$ is exposed as the **maximum neighbor cap per layer** (with layer 0 often using a larger cap, e.g., $M_0 = 2M$). The **level distribution parameter** $m_L$ is conceptually separate, though related via the derivation below. The user-facing knob is $M$ (neighbor cap); the framework derives the layer assignment internally.
 
 **The Role of $e$ (Natural Logarithm)**
 The original HNSW paper implements this using an exponential distribution to determine the *max level* of a node:
@@ -1464,7 +1463,14 @@ A critical "gotcha" in vector search is that widely used ANN algorithms are **no
 3.  **Random Initialization**: k-means (for IVF/PQ) starts with random seeds.
 4.  **Floating-Point Math**: SIMD instructions accumulate floating point numbers in different orders, leading to tiny rounding differences that can flip the order of two nearly-identical vectors.
 
-**Mitigation**: For forensic or legal use cases where exact reproducibility is required, you must implement an **Exact k-NN fallback** (brute force) on a time-bounded window of data, rather than relying solely on the ANN index.
+**Mitigations**: For use cases where reproducibility is required, several strategies can be combined:
+*   **Deterministic build seeds** and **fixed insertion ordering** to produce identical graphs.
+*   **Snapshotting immutable index versions** so queries always run against the same graph.
+*   **Disabling concurrent mutation** during query execution.
+*   **Deterministic BLAS/SIMD settings** to eliminate floating-point accumulation order differences.
+*   **Exact k-NN reranking** on a bounded candidate set as the gold-standard fallback.
+
+For forensic or legal use cases, an **Exact k-NN fallback** (brute force) on a time-bounded window of data remains the strongest guarantee.
 
 ---
 
@@ -1473,10 +1479,10 @@ A critical "gotcha" in vector search is that widely used ANN algorithms are **no
 | Algorithm | Search Complexity | Typical Memory | Latency | Use Case |
 |:---|:---|:---|:---|:---|
 | **Exact k-NN** | $O(N \cdot d)$ | 100% (High) | Seconds | Ground truth, small data |
-| **HNSW** | $O(\log N)$ | ~140% (100% Data + 40% Graph) | < 1 ms | Real-time, expensive |
+| **HNSW** | ~$O(\log N)$ | ~140% (100% Data + 40% Graph) | < 1 ms | Real-time, expensive |
 | **IVF-PQ** | $O(N/K)$ | 5-10% (Low) | 1-10 ms | Balanced, large scale |
 | **IVF-PQFS** | $O(N/K)$ (SIMD) | 2-5% (Very Low) | < 2 ms | High throughput, compressed |
-| **DiskANN** | $O(\log N)$ + Disk I/O | 5% (Very Low) | 2-10 ms | Massive scale, cost-effective |
+| **DiskANN** | ~$O(\log N)$ + Disk I/O | 5% (Very Low) | 2-10 ms | Massive scale, cost-effective |
 | **ScaNN** | Optimized IVF-PQ | 5-10% (Low) | < 5 ms | High accuracy / Google Cloud |
 | **SingleStore** | Hybrid (HNSW / IVF) | High or Low | 1-10 ms | HTAP (SQL + Vector) |
 
@@ -1501,12 +1507,31 @@ graph TD
 {{< /mermaid >}}
 
 > **Note on Algorithms vs. Services:**
-> *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search**.
-> *   **DiskANN** is the core algorithm behind **Azure AI Search**, **LanceDB**, and **Milvus (Disk Index)**.
+> *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search** <a id="cite-6"></a>[[6]](#ref-6).
+> *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-8"></a>[[8]](#ref-8).
+> *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search <a id="cite-9"></a>[[9]](#ref-9).
+> *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging <a id="cite-10"></a>[[10]](#ref-10) (check current docs/releases for the latest).
 > *   **HNSW** is the default in-memory engine for **Pinecone**, **Milvus**, and **Weaviate**.
-> *   **SingleStore** uses **HNSW** (Memory) and **IVF-PQFS** (Disk).
+> *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration <a id="cite-11"></a>[[11]](#ref-11) <a id="cite-12"></a>[[12]](#ref-12).
 
+### Algorithm Support by Service
 
+| Service | HNSW | IVF-Flat | IVF-PQ | IVF-PQFS | DiskANN | ScaNN | Flat / Brute-Force |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Google Vertex AI** | — | — | — | — | — | ✅ | — |
+| **Google AlloyDB** | ✅ | — | — | — | — | ✅ | ✅ |
+| **Google Cloud Spanner** | — | — | — | — | — | ✅ | ✅ |
+| **Azure AI Search** | ✅ | — | — | — | — | — | ✅ |
+| **Azure Cosmos DB** | — | — | — | — | ✅ | — | — |
+| **SQL Server** | — | — | — | — | ✅ | — | — |
+| **Milvus / Zilliz** | ✅ | ✅ | ✅ | — | ✅ | — | ✅ |
+| **Pinecone** | ✅ | — | — | — | — | — | — |
+| **Weaviate** | ✅ | — | — | — | — | — | ✅ |
+| **SingleStore** | ✅ | ✅ | ✅ | ✅ | — | — | — |
+| **LanceDB** | — | ✅ | ✅ | — | 🔜 | — | — |
+| **pgvector (PostgreSQL)** | ✅ | ✅ | — | — | — | — | ✅ |
+
+*✅ = Supported, 🔜 = Emerging/Roadmap, — = Not available or not documented.*
 
 ## 8. References
 
@@ -1515,3 +1540,10 @@ graph TD
 3.  **<a id="ref-3"></a>Guo, R., et al. (2020).** *[Accelerating Large-Scale Inference with Anisotropic Vector Quantization (ScaNN)](https://arxiv.org/abs/1908.10396).* ICML. [↩](#cite-3)
 4.  **<a id="ref-4"></a>Johnson, J., et al. (2019).** *[Billion-scale similarity search with GPUs (Faiss)](https://arxiv.org/abs/1702.08734).* IEEE Big Data. [↩](#cite-4)
 5.  **<a id="ref-5"></a>Aggarwal, C. C., Hinneburg, A., & Keim, D. A. (2001).** *[On the Surprising Behavior of Distance Metrics in High Dimensional Space](https://bib.dbvis.de/uploadedFiles/155.pdf).* ICDX. [↩](#cite-5)
+6.  **<a id="ref-6"></a>Google Cloud.** *[Vector Search overview | Vertex AI](https://docs.cloud.google.com/vertex-ai/docs/vector-search/overview).* [↩](#cite-6)
+7.  **<a id="ref-7"></a>Microsoft.** *[Vector Search & Vector Index - SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/ai/vectors?view=sql-server-ver17).* [↩](#cite-7)
+8.  **<a id="ref-8"></a>Microsoft.** *[Vector indexes in Azure AI Search](https://docs.azure.cn/en-us/search/vector-store).* [↩](#cite-8)
+9.  **<a id="ref-9"></a>Milvus.** *[On-disk Index | Milvus Documentation](https://milvus.io/docs/disk_index.md).* [↩](#cite-9)
+10. **<a id="ref-10"></a>LanceDB.** *[Add LanceDB to ANN benchmarks · Issue #220](https://github.com/lancedb/lancedb/issues/220).* GitHub. [↩](#cite-10)
+11. **<a id="ref-11"></a>SingleStore.** *[Announcing SingleStore Indexed ANN Vector Search](https://www.singlestore.com/blog/singlestore-indexed-ann-vector-search/).* [↩](#cite-11)
+12. **<a id="ref-12"></a>SingleStore.** *[Tuning Vector Indexes and Queries](https://docs.singlestore.com/cloud/developer-resources/functional-extensions/tuning-vector-indexes-and-queries/).* [↩](#cite-12)
