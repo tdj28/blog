@@ -46,7 +46,7 @@ And we should also expect these two sentences to have vector representations tha
 
 Intuitively this makes sense, but intuition isn't good enough for computation. So how do we quantify these differences in a scalable, efficient manner?
 
-To do this, they rely on **Approximate Nearest Neighbor (ANN)** algorithms to navigate high-dimensional spaces efficiently. This post provides an introduction to the core algorithms that empower embedding vector searching at scale.
+To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navigate high-dimensional spaces efficiently. This post provides an introduction to the core algorithms that empower embedding vector searching at scale.
 
 ## 1.1 The Classical Approach: Space Partitioning
 
