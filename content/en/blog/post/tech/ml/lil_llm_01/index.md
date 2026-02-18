@@ -23,24 +23,24 @@ the sophistication of _Lil' LLM_.
 
 We begin with some definitions, which we will start out at introductory level (at the expense of precision) and deepen as the series proceeds.
 
-{{% alert title="LLM" color="success" %}}
+{{< alert title="LLM" color="success" >}}
 
 An __LLM__, or Large Language Model, refers to a type of AI model that has been trained on text data, via neural networks with potentially billions of parameters, in order to create seemingly intelligent output to given language input.
-{{% /alert %}}
+{{< /alert >}}
 
 
-{{% alert title="n-gram" color="success" %}}
+{{< alert title="n-gram" color="success" >}}
 An __n-gram__ is a contiguous sequence of n items from a given text input. The text can be broken up into syllables, letters, words, or base pairs according to the application. An n-gram of size 1 is referred to as a "unigram"; size 2 is a "bigram" (or "digram"); size 3 is a "trigram"; and so on.
-{{% /alert %}}
+{{< /alert >}}
 
-{{% alert title="token" color="success" %}}
+{{< alert title="token" color="success" >}}
 In the context of natural language processing, a __token__ is a single, atomic unit of text where the atomicity is chosen by those training the model. 
-{{% /alert %}}
+{{< /alert >}}
 
-{{% alert title="seed" color="success" %}}
+{{< alert title="seed" color="success" >}}
 A __seed__ refers to the initial input given to the model to generate text. The seed is provided to the model in order to initiate its output,
 and varying the seed can help vary the output, as we will see with Lil' LLM.
-{{% /alert %}}
+{{< /alert >}}
 
 ## Lil' LLM v 0.1
 
@@ -92,9 +92,9 @@ The code for v0.1 can be found [on github](https://github.com/tdj28/lil-llm/tree
 
 The output of this program is:
 
-{{% alert title="" color="info" %}}
+{{< alert title="" color="info" >}}
 hello bob because alice and hello bob because
-{{% /alert %}}
+{{< /alert >}}
 
 Not great, but it is a start! We see that we already got trapped in a cycle:
 

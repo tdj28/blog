@@ -1,0 +1,106 @@
+/* Code Tabs Styling */
+.code-tabs {
+    border: 1px solid #374151;
+    /* gray-700 */
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    background-color: #1f2937;
+    /* gray-800 */
+}
+
+.code-tabs-header {
+    background-color: #111827;
+    /* gray-900 */
+    border-bottom: 1px solid #374151;
+    display: flex;
+    overflow-x: auto;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    color: #d1d5db;
+    /* gray-300 */
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.tab-button:hover {
+    background-color: #374151;
+}
+
+.tab-button.active {
+    background-color: #1f2937;
+    color: #fff;
+    border-bottom: 2px solid #3b82f6;
+    /* blue-500 */
+    font-weight: 600;
+}
+
+.code-tab {
+    display: none;
+    padding: 0;
+}
+
+.code-tab.active {
+    display: block;
+}
+
+.code-tab pre {
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+/* Fix for underlines in code blocks caused by Tailwind Typography */
+.prose code,
+.prose pre,
+.prose pre code span,
+.prose pre span,
+code,
+pre {
+    text-decoration: none !important;
+}
+
+/* SUPER AGGRESSIVE FIX FOR UNDERLINES */
+.code-tab pre,
+.code-tab code,
+.code-tab span,
+.code-tab a,
+.prose .code-tab pre,
+.prose .code-tab code,
+.prose .code-tab span {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+/* Specific fix for links if they are being underlined */
+.code-tab a {
+    background-image: none !important;
+}
+
+/* UNIVERSAL RESET FOR CODE TABS */
+.code-tab *,
+.code-tabs * {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+/* NUCLEAR OPTION FOR UNDERLINES */
+.code-tab *,
+.code-tabs *,
+.code-tab pre code span,
+.code-tab .highlight,
+.code-tab .chroma,
+div[class*="code-tab"] * {
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    background-image: none !important; /* kills linear-gradient underlines */
+}

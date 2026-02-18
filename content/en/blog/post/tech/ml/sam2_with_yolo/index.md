@@ -27,7 +27,7 @@ Suppose, for example, that I wanted to _detect_ and _track_ if people enter some
 been widely used for people detection, and here we use it to detect people whose YOLO-created bounding box intersects with a chosen
 detection region. Then we use points around the center of that bounding box as seeds for tracking those individuals with SAM2.
 
-{{% alert title="Warning" color="warning" %}}
+{{< alert title="Warning" color="warning" >}}
 This code is shared purely for research purposes and should not be used as-is for anything beyond education. The reliability of
 these tools in production settings needs to be tested thoroughly
 {{< /alert >}}
@@ -49,7 +49,7 @@ Code for this post can be found [here](https://github.com/tdj28/using-yolo-with-
 
 First, we need to set up the environment and install the required packages:
 
-{{% alert title="Tip" color="primary" %}}
+{{< alert title="Tip" color="primary" >}}
 
 The pinning of package versions here is to help ensure that this code can work as is out-of-the-box; however, you may
 get better results by unpinning these versions and just using the latest code. It is generally best practice to pin packages 
@@ -80,7 +80,7 @@ in _production_ environments.
 
 We start by converting the input video into frames. The frames will be processed to detect and segment people.
 
-{{% alert title="Info" color="info" %}}
+{{< alert title="Info" color="info" >}}
 As of the publication of this post, SAM2 only supports JPEG.
 {{< /alert >}}
 
@@ -223,7 +223,7 @@ def plot_with_rect(ax, image, rect_x, rect_y, rect_width, rect_height):
 
 Now we perform the people detections:
 
-{{% alert title="Tip" color="primary" %}}
+{{< alert title="Tip" color="primary" >}}
 We are using YOLOv5 here, but there are newer version available. 
 {{< /alert >}}
 
@@ -277,7 +277,7 @@ plt.show()
 We initialize the SAM2 predictor to generate masks for each detected person as follows.
 
 
-{{% alert title="Note" color="note" %}}
+{{< alert title="Note" color="note" >}}
 You'll notice that in addition to using the point of center of the bounding boxes, we use two more points slightly above it.
 This is done to improve the SAM2 detection results. The YOLO bounding box center is typically around the midsection of a 
 detected individual, so selecting a few points above helps ensure we target the whole individual more reliably with SAM2.
@@ -407,7 +407,7 @@ with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
 
 We propagate the masks generated in the first frame through the entire video.
 
-{{% alert title="Note" color="info" %}}
+{{< alert title="Note" color="info" >}}
 
 The way we are doing this here is not
 efficient as we are propagating one detected person at a time, and then applying the masks later to the final image. This was

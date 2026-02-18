@@ -1,6 +1,81 @@
-{{ $color := .Get "color" | default "info" }}
-{{ $title := .Get "title" }}
-<div class="alert alert-{{ $color }}">
-  {{ with $title }}<strong class="alert-title">{{ . }}:</strong> {{ end }}
-  <div class="alert-content">{{ .Inner | markdownify }}</div>
+{{- if .IsNamedParams -}}
+{{- $.Scratch.Set "cardColor" (default (.Get "color") (.Get "cardColor")) -}}
+{{- $.Scratch.Set "iconColor" (.Get "iconColor") -}}
+{{- $.Scratch.Set "textColor" (.Get "textColor") -}}
+{{- $.Scratch.Set "title" (.Get "title") -}}
+{{- $.Scratch.Set "icon" (.Get "icon") -}}
+{{- else -}}
+{{- $.Scratch.Set "icon" (.Get 0) -}}
+{{- end -}}
+{{- $colorParam := $.Scratch.Get "cardColor" -}}
+{{- $defaultIcon := "triangle-exclamation" -}}
+{{- $bgLight := "" -}}
+{{- $bgDark := "" -}}
+{{- $iconColor := "" -}}
+{{- $useTailwind := false -}}
+{{- $bgClass := "" -}}
+{{- $iconClass := "" -}}
+{{- if eq $colorParam "primary" -}}
+{{- $useTailwind = true -}}
+{{- $bgClass = "bg-primary-100 dark:bg-primary-900" -}}
+{{- $iconClass = "text-primary-400" -}}
+{{- $defaultIcon = "circle-info" -}}
+{{- else if eq $colorParam "secondary" -}}
+{{- $bgLight = "rgba(207,250,254,1)" -}}
+{{- $bgDark = "rgba(22,78,99,1)" -}}
+{{- $iconColor = "rgba(34,211,238,1)" -}}
+{{- $defaultIcon = "lightbulb" -}}
+{{- else if eq $colorParam "neutral" -}}
+{{- $useTailwind = true -}}
+{{- $bgClass = "bg-neutral-100 dark:bg-neutral-900" -}}
+{{- $iconClass = "text-neutral-400" -}}
+{{- $defaultIcon = "circle-info" -}}
+{{- else if eq $colorParam "success" -}}
+{{- $bgLight = "#dcfce7" -}}
+{{- $bgDark = "#14532d" -}}
+{{- $iconColor = "#16a34a" -}}
+{{- $defaultIcon = "check" -}}
+{{- else if eq $colorParam "warning" -}}
+{{- $bgLight = "#fce4ec" -}}
+{{- $bgDark = "#4a1525" -}}
+{{- $iconColor = "#e91e63" -}}
+{{- $defaultIcon = "triangle-exclamation" -}}
+{{- else if or (eq $colorParam "error") (eq $colorParam "danger") -}}
+{{- $bgLight = "#fee2e2" -}}
+{{- $bgDark = "#450a0a" -}}
+{{- $iconColor = "#dc2626" -}}
+{{- $defaultIcon = "skull-crossbones" -}}
+{{- else if or (eq $colorParam "info") (eq $colorParam "note") -}}
+{{- $useTailwind = true -}}
+{{- $bgClass = "bg-primary-100 dark:bg-primary-900" -}}
+{{- $iconClass = "text-primary-400" -}}
+{{- $defaultIcon = "circle-info" -}}
+{{- else -}}
+{{- $useTailwind = true -}}
+{{- $bgClass = "bg-primary-100 dark:bg-primary-900" -}}
+{{- $iconClass = "text-primary-400" -}}
+{{- $defaultIcon = "triangle-exclamation" -}}
+{{- end -}}
+{{- $icon := default $defaultIcon ($.Scratch.Get "icon") -}}
+{{- if not $useTailwind -}}
+<div id="alert-{{ .Ordinal }}" class="flex px-4 py-3 rounded-md" style="background-color: {{ $bgLight | safeCSS }};">
+<span class="ltr:pr-3 rtl:pl-3 flex items-center" style="color: {{ $iconColor | safeCSS }};">
+{{- partial "icon.html" $icon -}}
+</span>
+<span class="flex-1 dark:text-neutral-300">
+{{- if $.Scratch.Get "title" }}<strong>{{ $.Scratch.Get "title" }}:</strong> {{ end -}}
+{{- .Inner | markdownify -}}
+</span>
 </div>
+<script>(function(){var el=document.getElementById("alert-{{ .Ordinal }}");if(document.documentElement.classList.contains("dark")){el.style.backgroundColor="{{ $bgDark }}";}new MutationObserver(function(){el.style.backgroundColor=document.documentElement.classList.contains("dark")?"{{ $bgDark }}":"{{ $bgLight }}";}).observe(document.documentElement,{attributes:true,attributeFilter:["class"]});})()</script>
+{{- else -}}
+<div class="flex px-4 py-3 rounded-md {{ $bgClass }}">
+<span{{ if not ($.Scratch.Get "iconColor") }} class="{{ $iconClass }} ltr:pr-3 rtl:pl-3 flex items-center"{{ else }} class="ltr:pr-3 rtl:pl-3 flex items-center" style="color: {{ $.Scratch.Get "iconColor" | safeCSS }}"{{ end }}>
+{{- partial "icon.html" $icon -}}
+</span>
+<span{{ if not ($.Scratch.Get "textColor") }} class="flex-1 dark:text-neutral-300"{{ else }} class="flex-1" style="color: {{ $.Scratch.Get "textColor" | safeCSS }}"{{ end }}>
+{{- if $.Scratch.Get "title" }}<strong>{{ $.Scratch.Get "title" }}:</strong> {{ end -}}
+{{- .Inner | markdownify -}}
+</span>
+</div>
+{{- end -}}

@@ -28,12 +28,12 @@ The sample above is just a starting point. More sophisticated examples of the us
 
 ## Installing the Library
 
-{{% note %}}
+{{< note >}}
 UPDATE Sep 13 2018:
 
 The PR has been merged and you can just install with `pip install cmaputil` without having to pull the branch.
 
-{{% /note %}}
+{{< /note >}}
 
 PNNL's `cmaputil` library can be downloaded from their [github](https://github.com/pnnl/cmaputil) page or installed via `pip install cmaputil`. However, for the use cases I'm showing here, that won't quite work. [This PR](https://github.com/pnnl/cmaputil/pull/3) shows why. If that PR has been merged, or an alternative fix merged, you should be able to use the library from the source. If not, here is a quick work around:
 

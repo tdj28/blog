@@ -17,18 +17,17 @@ math: true
 author: T Jones
 ---
 
-{{< math-inline >}}
 
-{{% note %}}
+{{< note >}}
 UPDATE July 23 2022:
 The JWST has taken spectrographic readings of the TRAPPIST system. We will update this blog entry with any key findings when they are released.
 It will be of great interest if JWST detects atmosphere and water on any of the TRAPPIST planets in the habitable zone.
-{{% /note %}}
+{{< /note >}}
 
-{{% note %}}
+{{< note >}}
 UPDATE Aug 10 2021:
 An [article](https://academic.oup.com/mnras/article-abstract/507/2/1723/6339287?redirectedFrom=fulltext&login=false) ([preprint](https://arxiv.org/abs/2108.01917), [NASA ADS](https://ui.adsabs.harvard.edu/abs/2021MNRAS.507.1723I/abstract)) in the _Monthly Notices of the Royal Astronomical Society_ suggests that ultra-cool dwarf stars are [potentially not as deadly as first thought](https://skyandtelescope.org/astronomy-news/red-dwarfs-arent-so-bad-for-planets-after-all/). The article suggests that the flaring tends to happen at higher latitudes on the star, which would result in such flares to tend to be directed away from the planets which are located closer to the equatorial plane of the star. Should this prove to be accurate, then that would soften the skepticism we displayed in the earlier version of this blog in regards to stars of this type hosting life, although the other causes of skepticism still remain high.
-{{% /note %}}
+{{< /note >}}
 
 ## Quick overview
 * It was recently announced that a nearby star, TRAPPIST-1,

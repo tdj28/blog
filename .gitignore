@@ -4,3 +4,14 @@ node_modules/
 .hugo_build.lock
 .DS_Store
 **/.DS_Store
+venv
+env
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/

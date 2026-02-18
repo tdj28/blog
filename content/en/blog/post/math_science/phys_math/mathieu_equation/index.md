@@ -43,13 +43,13 @@ $$\nabla^2\Phi = 0 \rightarrow \alpha + \beta + \gamma = 0$$
 We can satisfy this in more than one way. For the linear Paul Trap, whose initial manifestations were not as a 
 trap but as a focusing tunnel of sorts, but which can be turned into a 'race track' ion trap:
 
-{{% alert title="race track ion trap" color="primary" %}}
+{{< alert title="race track ion trap" color="primary" >}}
 $$\alpha = 1 = -\gamma, \beta = 0 \rightarrow \Phi = \frac{\Phi_0}{2r_0^2}(x^2 - z^2)     $$
-{{% /alert %}}
+{{< /alert >}}
 
 For the "ionenkäfig", the chamber rf Paul ion trap that restrains ions in a chamber:
 
-{{% alert title="ionenkäfig" color="primary" %}}
+{{< alert title="ionenkäfig" color="primary" >}}
 $$\alpha = \beta = 1, \gamma = -2 \rightarrow \Phi = \frac{\Phi_0}{r_0^2 + 2z_0^2}(r^2 - 2z^2)$$
 
 we can make this look similar to the race track potential by defining \\( 2d_0^2 = r_0^2 + 2z_0^2\\) and \\(\zeta = \sqrt{2} z\\):
@@ -57,7 +57,7 @@ we can make this look similar to the race track potential by defining \\( 2d_0^2
 $$\frac{\Phi_0}{2d_0^2}(r^2 - \zeta^2)$$
 
 
-{{% /alert %}}
+{{< /alert >}}
 
 This figure (from reference [1]) shows a diagram of an idealized rf Paul trap (a) and the chamber rf Paul trap (b):
 
@@ -99,7 +99,7 @@ $$\ddot{\eta} + \left(a - 2q \cos(2\tau)\right)\eta = 0$$
 
 The variables are dimensionless for this equation, so we have a little work to do to massage our motion equations into this form.
 
-{{% alert title="z-component conversion" color="info" %}}
+{{< alert title="z-component conversion" color="info" >}}
 
 For the \\( z \\)-direction, the equation of motion is:
 
@@ -122,10 +122,10 @@ $$\ddot{z} + \left(-\frac{4eU}{2mr_0^2\omega^2} - \frac{4eV}{2mr_0^2\omega^2} \c
 which is of the Mathieu equation form:
 
 $$\ddot{z} + \left(a - 2q \cos(2\tau)\right)z = 0$$
-{{% /alert %}}
+{{< /alert >}}
 
 
-{{% alert title="r-component conversion" color="info" %}}
+{{< alert title="r-component conversion" color="info" >}}
 
 For the \\( r \\)-direction, the equation of motion is:
 
@@ -135,7 +135,7 @@ We can do the exact same analysis above, although in this case there will be a d
 As we will see, the Mathieu function is symmetrical on reflection around \\(q = 0 \\), but _not_ around \\(a = 0\\).
 Hence, the Mathieu function for the \\(r\\) and \\(z\\) directions are similar but flipped about \\(a = 0\\). Hence,
 to find regions of stability (that is, orbits that will trap the ions), we need to find the __intersection__ of the two.
-{{% /alert %}}
+{{< /alert >}}
 
 ##  Mathieu's Equation, solution, and stability
 
@@ -143,9 +143,9 @@ to find regions of stability (that is, orbits that will trap the ions), we need 
 
 Our derivation below can be found in greater detail and better form in many references [3, 4, 5], and our derivation follows the spirit of these. An equation such as Mathieu's equation,
 
-{{% alert title="Mathieu's equation" color="secondary" %}}
+{{< alert title="Mathieu's equation" color="secondary" >}}
 $$\ddot{\eta} + (a - 2q \cos(2\tau))\eta = 0     $$
-{{% /alert %}}
+{{< /alert >}}
 
 is of a class of differential equations of the type [7],
 
@@ -163,14 +163,14 @@ $$
 This equation can be summarized in the matrix equation \\(Y\mathbf{c} = \mathbf{y}\\). We thus require 
 that the determinant of Y (called the Wronskian in this context) is not equal to zero (guarantees that the two solutions are linearly independent),
 
-{{% alert title="Wronskian" color="secondary" %}}
+{{< alert title="Wronskian" color="secondary" >}}
 $$
 W(Y) = \det(Y)  = \begin{vmatrix}
 y_1(t_0) & y_2(t_0)\\\\
 y^{\prime}_1(t_0) & y^{\prime}_2(t_0)
 \end{vmatrix} \neq 0
 $$
-{{% /alert %}}
+{{< /alert >}}
 
 The set of even/odd solutions:
 
@@ -186,7 +186,7 @@ $$
 are thus fundamental sets of solutions. We may follow Floquet's theorem [3], which tells us that Mathieu's equation has at least one solution such that
 
 
-{{% alert title="Floquet's Theorem" color="secondary" %}}
+{{< alert title="Floquet's Theorem" color="secondary" >}}
 For a linear differential equation with periodic coefficients, such as \\( y^{\prime\prime} + p(\eta) y = 0 \\), where \\( p(\eta) \\) is periodic with period \\( T \\), the solutions can be written in the form:
 
 $$
@@ -205,7 +205,7 @@ where \\( \mu \\) is a complex constant and \\( \phi(\eta) \\) is a periodic fun
 
 The details of this is outlined as follows:
 
-{{% alert title="Floquet's theorem for Mathieu's Equations" color="info" %}}
+{{< alert title="Floquet's theorem for Mathieu's Equations" color="info" >}}
 
 To understand how the solutions behave after a shift by the period \\(\pi\\), we examine the following relationships, which stem from the properties of second-order linear differential equations with periodic coefficients:
 
@@ -324,10 +324,10 @@ This confirms that the solutions exhibit the quasi-periodic behavior predicted b
 
 With Floquent's theorem we assume a series solution, due to G. W. Hill,
 
-{{% alert title="Series solution to Mathieu's equation" color="primary" %}}
+{{< alert title="Series solution to Mathieu's equation" color="primary" >}}
 $$w = e^{\mu\eta}\phi(\eta) = e^{\mu\eta}\sum_{r=-\infty}^{\infty} c_{2r}e^{2ri\eta} = \sum_{r=-\infty}^{\infty} c_{2r}e^{(\mu+2ri)\eta}     $$
 (essentially a Fourier expansion, where we have the 2 multiplier since the original function is periodic in \\(\pi\\)).
-{{% /alert %}}
+{{< /alert >}}
 
 When we put this into Mathieu's equation,
 
@@ -357,7 +357,7 @@ $$\Delta(i\mu) = \begin{vmatrix}
 
 But of course, this is not a simple object to understand and solve. We can approach this problem from a rather clever angle introduced by E. T. Whittaker.
 
-{{% alert title="Whittaker's approach" color="info" %}}
+{{< alert title="Whittaker's approach" color="info" >}}
 
 
 Consider the function
@@ -589,7 +589,7 @@ In my original experiments I used Maple to get the seeds for the determinant, bu
 you can get those seeds with python:
 
 
-{{% alert title="Getting det seeds in python" color="primary" %}}
+{{< alert title="Getting det seeds in python" color="primary" >}}
 
 
 In the context of solving Mathieu's equation, we use three key matrices to reflect increasingly large sizes of the larger matrix 
@@ -646,7 +646,7 @@ Matrix B is the smallest, a 3x3 tridiagonal matrix. It continues the pattern see
 The matrices are all odd-sized (3x3, 5x5, 7x7) because Mathieu's equation has solutions that are either even or odd functions. The central row and column in these matrices correspond to the constant term in the Fourier series expansion of the solution.
 
 
-{{% /alert %}}
+{{< /alert >}}
 
 ```python
 import sympy as sp

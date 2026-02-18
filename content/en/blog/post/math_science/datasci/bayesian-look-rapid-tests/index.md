@@ -13,13 +13,14 @@ toc: true
 math: true
 comments: false
 author: T Jones
+image: image.png
 summary: A look at how Bayesian statistics can help us understand ways to make decisions (in the context of COVID-19 rapid test accuracy). This post will introduce concepts related to Bayesian statistics, but may still be interesting to individuals already familiar with the topic.
 ---
 
 In this post, we explore Bayesian probabilities through the lens of the accuracies of medical tests. We show how Bayesian priors can
 help refine our projections, and how to do this accurately.
 
-{{% alert title="Warning" color="warning" %}}
+{{< alert title="Warning" color="warning" >}}
 This post is for a mathematical discussion, not a medical discussion. The intent is to inform the reader about how
 probability works in relation to tests that can have false positives/negatives. The author has no medical training nor
 is this post intended to provide medical advice. It is hoped that the reader will better understand likelihoods of test
@@ -38,7 +39,7 @@ How can we think about this carefully? This post is not medical instruction, but
 
 ## Definitions and grounding in reference
 
-{{% alert title="Note" color="primary" %}}
+{{< alert title="Note" color="primary" >}}
 In order to keep the mathematical discussion focused, we will have the following simplified assumptions:
 
 * We assume for simplicity that only one over-the-counter test is available to the public in order to keep our calculations simpler, and assume all batches are equally accurate and that it doesn't ever expire. We also assume that the test accuracy remain unchanged for new strains, which is also not likely.
@@ -47,13 +48,13 @@ In order to keep the mathematical discussion focused, we will have the following
 
 __In reality, none of these assumptions hold true, and medical and public health officials have
 to consider all of these complexities and many more.__
-{{% /alert %}}
+{{< /alert >}}
 
 As will always be the case in Data Science, we are considering a model of our world that aligns in some ways with ours, but is far simpler by necessity. 
 
-{{% alert title="Tip" color="primary" %}}
+{{< alert title="Tip" color="primary" >}}
 The art of Data Science is finding a key point at which we've added enough complexity to our model for it to provide actionable findings, but not so much complexity that our models are impractical to deploy and use. However, we must always remember that __these findings are only guaranteed to apply accurately to the world of our model, and thus we need to be careful in applying them without caution and testing to the world we live in.__
-{{% /alert %}}
+{{< /alert >}}
 
 
 With those caveats in mind, let's see what probability can tell us about our imagined Person X scenario. 
@@ -69,7 +70,7 @@ For all three types of tests, we can find multiple examples in the literature wh
 
 [^Mulchandanim4262]: Mulchandani et al., _Accuracy of UK Rapid Test Consortium (UK-RTC) AbC-19 Rapid Test for detection of previous SARS-CoV-2 infection in key workers: test accuracy study_, BMJ, 371, 2020, doi [10.1136/bmj.m4262](https://www.bmj.com/content/371/bmj.m4262)
 
-{{% alert title="Warning" color="warning" %}}
+{{< alert title="Warning" color="warning" >}}
 We are using a single study here to ground our discussion in numbers. In no way should this single study be seen as the final source of truth, nor should the reader take numbers presented from this study as accurately applying to all tests. The reader is encouraged to conduct further research if they wish to be a part of any debates on the accuracy of these tests and how to present accuracy data to the public.
 {{< /alert >}}
 
@@ -100,7 +101,7 @@ flowchart TD
 ```
 </div>
 
-{{% alert title="True/False Positive/Negative" color="primary" %}}
+{{< alert title="True/False Positive/Negative" color="primary" >}}
 We will define these in the context of our current discussion about epidemiology.
 Suppose a test can have two results: positive or negative. Suppose that these results map with some accuracy to a corresponding state, such as infected or not-infected. Then we can define the following terms:
 
@@ -209,32 +210,32 @@ Conditional probability is defined as:
 
 We now present some standard definitions:
 
-{{% alert title="Sensitivity" color="success" %}}
+{{< alert title="Sensitivity" color="success" >}}
 
 Portion of test results which gave a true positive result out of the pool of all test subjects who were in fact infected (those who were infected and got an accurate positive result are TP, those who were infected but got a negative result were FN, the sum TP + FN gives us the total that was in fact infected). The probability is written as the probability of getting a positive result \\(P(+)\\) given "|" that they are indeed infected \\(P(D)\\):
 
 $$ P(+|D) = \frac{\text{TP}}{\text{TP} + \text{FN}} $$
 
-{{% /alert %}}
+{{< /alert >}}
 
-{{% alert title="Specificity" color="success" %}}
+{{< alert title="Specificity" color="success" >}}
 Portion of test results which gave a true negative result out of the pool of all test subjects who were in fact __NOT__ infected (those who were __NOT__ infected and got a positive result are FP, those who were __NOT__ infected and got an accurate negative result were TN, the sum TN + FP gives us the total that was in fact __NOT__ infected). The probability is written as the probability of getting an negative result \\(P(-)\\) given "|" that they are not infected \\(P(\neg D)\\):
 
 $$ P(-|\neg D) =  \frac{\text{TN}}{\text{TN} + \text{FP}} $$
-{{% /alert %}}
+{{< /alert >}}
 
-{{% alert title="Accuracy" color="success" %}}
+{{< alert title="Accuracy" color="success" >}}
 Portion of all test results that were correctly identified, either as positive or negative, out of the total number of tests conducted. This includes both true positive results (TP, those who were infected and got an accurate positive result) and true negative results (TN, those who were __NOT__ infected and got an accurate negative result), divided by the total number of tests, which is the sum of true positives (TP), false positives (FP, those who were __NOT__ infected but got a positive result), true negatives (TN), and false negatives (FN, those who were infected but got a negative result).
 $$ \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} $$
-{{% /alert %}}
+{{< /alert >}}
 
-{{% alert title="Remark" color="primary" %}}
+{{< alert title="Remark" color="primary" >}}
 In what follows, we will be treating this equation and other like it as if this equivalence were true:
 
 $$ \text{Specificity} = P(\text{TN}|\neg D) = P(-|\neg D) $$
 
 In the context of disease as we are discussing it here, this equivalence is valid. Please note, though, that for more complicated discussions on probability, this equivalence may not hold. 
-{{% /alert %}}
+{{< /alert >}}
 
 
 ### Analysis of journal article
@@ -250,11 +251,11 @@ By consensus readings, the protocol they describe entailed having three readers 
 
 To determine who was true positive, the researchers used the baseline of truth for this consensus reading analysis to be "participants who had had a positive PCR test for SARS-CoV-2'' (Mulchandani et al)[^Mulchandanim4262]. The PCR test, while more accurate than a rapid test, itself lacks perfect accuracy, so this and other systematic potential errors results in a uncertainty interval. Here's a quick summary of their sensitivity findings:
 
-{{% alert title="Summary of findings" color="success" %}}
+{{< alert title="Summary of findings" color="success" >}}
 - *Rapid Test Sensitivity* when baseline for true positives was self-reported PCR positives alone: ≈92.5%
 - *Rapid Test Sensitivity* for those who had confirmed PCR positives when baseline for true positives was antibody blood test: ≈94.2%
 - *Rapid Test Sensitivity* for those who had no PCR test and hence had an unknown infection status, when baseline for true positives was antibody blood test: ≈84.7%
-{{% /alert %}}
+{{< /alert >}}
 
 So what's happening here? One explanation the researchers propose is that those individuals who had a more intense infection were more likely to experience more intense symptoms and more likely to get a PCR test. And since Rapid Tests are shown to be more accurate for those with more intense symptoms, and having more intense symptoms makes getting a PCR more likely (due to the inconvenience and discomfort of these tests as compared to Rapid Tests, those with fewer or less intense symptoms are less likely to make the effort), it then makes sense that these tests have higher sensitivity for those who got the PCR test. In the words of authors (Mulchandani et al)[^Mulchandanim4262]:
 
@@ -296,7 +297,7 @@ $$ \lim_{TN \rightarrow \infty} \frac{TN}{TN + FP} = 1 $$
 
 Things bring us to an important remark:
 
-{{% alert title="Remark" color="primary" %}}
+{{< alert title="Remark" color="primary" >}}
 When evaluating the values of sensitivity and specificity, be mindful of the proportions of the pool being analyzed. For example, if a test is administered to a population of 1000 where only one single person is infected, and the test captures that positive and also gives a single false positive, then we have:
 - TP = 1 (the infected person tests positive)
 - FP = 1 (one uninfected person tests positive)
@@ -318,13 +319,13 @@ $$ \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} =
 Note that while accuracy appears high (99.9%), this doesn't reflect that we had a false positive rate of 50% among the positives (1 FP out of 2 total positive results), which is quite poor. This demonstrates why specificity and sensitivity are more informative metrics than accuracy alone when dealing with imbalanced datasets.
 
 Statistics is about forming conclusions based on incomplete data, but there is a limit at which data is too incomplete to draw conclusions. How that limit is determined is beyond the scope of this post.
-{{% /alert %}}
+{{< /alert >}}
 
 However, in the study cited, and a multitude of other studies, the results are statistically significant enough that we can, with some confidence, examine real world scenarios with the context of these findings. Let's return to our case of Person X and examine their situation given these numbers and assumptions above.
 
 ### Example
 
-{{% alert title="Example" color="secondary" %}}
+{{< alert title="Example" color="secondary" >}}
 
 >Suppose the Person X we started this post with, who has symptoms consistent with cold/flu/COVID-19, took a rapid test and got a negative result. What are the chances that Person X got a false negative and is indeed infected with SARS-COV-2?
 
@@ -389,7 +390,7 @@ $$
 That is, in this given scenario, assuming the numbers above, the probability that Person X has the disease despite the
 fact that their rapid test came back negative is around 7.76%. __Important: This number is particular to the scenario we imagined above, but is in no way representative for every case. For example, we picked a random percentage for \\(P(D)\\). Please do not use these numbers to make real world decisions or arguments. This was for demonstrative educational purposes only.__
 
-{{% /alert %}}
+{{< /alert >}}
 
 ## Bayes' Theorem
 
