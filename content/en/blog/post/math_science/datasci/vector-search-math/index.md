@@ -21,7 +21,7 @@ toc: true
 {{< alert "circle-info" >}}
 Creation of this blog post was driven by the 
 human author who has many years of experience 
-in education. AI tooling was used to acclerate 
+in education. AI tooling was used to accelerate 
 content creation and peer review the
 accuracy of the content.
 {{< /alert >}}
@@ -280,10 +280,10 @@ graph TD
 ### The Failure Mode: Why Pruning Fails in High Dimensions
 
 **What is Pruning?**
-In a search tree, "pruning" means safely ignoring an entire branch of the tree. If you know for a fact that the closest point in a branch is 10 units away, but you've already found a neighbor that is 5 units away, you don't need to enter that branch at all. You "prune" it. This is what gives trees their $O(\log N)$ speed, you skip most of the data since it isn't relevant to your search.
+In a search tree, "pruning" means safely ignoring an entire branch of the tree. If you know for a fact that the closest point in a branch is 10 units away, but you've already found a neighbor that is 5 units away, you don't need to enter that branch at all. You "prune" it. This is what gives trees their $O(\log N)$ speed—you skip most of the data since it isn't relevant to your search.
 
 **The "High-Dimensional" Problem**
-In 2D or 3D, space is "crowded," and data is distinct. If you are in one quadrant, you are far from the others.
+In 2D or 3D, space is "crowded" and data points are distinct. If you are in one quadrant, you are far from the others.
 However, as dimensions increase ($d > 10$), a strange geometric phenomenon occurs: **points move to the edges <a id="cite-5"></a>[[5]](#ref-5).**
 
 Imagine a high-dimensional hypercube. The volume of the cube is $1^d$. The volume of a slightly smaller inscribed cube (say, 90% size) is $0.9^d$.
@@ -312,7 +312,7 @@ Mathematically, as dimension $d$ increases:
 
 **The "Dice Roll" Intuition**:
 Think of 1 dimension as rolling a single die. You can easily get a 1 (min) or a 6 (max). The "contrast" is high.
-Now, think of 1,000 dimensions as summing 1,000 independent dice. According to the **Central Limit Theorem**, the sum of independent random variables tends toward a **Normal Distribution (Gaussian)**. The result will strictly cluster around the mean (3,500). It is effectively statistically impossible to roll all 1s (1,000) or all 6s (6,000).
+Now, think of 1,000 dimensions as summing 1,000 independent dice. According to the **Central Limit Theorem**, the sum of independent random variables tends toward a **Normal Distribution (Gaussian)**. The result will cluster tightly around the mean (3,500). It is effectively statistically impossible to roll all 1s (1,000) or all 6s (6,000).
 In high dimensions, every vector is effectively a "sum of many dice." Its length (norm) and distance to others converge to a statistical mean. The "spikes" (unique features) get washed out in the law of large numbers.
 
 ![Curse of Dimensionality Graph](curse_of_dimensionality.png)
@@ -1168,7 +1168,7 @@ graph TD
 You might see terms like **IVF-PQFS**. The **FS** stands for **Fast Scan**.
 *   **Standard PQ**: Uses lookup tables. For every sub-vector code, we jump to a table in memory to fetch the pre-computed distance. This causes **random memory access**, which is hard for the CPU to predict and cache.
 *   **Fast Scan (FS)**: Optimizes this by keeping data in CPU registers to perform massive parallel computation.
-    *   **4-bit PQ**: Standard PQ reduces each sub-vector to an 8-bit code (0-255 **Centroid ID**). Fast Scan uses 4-bit codes (0-15 Centroid IDs). This allows **packing two codes into one byte** (e.g., bits 0-3 for one sub-vector, 4-7 for another), doubling the data density in memory.
+    *   **4-bit PQ**: Standard PQ reduces each sub-vector to an 8-bit code (0-255 **Centroid ID**). Fast Scan uses 4-bit codes (0–15, i.e., 16 Centroid IDs). This allows **packing two codes into one byte** (e.g., bits 0-3 for one sub-vector, 4-7 for another), doubling the data density in memory.
         *   **Fun Fact**: In computer science, 4 bits is officially called a **nybble** (or **nibble**). It's a play on words: half a "byte."
     *   **SIMD Instructions** (Single Instruction, Multiple Data): These are special CPU commands (like AVX2/AVX512) that perform the same math operation on multiple numbers at once.
     *   **Skipping the Lookup Table**: In standard PQ, the code *is* an index into a distance table (requiring a RAM fetch). In FS, we load the distance table *into* the SIMD registers first. Then, we use special "shuffle/permute" instructions to compute the distance directly within the CPU register, avoiding the slow trip to fetch data from RAM.
@@ -1542,7 +1542,7 @@ graph TD
 *✅ = Supported, (opaque) = Not publicly specified, — = Not available or not documented.*
 
 {{< alert "circle-info" >}}
-**Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with distinct algorithm choices. Lightweight or embedded vector stores like **ChromaDB** and **Qdrant** primarily wrap **HNSW** (via `hnswlib`) with a brute-force buffer for small batch ingestion, they are excellent for prototyping and small-to-medium workloads but don't expose the breadth of indexing strategies seen above. Similarly, **Faiss** is a *library*, not a managed service, it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
+**Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with distinct algorithm choices. Lightweight or embedded vector stores like **ChromaDB** and **Qdrant** primarily wrap **HNSW** (via `hnswlib`) with a brute-force buffer for small batch ingestion—they are excellent for prototyping and small-to-medium workloads but don't expose the breadth of indexing strategies seen above. Similarly, **Faiss** is a *library*, not a managed service—it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
 {{< /alert >}}
 
 ## 8. References
