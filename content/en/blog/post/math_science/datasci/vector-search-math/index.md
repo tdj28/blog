@@ -26,9 +26,9 @@ content creation and peer review the
 accuracy of the content.
 {{< /alert >}}
 
-The rise of Large Language Models (LLMs) and other Machine Learning tools such as CLIP and semantic search has made **Vector Databases** a critical component of modern infrastructure. But unlike traditional databases that search for exact substring matches, vector databases search for *meaning*.
+The rise of Large Language Models (LLMs) and other Machine Learning tools such as CLIP and semantic search has made **Vector Databases** a critical component of modern infrastructure. They are the foundational retrieval engine behind **Retrieval-Augmented Generation (RAG)**, enabling AI applications to dynamically pull relevant, domain-specific context from massive datasets. But unlike traditional databases that search for exact substring matches, vector databases search for *meaning*.
 
-For example, if we vectorize two separate images of a dog in some representation space, we should expect that those vectors should be closer together than the vectors of an image of a dog to that of an image of a car. Similarly, these two sentences should be expected to be closer together because they have similar *meaning*:
+For example, if we vectorize two separate images of a dog in some representation space, we should expect that those vectors should be closer together than the vectors of an image of a dog to that of an image of a car. Similarly, these two sentences embedded into a vector space should be expected to be closer together because they have similar *meaning*:
 
 > The weather was amazing today and made me so happy!
 
