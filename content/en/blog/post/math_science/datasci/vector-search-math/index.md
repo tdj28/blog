@@ -224,6 +224,11 @@ graph TD
 **Search Logic**:
 You calculate which MBRs intersect with your query's search radius. You must descend into **every** intersecting MBR.
 
+### Historical Alternatives: LSH & Random Projection Forests
+Before graph-based algorithms achieved absolute dominance for dense vector search, two other techniques were deeply foundational (and still appear on benchmarks like **[ANN-Benchmarks](https://ann-benchmarks.com/)**):
+*   **Locality Sensitive Hashing (LSH)**: Instead of trees, LSH hashes vectors such that similar vectors fall into the same "buckets" with high probability. While computationally elegant, pure LSH struggles to match the recall-to-QPS (Queries Per Second) ceilings of modern graphs.
+*   **Random Projection Forests (e.g., Annoy)**: Popularized by Spotify, algorithms like Annoy build a "forest" of trees by recursively splitting the space using *random* hyperplanes rather than axis-aligned ones (like KD-Trees). You search multiple trees simultaneously to find the nearest neighbor. Annoy is historically famous and excellent for simple memory-mapped workloads, but its performance curve is largely dwarfed by HNSW and ScaNN today.
+
 
 {{% tabs "rtree-implementation" %}}
 {{% tab "Python" %}}
@@ -960,6 +965,9 @@ where:
 ![Optimization Landscape: Local vs Global Minimum](local_vs_global.png)
 *Figure: Greedy Search (Black Dashed) gets stuck in a local minimum. Beam Search (Blue Solid) maintains diversity to find the true global minimum.*
 
+> **Note on Alternative Graph Architectures:**
+> While HNSW is the ubiquitous "S-Tier" (industry standard) deployed across most managed databases (Elasticsearch, PostgreSQL via pgvector, Pinecone, Azure), alternative graph algorithms frequently top the raw [ANN-Benchmarks leaderboard](https://ann-benchmarks.com/index.html). Algorithms like **NGT** (Neighborhood Graph and Tree from Yahoo Japan) and **PyNNDescent** optimize graph construction differently—often achieving higher raw QPS at high recall—but lack the widespread database integrations of HNSW.
+
 ---
 
 ## Disk-Based Indexing: DiskANN & Vamana
@@ -1674,7 +1682,7 @@ graph TD
 
 ## Further Reading & Benchmarks
 If you're selecting an algorithm for a production system, pure theory only goes so far. Hardware architecture, compiler optimizations, and dataset distribution heavily dictate real-world performance.
-*   **[ANN-Benchmarks](https://github.com/erikbern/ann-benchmarks)**: The definitive open-source empirical leaderboard for approximate nearest neighbor algorithms. Highly recommended to observe how recall curves degrade against QPS.
+*   **[ANN-Benchmarks](https://ann-benchmarks.com/index.html)**: The definitive open-source empirical leaderboard for approximate nearest neighbor algorithms. Highly recommended to observe how recall curves degrade against QPS (and its corresponding [GitHub repository](https://github.com/erikbern/ann-benchmarks)).
 *   **[VectorDBBench](https://github.com/zilliztech/VectorDBBench)**: An open-source benchmark tool focused specifically on managed and open-source vector databases.
 
 ## References
