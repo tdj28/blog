@@ -58,12 +58,12 @@ To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navi
 - **Sparse Vectors**: Lexical vectors (like BM25 or SPLADE) are 99% zeros and run on entirely different infrastructure (Inverted Indexes) rather than the ANN pipelines described here. Sparse vectors have different failure modes; inverted indexes avoid the same geometry-driven pruning collapse.
 
 > **Note:** Code blocks in this document are minimal for conceptual clarity; some explicitly omit imports, memory management, and structural boilerplate.
-
+<!-- 
 ## Choose Your Path
 Depending on your intent, feel free to jump directly to:
 - 📖 **"I want the pure theory"** &rarr; [The Curse of Dimensionality](#the-challenge-the-curse-of-dimensionality)
 - 🏗️ **"I want to understand how the algorithms work"** &rarr; [Graph-Based Indexing: HNSW](#graph-based-indexing-hnsw)
-- 🚀 **"I just need to pick an index for my database"** &rarr; [Algorithm Selection & Production Realities](#algorithm-selection--production-realities)
+- 🚀 **"I just need to pick an index for my database"** &rarr; [Algorithm Selection & Production Realities](#algorithm-selection--production-realities) -->
 
 ---
 
@@ -195,6 +195,8 @@ graph TD
     R1 -->|Yes| RL["Leaf: Points E, F"]
     R1 -->|No| RR["Leaf: Points G, H"]
 {{< /mermaid >}}
+
+> **KD-Trees vs. Prefix Trees**: While KD-Trees partition continuous *geometric space* by splitting along dimensional medians, you might also hear about **Prefix Trees** (Tries or Radix Trees). Prefix Trees partition *discrete data* (like strings or bitwise representations) by their structural prefixes. They are fundamentally built for exact or longest-prefix matching rather than spatial nearest-neighbor approximations. For a deep dive into $O(L)$ digital search complexity, see our dedicated post on [The Architecture of Prefix Trees](/blog/post/computer_science/algorithms/prefix-trees/).
 
 ### R-Trees: Object-Centric Grouping
 While KD-Trees partition the *space* (splitting the canvas like a grid, regardless of where the data is), **R-Trees** partition the *data* (grouping the ink, drawing boxes only where the points actually exist).
