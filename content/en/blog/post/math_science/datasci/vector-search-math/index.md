@@ -50,7 +50,8 @@ To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navi
 
 ## TL;DR: The 60-Second Summary
 - **The Problem**: High-dimensional math breaks traditional spatial trees (like KD-Trees). Distances "concentrate", making everything look equidistant, meaning you have to scan the whole database anyway.
-- **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the common default for in-memory search, using a multi-layered proximBuilding and maintaining an HNSW index is mathematically intense. The algorithmic complexity for searching is expected $O(\log N)$, but construction is roughly $O\!\left(C_{\text{dist}} \cdot ef_{\text{construction}} \cdot M \cdot N \log N\right)$. Therefore, understanding the practical memory blueprint is critical: couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is often cost-prohibitive to keep entirely in memory.
+- **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the common default for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
+- **The Scaling Challenge**: HNSW uses massive amounts of RAM (often costing hundreds of bytes to a couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is often cost-prohibitive to keep entirely in memory.
 - **The Solutions**:
     - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., **PQ**: 384 float32 → 48 bytes) to fit them in RAM, at the cost of slight recall loss.
     - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, typically reducing RAM needs by ~10x-100x vs naive in-memory graphs, depending on PQ and caching.
@@ -224,11 +225,6 @@ graph TD
 **Search Logic**:
 You calculate which MBRs intersect with your query's search radius. You must descend into **every** intersecting MBR.
 
-### Historical Alternatives: LSH & Random Projection Forests
-Before graph-based algorithms achieved absolute dominance for dense vector search, two other techniques were deeply foundational (and still appear on benchmarks like **[ANN-Benchmarks](https://ann-benchmarks.com/)**):
-*   **Locality Sensitive Hashing (LSH)**: Instead of trees, LSH hashes vectors such that similar vectors fall into the same "buckets" with high probability. While computationally elegant, pure LSH struggles to match the recall-to-QPS (Queries Per Second) ceilings of modern graphs.
-*   **Random Projection Forests (e.g., Annoy)**: Popularized by Spotify, algorithms like Annoy build a "forest" of trees by recursively splitting the space using *random* hyperplanes rather than axis-aligned ones (like KD-Trees). You search multiple trees simultaneously to find the nearest neighbor. Annoy is historically famous and excellent for simple memory-mapped workloads, but its performance curve is largely dwarfed by HNSW and ScaNN today.
-
 
 {{% tabs "rtree-implementation" %}}
 {{% tab "Python" %}}
@@ -316,10 +312,12 @@ graph TD
 **What is Pruning?**
 In a search tree, "pruning" means safely ignoring an entire branch of the tree. If you know for a fact that the closest point in a branch is 10 units away, but you've already found a neighbor that is 5 units away, you don't need to enter that branch at all. You "prune" it. This is what gives trees their expected $O(\log N)$ speed—you skip most of the data since it isn't relevant to your search (though worst-case can degrade depending on parameters).
 
-### A Classical High-Dimensional Attempt: Locality Sensitive Hashing (LSH)
+### Classical High-Dimensional Attempts: LSH & Random Projections
 As practitioners realized trees failed in high dimensions, the classical "theory-first" approach shifted to **Locality Sensitive Hashing (LSH)**. Rooted in the Johnson-Lindenstrauss lemma (which provides the intuition that random projections approximately preserve pairwise distances [[jl-lemma-proof]](#ref-jl-lemma-proof)), LSH uses random hyperplanes to hash vectors into buckets.
 
 If two vectors are close in space, they are highly likely to fall on the same side of a random hyperplane, and thus land in the same hash bucket. Random hyperplane LSH specifically targets cosine (angular) distance [[charikar-simhash]](#ref-charikar-simhash). While mathematically elegant, LSH requires many parallel hash tables to achieve good recall and struggles with precision compared to the modern graph-based methods we use today.
+
+Another historical parallel is **Random Projection Forests (e.g., Annoy)**. Popularized by Spotify, algorithms like Annoy build a "forest" of trees by recursively splitting the space using *random* hyperplanes rather than strict axis-aligned ones. You search multiple trees simultaneously to find the nearest neighbor. Annoy is historically famous and excellent for simple memory-mapped workloads, but its performance curve is largely dwarfed by HNSW and ScaNN today.
 
 **The "High-Dimensional" Problem**
 In 2D or 3D, space is "crowded" and data points are distinct. If you are in one quadrant, you are far from the others.
@@ -594,7 +592,7 @@ Measures the angle between two vectors, normalized to [-1, 1]. It effectively ig
 $$\text{cos}(\mathbf{x}, \mathbf{y}) = \frac{\mathbf{x} \cdot \mathbf{y}}{\|\mathbf{x}\| \cdot \|\mathbf{y}\|} = \frac{\sum_{i=1}^{d} x_i y_i}{\sqrt{\sum_{i=1}^{d} x_i^2} \cdot \sqrt{\sum_{i=1}^{d} y_i^2}}$$
 
 ### Inner Product (IP / Dot Product)
-Used when vectors are pre-normalized:
+Inner product (dot product) is used for Maximum Inner Product Search (MIPS). If vectors are unit-normalized, dot product ranking exactly matches cosine similarity:
 
 $$\text{IP}(\mathbf{x}, \mathbf{y}) = \sum_{i=1}^{d} x_i y_i$$
 
@@ -966,7 +964,7 @@ where:
 *Figure: Greedy Search (Black Dashed) gets stuck in a local minimum. Beam Search (Blue Solid) maintains diversity to find the true global minimum.*
 
 > **Note on Alternative Graph Architectures:**
-> While HNSW is the ubiquitous "S-Tier" (industry standard) deployed across most managed databases (Elasticsearch, PostgreSQL via pgvector, Pinecone, Azure), alternative graph algorithms frequently top the raw [ANN-Benchmarks leaderboard](https://ann-benchmarks.com/index.html). Algorithms like **NGT** (Neighborhood Graph and Tree from Yahoo Japan) and **PyNNDescent** optimize graph construction differently—often achieving higher raw QPS at high recall—but lack the widespread database integrations of HNSW.
+> While HNSW is the ubiquitous "S-Tier" (industry standard) deployed across most managed databases (Elasticsearch, PostgreSQL via pgvector, Pinecone, Azure), alternative graph algorithms frequently appear on the raw [ANN-Benchmarks leaderboard](https://ann-benchmarks.com/index.html). Algorithms like **NGT** (Neighborhood Graph and Tree from Yahoo Japan) and **PyNNDescent** optimize graph construction differently—they can be extremely competitive on certain datasets/hardware configurations and sometimes outperform HNSW implementations on recall/QPS curves—but they historically lack the widespread database integrations of HNSW.
 
 ---
 
