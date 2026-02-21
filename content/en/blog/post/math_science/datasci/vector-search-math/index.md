@@ -1,5 +1,5 @@
 ---
-title: "The Mathematics of Vector Search"
+title: "The Mathematics of Dense Vector Search"
 date: 2026-02-17
 draft: false
 authors: ["t-jones", "gemini-3-pro", "gpt-5-pro-review"]
@@ -47,6 +47,13 @@ And we should also expect these two sentences to have vector representations tha
 Intuitively this makes sense, but intuition isn't good enough for computation. So how do we quantify these differences in a scalable, efficient manner?
 
 To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navigate high-dimensional spaces efficiently. This post provides an introduction to the core algorithms that empower embedding vector searching at scale.
+
+## Out of Scope: Dense vs. Sparse Vectors
+Before diving into the math, we must define our terms. This post exclusively covers the mathematics of **Dense Vector Search**. 
+
+Dense vectors (like embeddings from OpenAI or CLIP) are relatively low-dimensional (e.g., 384 to 3072 dimensions) but *every dimension has a non-zero floating-point value*. This geometric "denseness" is what triggers the algorithmic complexities (like the Curse of Dimensionality) discussed in the rest of this post.
+
+By contrast, **Sparse Vectors** (such as traditional TF-IDF/BM25 profiles, or modern neural representations like **SPLADE** <a id="cite-32"></a>[[32]](#ref-32) and Elastic's **ELSER**) have massive dimensionality (often corresponding to the entire English vocabulary, e.g., 30,000+ dimensions), but they are 99% zeros. Because they are sparse, we do not mathematically calculate distance across all dimensions. Instead, we use fast set-intersection operations on **Inverted Indexes**. Therefore, sparse vectors do not suffer from the same geometric curse, and algorithms like HNSW or IVF are not the primary mechanisms for scaling them.
 
 ## The Classical Approach: Space Partitioning
 
@@ -1643,3 +1650,4 @@ graph TD
 29. **<a id="ref-29"></a>MongoDB.** *[Atlas Vector Search Overview | MongoDB Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/).* [↩](#cite-29)
 30. **<a id="ref-30"></a>Databricks.** *[Mosaic AI Vector Search | Databricks Documentation](https://docs.databricks.com/en/generative-ai/vector-search.html).* [↩](#cite-30)
 31. **<a id="ref-31"></a>Elasticsearch.** *[Vector search in Elasticsearch | Elastic Docs](https://www.elastic.co/docs/solutions/search/vector).* [↩](#cite-31)
+32. **<a id="ref-32"></a>Formal, T., et al. (2021).** *[SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking](https://arxiv.org/abs/2107.05720).* SIGIR. [↩](#cite-32)
