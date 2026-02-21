@@ -206,12 +206,6 @@ graph TD
 **Search Logic**:
 You calculate which MBRs intersect with your query's search radius. You must descend into **every** intersecting MBR.
 
-### Locality Sensitive Hashing (LSH)
-As practitioners realized trees failed in high dimensions, the classical "theory-first" approach shifted to **Locality Sensitive Hashing (LSH)**. Rooted in the Johnson-Lindenstrauss lemma (which provides the intuition that random projections approximately preserve pairwise distances), LSH uses random hyperplanes to hash vectors into buckets.
-
-If two vectors are close in space, they are highly likely to fall on the same side of a random hyperplane, and thus land in the same hash bucket. While mathematically elegant, LSH requires many parallel hash tables to achieve good recall and struggles with precision compared to the modern methods we use today.
-
----
 
 {{% tabs "rtree-implementation" %}}
 {{% tab "Python" %}}
@@ -299,6 +293,11 @@ graph TD
 **What is Pruning?**
 In a search tree, "pruning" means safely ignoring an entire branch of the tree. If you know for a fact that the closest point in a branch is 10 units away, but you've already found a neighbor that is 5 units away, you don't need to enter that branch at all. You "prune" it. This is what gives trees their expected $O(\log N)$ speed—you skip most of the data since it isn't relevant to your search (though worst-case can degrade depending on parameters).
 
+### A Classical High-Dimensional Attempt: Locality Sensitive Hashing (LSH)
+As practitioners realized trees failed in high dimensions, the classical "theory-first" approach shifted to **Locality Sensitive Hashing (LSH)**. Rooted in the Johnson-Lindenstrauss lemma (which provides the intuition that random projections approximately preserve pairwise distances <a id="cite-33"></a>[[33]](#ref-33)), LSH uses random hyperplanes to hash vectors into buckets.
+
+If two vectors are close in space, they are highly likely to fall on the same side of a random hyperplane, and thus land in the same hash bucket. Random hyperplane LSH specifically targets cosine (angular) distance <a id="cite-35"></a>[[35]](#ref-35). While mathematically elegant, LSH requires many parallel hash tables to achieve good recall and struggles with precision compared to the modern graph-based methods we use today.
+
 **The "High-Dimensional" Problem**
 In 2D or 3D, space is "crowded" and data points are distinct. If you are in one quadrant, you are far from the others.
 However, as dimensions increase ($d > 10$), a strange geometric phenomenon occurs: **points move to the edges <a id="cite-5"></a>[[5]](#ref-5).**
@@ -323,7 +322,7 @@ In low-dimensional spaces (like 2D or 3D geographical data), structures like **K
 
 However, modern embedding models (like CLIP or OpenAI's text-embedding-3) output vectors with hundreds or thousands of dimensions (e.g., 512, 768, 1536, or 3072). In these high-dimensional spaces, a phenomenon known as the **Curse of Dimensionality** renders traditional spatial partitioning ineffective.
 
-Mathematically, as dimension $d$ increases:
+Mathematically, as dimension $D$ increases:
 1.  **Distance Concentration <a id="cite-5-2"></a>[[5]](#ref-5)**: The ratio of the distance to the nearest neighbor vs. the farthest neighbor approaches 1. **Relative distance contrast collapses** (nearest and farthest distances concentrate), so 'close vs far' becomes hard to separate, making it impossible for the algorithm to distinguish a "clear" winner.
 2.  **Empty Space**: As discussed in the **[Failure Mode](#the-failure-mode-why-pruning-fails-in-high-dimensions)** section above, volume expands exponentially, pushing all data points to the surface.
 
@@ -333,10 +332,10 @@ Now, think of 1,000 dimensions as summing 1,000 independent dice. According to t
 In high dimensions, every vector is effectively a "sum of many dice." Its length (norm) and distance to others converge to a statistical mean. The "spikes" (unique features) get washed out in the law of large numbers.
 
 **The Saving Grace: Intrinsic Dimension**
-While the math above assumes embeddings are perfectly uniform across all dimensions, real-world data is inherently structured. Embeddings typically lie on much lower-dimensional manifolds (their *intrinsic dimension* is much smaller than their raw dimension $d$). This clustered, non-uniform structure is the saving grace that allows ANN algorithms to successfully partition and navigate the space despite the raw geometric curse.
+While the math above assumes embeddings are perfectly uniform across all dimensions, real-world data is inherently structured. Embeddings typically lie on much lower-dimensional manifolds (their *intrinsic dimension* is much smaller than their raw dimension $D$). This clustered, non-uniform structure is the saving grace that allows ANN algorithms to successfully partition and navigate the space despite the raw geometric curse.
 
 **The Hubness Phenomenon**
-Because of that same high-dimensional concentration, embedding spaces also exhibit "Hubness." A very small subset of dense vectors (the "hubs") end up appearing as the nearest neighbors for exponentially many uncorrelated queries, which requires careful algorithm tuning to avoid retrieving the same dominant hubs over and over.
+Because of that same high-dimensional concentration, embedding spaces also exhibit "Hubness." A very small subset of dense vectors (the "hubs") end up appearing as the nearest neighbors for a large fraction of uncorrelated queries <a id="cite-27"></a>[[27]](#ref-27), which requires careful algorithm tuning to avoid retrieving the same dominant hubs over and over.
 
 ![Curse of Dimensionality Graph](curse_of_dimensionality.png)
 
@@ -492,7 +491,7 @@ This forces us to compromise: we trade **exactness** for **speed**, accepting "a
 
 Before optimizing, it's useful to know the baseline. This is the $O(N)$ approach.
 
-> **Production Context:** While too slow for billion-scale data, this brute-force approach guarantees 100% recall. Providers often expose this explicitly (e.g., Azure AI Search calls its brute-force algorithm `exhaustiveKnn` <a id="cite-26"></a>[[26]](#ref-26)) for use cases requiring absolute precision on small, pre-filtered datasets, or to generate a gold-standard ground truth for evaluating ANN recall.
+> **Production Context:** While too slow for billion-scale data, this brute-force approach guarantees 100% recall. Providers often expose this explicitly (e.g., Azure AI Search calls its brute-force algorithm `exhaustiveKnn` <a id="cite-18"></a>[[18]](#ref-18)) for use cases requiring absolute precision on small, pre-filtered datasets, or to generate a gold-standard ground truth for evaluating ANN recall.
 
 {{% tabs "linear-search" %}}
 {{% tab "Python" %}}
@@ -916,7 +915,7 @@ This precisely matches our requirement! The probability of reaching level $l$ de
 While graph height adds small terms, search in Layer 0 dominates. Since we evaluate $\sim M$ neighbors for each of the $ef\_{search}$ candidates in our beam, the primary cost is:
 $$ Cost \approx O(d \cdot ef\_{search} \cdot M) + \text{smaller terms} $$
 where:
-*   $d$: Cost of a single distance calculation
+*   $C_{dist}$: Cost of a single distance calculation
 *   $ef\_{search}$: The beam width (number of candidates explored)
 *   $M$: The maximum number of neighbors evaluated per candidate
 
@@ -1062,8 +1061,9 @@ It runs k-means on *each sub-space* to create a codebook (usually 256 centroids 
 import numpy as np
 from sklearn.cluster import KMeans
 
-def train_pq(vectors, m=96):
-    dim = vectors.shape[1]
+def train_pq(residuals, m=96):
+    # Assumes you have already computed residuals: r = x - c(x)
+    dim = residuals.shape[1]
     assert dim % m == 0, "Dimension must be perfectly divisible by m"
     sub_dim = dim // m
     codebooks = []
@@ -1072,7 +1072,7 @@ def train_pq(vectors, m=96):
         # Extract sub-vectors for this subspace
         start = i * sub_dim
         end = (i + 1) * sub_dim
-        sub_vectors = vectors[:, start:end]
+        sub_vectors = residuals[:, start:end]
         
         # Train k-means (256 centroids = 1 byte)
         # Note: At scale, PQ codebooks are trained with sampling 
@@ -1607,7 +1607,7 @@ graph TD
 > **Note on Algorithms vs. Services:**
 > *   **Google Cloud Spanner** supports **exact kNN** vector similarity search by ordering on vector distance functions (GoogleSQL: `COSINE_DISTANCE`, `EUCLIDEAN_DISTANCE`, `DOT_PRODUCT`; PostgreSQL: `spanner.cosine_distance`, `spanner.euclidean_distance`, `spanner.dot_product`). If embeddings are normalized, using dot product is a valid ranking-equivalent choice <a id="cite-16"></a>[[16]](#ref-16). For lower-latency **approximate nearest neighbor (ANN)** search at larger scales, Spanner supports **tree-based VECTOR INDEXes** queried via `APPROX_*` distance functions (for example `APPROX_COSINE_DISTANCE`) with tuning options such as `num_leaves_to_search` to trade recall for latency/cost. ANN vector search requires Enterprise / Enterprise Plus and **does not support the PostgreSQL interface** <a id="cite-17"></a>[[17]](#ref-17). Spanner also supports **filtered vector indexes** by storing selected non-vector columns in the vector index to enable index-side filtering <a id="cite-15"></a>[[15]](#ref-15).
 > *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search** <a id="cite-6"></a>[[6]](#ref-6).
-> *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-26"></a>[[26]](#ref-26).
+> *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-18"></a>[[18]](#ref-18).
 > *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search <a id="cite-9"></a>[[9]](#ref-9).
 > *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging <a id="cite-10"></a>[[10]](#ref-10) (check current docs/releases for the latest).
 > *   **HNSW** is the primary or default in-memory engine across the vast majority of the ecosystem, including **Milvus**, **Weaviate**, **MongoDB Atlas Vector Search** <a id="cite-29"></a>[[29]](#ref-29), and **Databricks Vector Search** (Mosaic AI) <a id="cite-30"></a>[[30]](#ref-30). **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
@@ -1623,8 +1623,8 @@ graph TD
 | **Google Vertex AI** <a id="cite-6"></a>[[6]](#ref-6) | — | — | — | — | — | ✅ | — |
 | **Google AlloyDB** <a id="cite-13"></a>[[13]](#ref-13) <a id="cite-14"></a>[[14]](#ref-14) | ✅ | ✅ | — | — | — | ✅ | ✅ |
 | **Google Cloud Spanner** <a id="cite-15"></a>[[15]](#ref-15) <a id="cite-17"></a>[[17]](#ref-17) | — | — | — | — | — | ✅ | ✅ |
-| **Azure AI Search** <a id="cite-26"></a>[[26]](#ref-26) | ✅ | — | — | — | — | — | ✅ |
-| **Azure Cosmos DB** <a id="cite-18"></a>[[18]](#ref-18) | — | — | — | — | ✅ | — | ✅ |
+| **Azure AI Search** <a id="cite-18"></a>[[18]](#ref-18) | ✅ | — | — | — | — | — | ✅ |
+| **Azure Cosmos DB** <a id="cite-19"></a>[[19]](#ref-19) | — | — | — | — | ✅ | — | ✅ |
 | **SQL Server** <a id="cite-7"></a>[[7]](#ref-7) | — | — | — | — | ✅ | — | — |
 | **Elasticsearch** <a id="cite-28"></a>[[28]](#ref-28) | ✅ | — | — | — | — | — | ✅ |
 | **Databricks** <a id="cite-30"></a>[[30]](#ref-30) | ✅  | — | — | — | — | — | ✅ |
@@ -1634,7 +1634,7 @@ graph TD
 | **Weaviate** <a id="cite-22"></a>[[22]](#ref-22) | ✅ | — | — | — | — | — | ✅ |
 | **SingleStore** <a id="cite-11"></a>[[11]](#ref-11) <a id="cite-23"></a>[[23]](#ref-23) | ✅ | ✅ | ✅ | ✅ | — | — | — |
 | **LanceDB** <a id="cite-24"></a>[[24]](#ref-24) | ✅ | ✅ | ✅ | — | — | — | — |
-| **pgvector (PostgreSQL)** <a id="cite-25"></a>[[25]](#ref-25) | ✅ | ✅ | — | — | — | — | ✅ |
+| **pgvector (PostgreSQL)** <a id="cite-26"></a>[[26]](#ref-26) | ✅ | ✅ | — | — | — | — | ✅ |
 
 *✅ = Supported, (opaque) = Not publicly specified, — = Not available or not documented.*
 
@@ -1670,11 +1670,11 @@ graph TD
 24. **<a id="ref-24"></a>SingleStore.** *[Vector Indexing | SingleStore Documentation](https://docs.singlestore.com/cloud/reference/sql-reference/vector-functions/vector-indexing/).* [↩](#cite-24)
 25. **<a id="ref-25"></a>LanceDB.** *[Vector Indexes | LanceDB Documentation](https://docs.lancedb.com/indexing/vector-index).* [↩](#cite-25)
 26. **<a id="ref-26"></a>pgvector.** *[pgvector: Open-source vector similarity search for PostgreSQL](https://github.com/pgvector/pgvector).* GitHub. [↩](#cite-26)
-27. **<a id="ref-27"></a>Microsoft.** *[Create a vector index in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-create-index).* [↩](#cite-27)
+27. **<a id="ref-27"></a>Radovanović, M., Nanopoulos, A., & Ivanović, M. (2010).** *[Hubs in space: Popular nearest neighbors in high-dimensional data](https://www.jmlr.org/papers/volume11/radovanovic10a/radovanovic10a.pdf).* JMLR. [↩](#cite-27)
 28. **<a id="ref-28"></a>Elasticsearch.** *[k-nearest neighbor (kNN) search | Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html).* [↩](#cite-28)
 29. **<a id="ref-29"></a>MongoDB.** *[Atlas Vector Search Overview | MongoDB Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/).* [↩](#cite-29)
 30. **<a id="ref-30"></a>Databricks.** *[Mosaic AI Vector Search | Databricks Documentation](https://docs.databricks.com/en/generative-ai/vector-search.html).* [↩](#cite-30)
 31. **<a id="ref-31"></a>Elasticsearch.** *[Vector search in Elasticsearch | Elastic Docs](https://www.elastic.co/docs/solutions/search/vector).* [↩](#cite-31)
 32. **<a id="ref-32"></a>Formal, T., et al. (2021).** *[SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking](https://arxiv.org/abs/2107.05720).* SIGIR. [↩](#cite-32)
-33. **<a id="ref-33"></a>Google Cloud.** *[Vector indexes | Spanner](https://docs.cloud.google.com/spanner/docs/vector-indexes).* [↩](#cite-33)
+33. **<a id="ref-33"></a>Dasgupta, S., & Gupta, A. (2003).** *[An elementary proof of a theorem of Johnson and Lindenstrauss](https://cseweb.ucsd.edu/~dasgupta/papers/jl.pdf).* Random Structures & Algorithms. [↩](#cite-33)
 34. **<a id="ref-34"></a>Cormack, G. V., Clarke, C. L. A., & Buettcher, S. (2009).** *[Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods](https://dl.acm.org/doi/10.1145/1571941.1572114).* SIGIR. [↩](#cite-34)
