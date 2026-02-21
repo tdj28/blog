@@ -48,7 +48,7 @@ Intuitively this makes sense, but intuition isn't good enough for computation. S
 
 To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navigate high-dimensional spaces efficiently. This post provides an introduction to the core algorithms that empower embedding vector searching at scale.
 
-## 1.1 The Classical Approach: Space Partitioning
+## The Classical Approach: Space Partitioning
 
 Before we had modern vector databases, we had spatial indexes. In low-dimensional spaces (like 2D maps or 3D CAD models), we solved the nearest neighbor problem using **Space Partitioning Trees**:
 
@@ -82,10 +82,11 @@ def build_kdtree(points, depth=0):
     
     return Node(
         point=points[median],
-        left=build_kdtree(points[:median], depth + 1),
         right=build_kdtree(points[median + 1:], depth + 1),
         axis=axis
     )
+    # Note: For production, prefer `nth_element`/partition selection and 
+    # operate on index ranges to avoid repeated sorts and O(N log^2 N) copies.
 ```
 {{% /tab %}}
 {{% tab "Go" %}}
@@ -155,7 +156,7 @@ Node* buildKDTree(std::vector<std::vector<double>>& points, int depth) {
 {{% /tab %}}
 {{% /tabs %}}
 
-**Search**: To find the nearest neighbor, you traverse the tree from root to leaf ($\log N$ steps). You can **prune** entire branches of the tree if the query point is too far from the bounding box of that branch. In low dimensions ($d < 10$), this is incredibly efficient.
+**Search**: To find the nearest neighbor, you traverse the tree from root to leaf (expected $\log N$ steps). You can **prune** entire branches of the tree if the query point is too far from the bounding box of that branch. In low dimensions ($d < 10$), this is incredibly efficient (expected / empirical under typical assumptions; worst-case can degrade).
 
 {{< mermaid >}}
 graph TD
@@ -177,7 +178,7 @@ An R-Tree groups nearby objects into a box described by its coordinates: $(min_x
 
 **The Fatal Flaw: Overlap**
 Unlike KD-Trees, where a point belongs strictly to the Left *or* Right side of a split, R-Tree nodes can **overlap**. A single query point might fall inside the bounding boxes of *multiple* sibling nodes.
-*   **Low Dimensions**: Overlap is minimal; search remains $O(\log N)$.
+*   **Low Dimensions**: Overlap is minimal; search remains expected $O(\log N)$ under typical assumptions (worst-case can degrade).
 *   **High Dimensions**: As dimensions rise, the "empty space" problem forces MBRs to grow larger to encompass their children. Eventually, MBRs overlap significantly. A single query might intersect with 50% of the tree's branches, destroying the pruning advantage.
 
 {{< mermaid >}}
@@ -280,7 +281,7 @@ graph TD
 ### The Failure Mode: Why Pruning Fails in High Dimensions
 
 **What is Pruning?**
-In a search tree, "pruning" means safely ignoring an entire branch of the tree. If you know for a fact that the closest point in a branch is 10 units away, but you've already found a neighbor that is 5 units away, you don't need to enter that branch at all. You "prune" it. This is what gives trees their $O(\log N)$ speed—you skip most of the data since it isn't relevant to your search.
+In a search tree, "pruning" means safely ignoring an entire branch of the tree. If you know for a fact that the closest point in a branch is 10 units away, but you've already found a neighbor that is 5 units away, you don't need to enter that branch at all. You "prune" it. This is what gives trees their expected $O(\log N)$ speed—you skip most of the data since it isn't relevant to your search (though worst-case can degrade depending on parameters).
 
 **The "High-Dimensional" Problem**
 In 2D or 3D, space is "crowded" and data points are distinct. If you are in one quadrant, you are far from the others.
@@ -298,7 +299,7 @@ Almost all data points sit on the "surface" or shell of the structure. When you 
 
 Because you can't rule out any branches, you are forced to visit them all. The tree devolves into a complicated, slow linked list, often performing *worse* than a brute-force linear scan.
 
-## 1.2 The Challenge: The Curse of Dimensionality
+## The Challenge: The Curse of Dimensionality
 
 Before diving into the solutions, we must understand the problem. Why can't we just use a B-Tree or a KD-Tree?
 
@@ -462,11 +463,13 @@ This forces us to compromise: we trade **exactness** for **speed**, accepting "a
 
 ---
 
-## 2. Distance Metrics: The Foundation
+## Distance Metrics: The Foundation
 
-### 1.3 Baseline: Linear Search (Exact k-NN)
+### Baseline: Linear Search (Exact k-NN)
 
 Before optimizing, it's useful to know the baseline. This is the $O(N)$ approach.
+
+> **Production Context:** While too slow for billion-scale data, this brute-force approach guarantees 100% recall. Providers often expose this explicitly (e.g., Azure AI Search calls its brute-force algorithm `exhaustiveKnn` <a id="cite-26"></a>[[26]](#ref-26)) for use cases requiring absolute precision on small, pre-filtered datasets, or to generate a gold-standard ground truth for evaluating ANN recall.
 
 {{% tabs "linear-search" %}}
 {{% tab "Python" %}}
@@ -600,7 +603,7 @@ double cosine_similarity(const std::vector<double>& v1, const std::vector<double
 
 ---
 
-## 3. Graph-Based Indexing: HNSW
+## Graph-Based Indexing: HNSW
 
 **HNSW (Hierarchical Navigable Small World) <a id="cite-1"></a>[[1]](#ref-1)** is currently the industry standard for in-memory vector search. It works by constructing a **multi-layered proximity graph**.
 
@@ -686,35 +689,38 @@ graph TD
 
 Why is HNSW so fast? It comes down to the probability of layer promotion, similar to a **Skip List**.
 
-#### Rudimentary Skip List Logic (Code)
-The core idea is **Probabilistic Layer Promotion**. Instead of balancing a tree (restructuring the index to ensure the tree height is uniform, meaning the path from the root to any leaf node is roughly the same length), valid HNSW/Skip List logic relies on a "coin flip" to decide if a node should exist in higher layers.
+#### HNSW Layer Assignment Logic (Code)
+The core idea is **Probabilistic Layer Promotion**. Instead of balancing a tree recursively, HNSW relies on an exponential/geometric distribution parameterized by $M$ (the maximum number of neighbors per layer). By taking the negative natural logarithm of a uniform random float and scaling it by $m_L = 1 / \ln(M)$, the probability of a node reaching layer $L$ perfectly decays by a factor of $1/M$ at each step.
 
 {{% tabs "skiplist-code" %}}
 {{% tab "Python" %}}
 ```python
 import random
+import math
 
-class SkipNode:
+class HNSWNode:
     def __init__(self, value, level):
         self.value = value
-        # Forward pointers for each level (0 to level)
-        # forward[0] is the base layer (neighbors)
-        # forward[N] are the express lanes
-        self.forward = [None] * (level + 1)
+        # Neighbors list for each layer from 0 to level
+        self.neighbors = [[] for _ in range(level + 1)]
 
-class SkipList:
-    def __init__(self, max_level=16, p=0.5):
+class HNSWGraph:
+    def __init__(self, M=16, max_level=16):
+        self.M = M
         self.max_level = max_level
-        self.p = p
-        self.head = SkipNode(None, max_level)
+        # The normalization factor
+        self.m_L = 1.0 / math.log(M)
     
     def random_level(self):
-        # The key to HNSW/SkipList structure:
-        # A coin flip determines how high up a node goes.
-        level = 0
-        while random.random() < self.p and level < self.max_level:
-            level += 1
-        return level
+        # HNSW layer assignment follows an exponential distribution.
+        # This ensures the probability of reaching layer L decays by 1/M at each step.
+        f = random.uniform(0, 1)
+        # Avoid log(0) edge case
+        if f == 0.0:
+            f = 1e-10
+            
+        level = int(-math.log(f) * self.m_L)
+        return min(level, self.max_level)
 ```
 {{% /tab %}}
 {{% tab "Go" %}}
@@ -722,65 +728,78 @@ class SkipList:
 package main
 
 import (
-    "math/rand"
+	"math"
+	"math/rand"
 )
 
-const (
-    MaxLevel = 16
-    P        = 0.5
-)
-
-type SkipNode struct {
-    Value   int
-    // Forward[0] = Next node in base layer
-    // Forward[i] = Next node in layer i (Express Lane)
-    Forward []*SkipNode
+type HNSWNode struct {
+	Value     int
+	Neighbors [][]int // Indexes of neighbors at each layer
 }
 
-type SkipList struct {
-    Head  *SkipNode
+type HNSWGraph struct {
+	M        int
+	MaxLevel int
+	mL       float64
 }
 
-func (sl *SkipList) RandomLevel() int {
-    level := 0
-    // Coin flip for promotion
-    for rand.Float32() < P && level < MaxLevel-1 {
-        level++
-    }
-    return level
+func NewHNSWGraph(m int, maxLevel int) *HNSWGraph {
+	return &HNSWGraph{
+		M:        m,
+		MaxLevel: maxLevel,
+		mL:       1.0 / math.Log(float64(m)),
+	}
+}
+
+func (g *HNSWGraph) RandomLevel() int {
+	// Exponential distribution scaled by 1/ln(M)
+	f := rand.Float64()
+	if f == 0.0 {
+		f = 1e-10
+	}
+	
+	level := int(-math.Log(f) * g.mL)
+	
+	if level > g.MaxLevel {
+		return g.MaxLevel
+	}
+	return level
 }
 ```
 {{% /tab %}}
 {{% tab "C++" %}}
 ```cpp
 #include <vector>
-#include <cstdlib>
+#include <cmath>
+#include <random>
+#include <algorithm>
 
-struct SkipNode {
+struct HNSWNode {
     int value;
-    // forward[0] is base layer, forward[i] is layer i
-    std::vector<SkipNode*> forward;
+    std::vector<std::vector<int>> neighbors; // Neighbors for each layer
     
-    SkipNode(int v, int level) : value(v), forward(level + 1, nullptr) {}
+    HNSWNode(int v, int level) : value(v), neighbors(level + 1) {}
 };
 
-class SkipList {
+class HNSWGraph {
+    int M;
     int max_level;
-    float p;
-    SkipNode* head;
+    double m_L;
+    std::mt19937 gen;
+    std::uniform_real_distribution<double> dist;
 
 public:
-    SkipList(int max_lvl, float prob) : max_level(max_lvl), p(prob) {
-        head = new SkipNode(-1, max_level);
-    }
+    HNSWGraph(int m, int max_lvl) 
+        : M(m), max_level(max_lvl), m_L(1.0 / std::log(m)), gen(42), dist(0.0, 1.0) {}
 
     int randomLevel() {
-        int lvl = 0;
-        // Bernoulli trial for layer promotion
-        while ((float)rand()/RAND_MAX < p && lvl < max_level) {
-            lvl++;
-        }
-        return lvl;
+        // Sample from uniform(0,1), take -ln(), scale by m_L
+        double f = dist(gen);
+        // Avoid log(0)
+        if (f == 0.0) f = 1e-10; 
+        
+        int lvl = static_cast<int>(-std::log(f) * m_L);
+        return std::min(lvl, max_level);
     }
 };
 ```
@@ -793,14 +812,14 @@ You might wonder: *Why use a random coin flip? Shouldn't we pick nodes that are 
 If we knew the entire dataset in advance, we could indeed pick perfectly spaced "pillars" to form the upper layers. However, that requires expensive global analysis ($O(N)$ or $O(N^2)$) and makes adding new data difficult (you'd have to shift the pillars).
 
 Randomness is a powerful shortcut. By promoting nodes randomly:
-1.  **Distribution**: We statistically guarantee that the express nodes are roughly uniformly distributed across the space, without ever calculating a single distance.
+1.  **Distribution**: We statistically tend to ensure that the express nodes are roughly uniformly distributed across the space, without ever calculating a single distance.
 2.  **Independence**: We can insert a new node without needing to "re-balance" the rest of the graph.
 3.  **Speed**: It takes $O(1)$ time to decide a node's level, versus $O(N)$ to find the "best" position.
 
 This is the beauty of **Skip Lists** and **HNSW**: Randomness yields structure.
 
 > **Does this make search result "random"?**
-> Surprisingly, yes! Because the graph is built using random coin flips, **no two HNSW index builds are exactly the same**. If you index the same data twice, you will get two slightly different graphs. This means for edge cases (points equidistant to multiple neighbors), consistent search results are not guaranteed across index rebuilds. We discuss this more in **[Section 7: The Reality of Non-Determinism](#7-the-reality-of-non-determinism)**.
+> Surprisingly, yes! Because the graph is built using random coin flips, **HNSW index builds are commonly non-deterministic in production unless you enforce determinism**. If you index the same data twice without fixing seeds and concurrency, you will get two slightly different graphs. This means for edge cases (points equidistant to multiple neighbors), consistent search results are not guaranteed across index rebuilds. We discuss this more in **[The Reality of Non-Determinism](#the-reality-of-non-determinism)**.
 
 Let $p$ be the **promotion probability**, the chance that a node at Layer $L$ also participates in Layer $L+1$.
 
@@ -873,11 +892,12 @@ This precisely matches our requirement! The probability of reaching level $l$ de
 2.  **Complexity**: Total hops = (Layers) $\times$ (Hops/Layer) $\approx \log_M N \times M$. This is very efficient for large $M$.
 
 3.  **Total Complexity**:
-$$ Cost = O(\log N) \times O(M) \times O(d) $$
+While graph height adds small terms, search in Layer 0 dominates. Since we evaluate $\sim M$ neighbors for each of the $ef\_{search}$ candidates in our beam, the primary cost is:
+$$ Cost \approx O(d \cdot ef\_{search} \cdot M) + \text{smaller terms} $$
 where:
-*   $O(\log N)$: Number of layers in the graph
-*   $O(M)$: Average number of hops per layer
-*   $O(d)$: Cost of a single distance calculation
+*   $d$: Cost of a single distance calculation
+*   $ef\_{search}$: The beam width (number of candidates explored)
+*   $M$: The maximum number of neighbors evaluated per candidate
 
 **Key Tuning Parameters**:
 *   **$M$**: Max links per node. Higher $M$ = better recall, higher memory.
@@ -898,7 +918,7 @@ where:
 
 ---
 
-## 4. Disk-Based Indexing: DiskANN & Vamana
+## Disk-Based Indexing: DiskANN & Vamana
 
 To break the "RAM Wall," Microsoft Research introduced **DiskANN <a id="cite-2"></a>[[2]](#ref-2)** and the **Vamana** graph. The goal: store the massive vector data on cheap NVMe SSDs while keeping search fast.
 
@@ -939,11 +959,11 @@ DiskANN splits the problem:
 
 During search, the system uses the compressed vectors in RAM to navigate "roughly" to the right neighborhood. Then, it issues **batched random reads** to the SSD to fetch full data for the most promising candidates.
 
-**Result**: You can store billion-scale datasets with roughly 10% of the RAM required by HNSW, with only a small latency penalty (milliseconds vs. microseconds).
+**Result**: You can store billion-scale datasets with an order-of-magnitude less RAM than fully in-memory graph indexes, depending on caching and compression, with only a small latency penalty (milliseconds vs. microseconds).
 
 ---
 
-## 5. Partitioning: IVF (Inverted File Index)
+## Partitioning: IVF (Inverted File Index)
 
 Index partitioning algorithms like **IVF** rely on clustering to divide the dataset into manageable chunks. This approach was popularized by the **Faiss <a id="cite-4"></a>[[4]](#ref-4)** library.
 
@@ -1001,7 +1021,7 @@ graph TD
 
 ---
 
-## 6. Compression: Quantization
+## Compression: Quantization
 
 To reduce memory usage further, we use **Quantization**. This is "lossy compression" for vectors.
 
@@ -1031,6 +1051,8 @@ def train_pq(vectors, m=96):
         sub_vectors = vectors[:, start:end]
         
         # Train k-means (256 centroids = 1 byte)
+        # Note: At scale, PQ codebooks are trained with sampling 
+        # + minibatch k-means / GPU implementations.
         kmeans = KMeans(n_clusters=256)
         kmeans.fit(sub_vectors)
         codebooks.append(kmeans.cluster_centers_)
@@ -1207,7 +1229,7 @@ graph TD
 Distance calculation uses a pre-computed lookup table, making it extremely fast.
 
 ### Scalar Quantization (SQ)
-Simply converts each 32-bit float into an 8-bit integer (int8) by mapping the min/max range of each dimension.
+A simple approach to SQ converts each 32-bit float into an 8-bit integer (int8). Note: While production pipelines often compute a **global** min/max across the entire dataset (either per-dimension or flat) to preserve relative distances, the simplified examples below demonstrate **per-vector** min/max scaling to build intuition.
 *   **Reduction**: 4x.
 *   **Pros**: Very fast (SIMD optimized), decent accuracy.
 
@@ -1241,9 +1263,9 @@ graph LR
 {{% tab "Python" %}}
 ```python
 def scalar_quantize(vector):
-    # Map floats to int8 (-128 to 127)
+    # Map floats to int8 (-128 to 127) using per-vector min/max
     min_val, max_val = min(vector), max(vector)
-    scale = 255 / (max_val - min_val)
+    scale = 0 if max_val == min_val else 255 / (max_val - min_val)
     
     quantized = []
     for x in vector:
@@ -1266,7 +1288,10 @@ func ScalarQuantize(vector []float64) ([]int8, float64, float64) {
 		}
 	}
 
-	scale := 255.0 / (maxVal - minVal)
+	var scale float64
+	if maxVal > minVal {
+		scale = 255.0 / (maxVal - minVal)
+	}
 	quantized := make([]int8, len(vector))
 
 	for i, v := range vector {
@@ -1301,7 +1326,7 @@ QuantizedResult scalar_quantize(const std::vector<double>& vector) {
         if (v > max_val) max_val = v;
     }
 
-    double scale = 255.0 / (max_val - min_val);
+    double scale = (max_val > min_val) ? 255.0 / (max_val - min_val) : 0.0;
     std::vector<int8_t> quantized;
     quantized.reserve(vector.size());
 
@@ -1319,7 +1344,8 @@ QuantizedResult scalar_quantize(const std::vector<double>& vector) {
 {{% /tabs %}}
 
 ### Binary Quantization (BQ)
-The most aggressive form. Converts every dimension to a single bit (0 or 1).
+The most aggressive form. Converts every dimension to a single bit (0 or 1). 
+*(Note: Production BQ usually includes a learned rotation/projection, like ITQ or OPQ-style, prior to binarization to preserve recall).*
 *   **Reduction**: 32x.
 *   **Distance**: Hamming distance (XOR + PopCount), which is incredibly fast on modern CPUs.
 
@@ -1461,7 +1487,7 @@ Think of it like a flashlight beam: ScaNN allows more error in the shadows (perp
 
 ---
 
-## 7. The Reality of Non-Determinism
+## The Reality of Non-Determinism
 
 A critical "gotcha" in vector search is that widely used ANN algorithms are **non-deterministic**. Running the same query twice might yield slightly different results.
 
@@ -1482,17 +1508,45 @@ For forensic or legal use cases, an **Exact k-NN fallback** (brute force) on a t
 
 ---
 
+## How to Measure and Tune ANN
+
+While the mathematical guarantees are elegant, tuning an ANN index in production requires a methodical, empirical approach. Because search complexity and recall are highly parameter-dependent (`ef_search`, `nprobe`, degree bounds, cache misses, etc.), follow this simple recipe:
+
+1.  **Define the Ground Truth**: Generate a held-out test dataset of queries. Run **Exact k-NN** to find the true top-K neighbors.
+2.  **Target Recall@k**: Choose a target recall metric (e.g., Recall@10 = 0.95 means that on average, 9.5 out of the 10 true nearest neighbors are returned).
+3.  **Sweep the Parameters**:
+    *   For **HNSW**: Plot a curve by sweeping `ef_search` (while fixing $M$).
+    *   For **IVF**: Plot a curve by sweeping `nprobe`.
+4.  **Measure Latency & QPS**: For each parameter step, measure the **p95 latency** and total **Query Per Second** (QPS) throughput.
+5.  **Add a Reranking Step (Optional)**: Often it's faster to return 50 coarse candidates from an ANN and manually calculate the exact distance (reranking) to return the top 10.
+
+By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to visualize exactly what performance costs.
+
+---
+
 ## Summary Table
 
 | Algorithm | Search Complexity | Typical Memory | Latency | Use Case |
 |:---|:---|:---|:---|:---|
 | **Exact k-NN** | $O(N \cdot d)$ | 100% (High) | Seconds | Ground truth, small data |
-| **HNSW** | ~$O(\log N)$ | ~140% (100% Data + 40% Graph) | < 1 ms | Real-time, expensive |
-| **IVF-PQ** | $O(N/K)$ | 5-10% (Low) | 1-10 ms | Balanced, large scale |
-| **IVF-PQFS** | $O(N/K)$ (SIMD) | 2-5% (Very Low) | < 2 ms | High throughput, compressed |
-| **DiskANN** | ~$O(\log N)$ + Disk I/O | 5% (Very Low) | 2-10 ms | Massive scale, cost-effective |
+| **HNSW** | Emp. $O(\log N)$ | Formula (see below) | < 1 ms | Real-time, expensive |
+| **IVF-PQ** | $O(\text{nprobe} \cdot N/K)$ | 5-10% (Low) | 1-10 ms | Balanced, large scale |
+| **IVF-PQFS** | $O(\text{nprobe} \cdot N/K)$ (SIMD) | 2-5% (Very Low) | < 2 ms | High throughput, compressed |
+| **DiskANN** | Emp. $O(\log N)$ + Disk I/O | 5% (Avg RAM) | 2-10 ms | Massive scale, cost-effective |
 | **ScaNN** | Optimized IVF-PQ | 5-10% (Low) | < 5 ms | High accuracy / Google Cloud |
-| **SingleStore** | Hybrid (HNSW / IVF) | High or Low | 1-10 ms | HTAP (SQL + Vector) |
+| **SingleStore** | Hybrid (HNSW / IVF) | Config-dependent | 1-10 ms | HTAP (SQL + Vector) |
+
+> **Estimating HNSW Memory Overhead:**
+> Saying HNSW takes "140% memory" is a rule-of-thumb that breaks down across different dimensions and ID widths. A more accurate memory formula for HNSW is:
+> 
+> $\text{Total RAM} \approx \text{Dataset Size} + \text{Graph Overhead}$  
+> $\text{Dataset Size} = N \times d \times \text{bytes\_per\_dim}$  
+> $\text{Graph Overhead} \approx N \times M \times \text{bytes\_per\_link}$
+> 
+> *Example:* 1 Million 768-dimensional float32 vectors with $M=16$ (using 8-byte pointers):
+> *   Data: $10^6 \times 768 \times 4 \approx 3.07 \text{ GB}$
+> *   Graph: $10^6 \times 16 \times 8 \approx 0.128 \text{ GB}$ (plus allocator overhead)
+> *   Here, the graph overhead is only ~4%. But for 128-dimensional int8 vectors, the data is 0.128 GB and graph is 0.128 GB—an overhead of 100%!
 
 Most modern production systems use a hybrid approach: **HNSW** for the hot, recent data, and **DiskANN** or **IVF-PQ** for the massive historical archive.
 
@@ -1519,8 +1573,10 @@ graph TD
 > *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-8"></a>[[8]](#ref-8).
 > *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search <a id="cite-9"></a>[[9]](#ref-9).
 > *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging <a id="cite-10"></a>[[10]](#ref-10) (check current docs/releases for the latest).
-> *   **HNSW** is the default in-memory engine for **Pinecone**, **Milvus**, and **Weaviate**.
+> *   **HNSW** is the default in-memory engine for **Milvus** and **Weaviate**. **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
 > *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration <a id="cite-11"></a>[[11]](#ref-11) <a id="cite-12"></a>[[12]](#ref-12).
+
+> **Service capabilities change frequently; verified against vendor docs as of 2026-02.**
 
 ### Algorithm Support by Service
 
@@ -1542,16 +1598,16 @@ graph TD
 *✅ = Supported, (opaque) = Not publicly specified, — = Not available or not documented.*
 
 {{< alert "circle-info" >}}
-**Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with distinct algorithm choices. Lightweight or embedded vector stores like **ChromaDB** and **Qdrant** primarily wrap **HNSW** (via `hnswlib`) with a brute-force buffer for small batch ingestion—they are excellent for prototyping and small-to-medium workloads but don't expose the breadth of indexing strategies seen above. Similarly, **Faiss** is a *library*, not a managed service—it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
+**Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with broad portfolios of algorithm choices. Dedicated vector stores like **Qdrant** (which uses a custom native HNSW implementation) and **ChromaDB** (which wraps a fork of `hnswlib`) are excellent for many workloads but don't expose the breadth of disparate indexing strategies (like IVF-PQ or DiskANN) compared above. Similarly, **Faiss** is a *library*, not a managed service—it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
 {{< /alert >}}
 
-## 8. References
+## References
 
 1.  **<a id="ref-1"></a>Malkov, Y. A., & Yashunin, D. A. (2018).** *[Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs](https://arxiv.org/abs/1603.09320).* IEEE TPAMI. [↩](#cite-1)
 2.  **<a id="ref-2"></a>Subramanya, S. J., et al. (2019).** *[DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node](https://www.microsoft.com/en-us/research/publication/diskann-fast-accurate-billion-point-nearest-neighbor-search-on-a-single-node/).* NeurIPS. [↩](#cite-2)
 3.  **<a id="ref-3"></a>Guo, R., et al. (2020).** *[Accelerating Large-Scale Inference with Anisotropic Vector Quantization (ScaNN)](https://arxiv.org/abs/1908.10396).* ICML. [↩](#cite-3)
-4.  **<a id="ref-4"></a>Johnson, J., et al. (2019).** *[Billion-scale similarity search with GPUs (Faiss)](https://arxiv.org/abs/1702.08734).* IEEE Big Data. [↩](#cite-4)
-5.  **<a id="ref-5"></a>Aggarwal, C. C., Hinneburg, A., & Keim, D. A. (2001).** *[On the Surprising Behavior of Distance Metrics in High Dimensional Space](https://bib.dbvis.de/uploadedFiles/155.pdf).* ICDX. [↩](#cite-5)
+4.  **<a id="ref-4"></a>Johnson, J., et al. (2019).** *[Billion-scale similarity search with GPUs (Faiss)](https://arxiv.org/abs/1702.08734).* IEEE Transactions on Big Data. [↩](#cite-4)
+5.  **<a id="ref-5"></a>Aggarwal, C. C., Hinneburg, A., & Keim, D. A. (2001).** *[On the Surprising Behavior of Distance Metrics in High Dimensional Space](https://bib.dbvis.de/uploadedFiles/155.pdf).* ICDT 2001. [↩](#cite-5)
 6.  **<a id="ref-6"></a>Google Cloud.** *[Vector Search overview | Vertex AI](https://docs.cloud.google.com/vertex-ai/docs/vector-search/overview).* [↩](#cite-6)
 7.  **<a id="ref-7"></a>Microsoft.** *[Vector Search & Vector Index - SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/ai/vectors?view=sql-server-ver17).* [↩](#cite-7)
 8.  **<a id="ref-8"></a>Microsoft.** *[Vector indexes in Azure AI Search](https://docs.azure.cn/en-us/search/vector-store).* [↩](#cite-8)
@@ -1566,9 +1622,10 @@ graph TD
 17. **<a id="ref-17"></a>Microsoft.** *[Create a Vector Index - Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-create-index).* [↩](#cite-17)
 18. **<a id="ref-18"></a>Microsoft.** *[Vector search in Azure Cosmos DB for NoSQL](https://learn.microsoft.com/en-us/azure/cosmos-db/vector-search).* [↩](#cite-18)
 19. **<a id="ref-19"></a>Milvus.** *[In-memory Index | Milvus Documentation](https://milvus.io/docs/index.md).* [↩](#cite-19)
-20. **<a id="ref-20"></a>Milvus.** *[Index Vector Fields | Milvus Documentation](https://milvus.io/docs/index-vector-fields.md).* [↩](#cite-20)
+20. **<a id="ref-20"></a>Milvus.** *[SCANN | Milvus Documentation](https://milvus.io/docs/scann.md).* [↩](#cite-20)
 21. **<a id="ref-21"></a>Pinecone.** *[Nearest Neighbor Indexes for Similarity Search](https://www.pinecone.io/learn/series/faiss/vector-indexes/).* [↩](#cite-21)
 22. **<a id="ref-22"></a>Weaviate.** *[Vector index | Weaviate Documentation](https://docs.weaviate.io/weaviate/config-refs/indexing/vector-index).* [↩](#cite-22)
 23. **<a id="ref-23"></a>SingleStore.** *[Vector Indexing | SingleStore Documentation](https://docs.singlestore.com/cloud/reference/sql-reference/vector-functions/vector-indexing/).* [↩](#cite-23)
 24. **<a id="ref-24"></a>LanceDB.** *[Vector Indexes | LanceDB Documentation](https://docs.lancedb.com/indexing/vector-index).* [↩](#cite-24)
 25. **<a id="ref-25"></a>pgvector.** *[pgvector: Open-source vector similarity search for PostgreSQL](https://github.com/pgvector/pgvector).* GitHub. [↩](#cite-25)
+26. **<a id="ref-26"></a>Microsoft.** *[Create a vector index in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-create-index).* [↩](#cite-26)
