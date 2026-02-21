@@ -51,7 +51,7 @@ To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navi
 ## TL;DR: The 60-Second Summary
 - **The Problem**: High-dimensional math breaks traditional spatial trees (like KD-Trees). Distances "concentrate", making everything look equidistant, meaning you have to scan the whole database anyway.
 - **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the undisputed champion for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
-- **The Scaling Challenge**: HNSW uses massive amounts of RAM (often costing hundreds of bytes to a couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is financially impossible to keep entirely in memory.
+- **The Scaling Challenge**: HNSW uses massive amounts of RAM (often costing hundreds of bytes to a couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is often cost-prohibitive to keep entirely in memory.
 - **The Solutions**: 
     - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., 384 floats into 48 bytes) to fit them in RAM, at the cost of slight recall loss.
     - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, typically reducing RAM needs by ~10x-100x vs naive in-memory graphs, depending on PQ and caching.
@@ -106,7 +106,7 @@ def build_kdtree(points, depth=0):
     median = len(points) // 2
     
     # Note: For production, prefer `nth_element`/partition selection and 
-    # operate on index ranges to avoid repeated sorts and O(N log^2 N) copies.
+    # operate on index ranges to avoid repeated sorts (which push toward O(N log^2 N)) and avoid copying slices (which causes heavy memory churn).
     return Node(
         point=points[median],
         left=build_kdtree(points[:median], depth + 1),
@@ -403,14 +403,13 @@ import (
 	"math/rand"
 )
 
-func calculateRatio(dim, numPoints int) float64 {
-	rand.Seed(42) // Seed for deterministic output
+func calculateRatio(rng *rand.Rand, dim, numPoints int) float64 {
 	points := make([][]float64, numPoints)
 	for i := range points {
 		points[i] = make([]float64, dim)
 		var norm float64
 		for j := 0; j < dim; j++ {
-			v := rand.NormFloat64()
+			v := rng.NormFloat64()
 			points[i][j] = v
 			norm += v * v
 		}
@@ -430,19 +429,24 @@ func calculateRatio(dim, numPoints int) float64 {
 			distSq += diff * diff
 		}
 		dist := math.Sqrt(distSq)
-		if dist < minDist { minDist = dist }
-		if dist > maxDist { maxDist = dist }
+		if dist < minDist {
+			minDist = dist
+		}
+		if dist > maxDist {
+			maxDist = dist
+		}
 	}
+
 	return minDist / maxDist
 }
 
 func main() {
-    fmt.Println("dimension,ratio")
-    for dim := 10; dim <= 3000; dim += 50 {
-        ratio := calculateRatio(dim, 1000)
-        fmt.Printf("%d,%.4f\n", dim, ratio)
-    }
-    // Pipe this output to a plotting tool
+	rng := rand.New(rand.NewSource(42))
+	dims := []int{10, 50, 100, 200, 500, 1000, 2000, 3000}
+	for _, dim := range dims {
+		ratio := calculateRatio(rng, dim, 1000)
+		fmt.Printf("Dim: %4d | Min/Max Ratio: %.4f\n", dim, ratio)
+	}
 }
 ```
 {{% /tab %}}
@@ -1606,6 +1610,7 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 
 Most modern production systems use a hybrid approach: **HNSW** for the hot, recent data, and **DiskANN** or **IVF-PQ** for the massive historical archive.
 
+<a id="algorithm-selection--production-realities"></a>
 ## Algorithm Selection & Production Realities
 Before leaving the algorithms behind, it is crucial to acknowledge three operational realities that drastically impact vector search in production:
 
@@ -1656,7 +1661,7 @@ graph TD
 | **Elasticsearch** [[elasticsearch-knn]](#ref-elasticsearch-knn) | ✅ | — | — | — | — | — | ✅ |
 | **Databricks** [[databricks-mosaic-ai]](#ref-databricks-mosaic-ai) | ✅  | — | — | — | — | — | ✅ |
 | **MongoDB Atlas** [[mongodb-atlas-vector]](#ref-mongodb-atlas-vector) | ✅  | — | — | — | — | — | ✅ |
-| **Milvus / Zilliz** [[milvus-in-memory]](#ref-milvus-in-memory) [[milvus-disk-index]](#ref-milvus-disk-index) | ✅ | ✅ | ✅ | — | ✅ | ✅ˢ | ✅ |
+| **Milvus / Zilliz** [[milvus-in-memory]](#ref-milvus-in-memory) [[milvus-disk-index]](#ref-milvus-disk-index) [[milvus-scann]](#ref-milvus-scann) | ✅ | ✅ | ✅ | — | ✅ | ✅ˢ | ✅ |
 | **Pinecone** [[pinecone-nearest-neighbor]](#ref-pinecone-nearest-neighbor) | *(opaque)* | — | — | — | — | — | — |
 | **Weaviate** [[weaviate-vector-index]](#ref-weaviate-vector-index) | ✅ | — | — | — | — | — | ✅ |
 | **SingleStore** [[singlestore-vector-indexing]](#ref-singlestore-vector-indexing) | ✅ | ✅ | ✅ | ✅ | — | — | — |
