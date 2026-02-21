@@ -49,12 +49,12 @@ Intuitively this makes sense, but intuition isn't good enough for computation. S
 To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navigate high-dimensional spaces efficiently. This post provides an introduction to the core algorithms that empower embedding vector searching at scale.
 
 ## TL;DR: The 60-Second Summary
-- **The Problem**: High-dimensional math breaks traditional spatial trees (like KD-Trees or B-Trees). Distances "concentrate", making everything look equidistant, meaning you have to scan the whole database anyway.
+- **The Problem**: High-dimensional math breaks traditional spatial trees (like KD-Trees). Distances "concentrate", making everything look equidistant, meaning you have to scan the whole database anyway.
 - **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the undisputed champion for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
-- **The Scaling Challenge**: HNSW uses massive amounts of RAM (adding $\approx$ 1-1.5KB of graph links per vector). At billion-scale, this is financially impossible to keep entirely in memory.
+- **The Scaling Challenge**: HNSW uses massive amounts of RAM (often costing hundreds of bytes to a couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is financially impossible to keep entirely in memory.
 - **The Solutions**: 
     - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., 384 floats into 48 bytes) to fit them in RAM, at the cost of slight recall loss.
-    - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, shrinking the memory footprint by $\approx 64\times$ while maintaining high recall.
+    - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, typically reducing RAM needs by ~10x-100x vs naive in-memory graphs, depending on PQ and caching.
 - **Sparse Vectors**: Lexical vectors (like BM25 or SPLADE) are 99% zeros and run on entirely different infrastructure (Inverted Indexes) rather than the ANN pipelines described here.
 
 ## Choose Your Path
@@ -335,7 +335,7 @@ Because you can't rule out any branches, you are forced to visit them all. The t
 
 Before diving into the solutions, we must understand the problem. Why can't we just use a B-Tree or a KD-Tree?
 
-In low-dimensional spaces (like 2D or 3D geographical data), structures like **KD-Trees** or **R-Trees** work beautifully. They partition space so you can quickly discard vast regions that are "too far away."
+B-trees index ordered keys; nearest-neighbor in vector spaces isn't naturally representable as a total order. For low-dimensional spaces (like 2D or 3D geographical data), structures like **KD-Trees** or **R-Trees** work beautifully. They partition space so you can quickly discard vast regions that are "too far away."
 
 However, modern embedding models (like CLIP or OpenAI's text-embedding-3) output vectors with hundreds or thousands of dimensions (e.g., 512, 768, 1536, or 3072). In these high-dimensional spaces, a phenomenon known as the **Curse of Dimensionality** renders traditional spatial partitioning ineffective.
 
@@ -404,6 +404,7 @@ import (
 )
 
 func calculateRatio(dim, numPoints int) float64 {
+	rand.Seed(42) // Seed for deterministic output
 	points := make([][]float64, numPoints)
 	for i := range points {
 		points[i] = make([]float64, dim)
@@ -1318,7 +1319,7 @@ def scalar_quantize(vector):
     quantized = []
     for x in vector:
         q = int((x - min_val) * scale) - 128
-        quantized.append(q)
+        quantized.append(max(-128, min(127, q)))
         
     return quantized, scale, min_val
 ```
@@ -1605,7 +1606,7 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 
 Most modern production systems use a hybrid approach: **HNSW** for the hot, recent data, and **DiskANN** or **IVF-PQ** for the massive historical archive.
 
-## Production Realities: Filtering and Hybrid Search
+## Algorithm Selection & Production Realities
 Before leaving the algorithms behind, it is crucial to acknowledge three operational realities that drastically impact vector search in production:
 
 1.  **Filtered ANN**: Real systems almost always include metadata filters (e.g., `"only docs from user X"`, `"only last 30 days"`). Applying these filters breaks the core assumptions of ANN graphs. Naively pre-filtering or constraining the traversal can fragment the graph and crater recall. Some systems mitigate this with bitset-aware traversal algorithms or filtered vector indexes (storing attributes on the index side, e.g., Spanner's `STORING` clause) [[spanner-vector-indexes]](#ref-spanner-vector-indexes).
@@ -1646,23 +1647,23 @@ graph TD
 
 | Service | HNSW | IVF-Flat | IVF-PQ | IVF-PQFS | DiskANN | ScaNN / Tree-ANN | Flat / Brute-Force |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Google Vertex AI** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search) | — | — | — | — | — | ✅ | — |
-| **Google AlloyDB** [[alloydb-ivfflat]](#ref-alloydb-ivfflat) [[alloydb-scann]](#ref-alloydb-scann) | ✅ | ✅ | — | — | — | ✅ | ✅ |
-| **Google Cloud Spanner** [[spanner-vector-indexes]](#ref-spanner-vector-indexes) [[spanner-ann]](#ref-spanner-ann) | — | — | — | — | — | ✅ | ✅ |
+| **Google Vertex AI** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search) | — | — | — | — | — | ✅ˢ | — |
+| **Google AlloyDB** [[alloydb-ivfflat]](#ref-alloydb-ivfflat) [[alloydb-scann]](#ref-alloydb-scann) | ✅ | ✅ | — | — | — | ✅ˢ | ✅ |
+| **Google Cloud Spanner** [[spanner-vector-indexes]](#ref-spanner-vector-indexes) [[spanner-ann]](#ref-spanner-ann) | — | — | — | — | — | ✅ᵀ | ✅ |
 | **Azure AI Search** [[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index) | ✅ | — | — | — | — | — | ✅ |
 | **Azure Cosmos DB** [[cosmos-db-vector]](#ref-cosmos-db-vector) | — | — | — | — | ✅ | — | ✅ |
 | **SQL Server** [[sql-server-vector]](#ref-sql-server-vector) | — | — | — | — | ✅ | — | — |
 | **Elasticsearch** [[elasticsearch-knn]](#ref-elasticsearch-knn) | ✅ | — | — | — | — | — | ✅ |
 | **Databricks** [[databricks-mosaic-ai]](#ref-databricks-mosaic-ai) | ✅  | — | — | — | — | — | ✅ |
 | **MongoDB Atlas** [[mongodb-atlas-vector]](#ref-mongodb-atlas-vector) | ✅  | — | — | — | — | — | ✅ |
-| **Milvus / Zilliz** [[milvus-in-memory]](#ref-milvus-in-memory) [[milvus-disk-index]](#ref-milvus-disk-index) | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ |
+| **Milvus / Zilliz** [[milvus-in-memory]](#ref-milvus-in-memory) [[milvus-disk-index]](#ref-milvus-disk-index) | ✅ | ✅ | ✅ | — | ✅ | ✅ˢ | ✅ |
 | **Pinecone** [[pinecone-nearest-neighbor]](#ref-pinecone-nearest-neighbor) | *(opaque)* | — | — | — | — | — | — |
 | **Weaviate** [[weaviate-vector-index]](#ref-weaviate-vector-index) | ✅ | — | — | — | — | — | ✅ |
 | **SingleStore** [[singlestore-vector-indexing]](#ref-singlestore-vector-indexing) | ✅ | ✅ | ✅ | ✅ | — | — | — |
 | **LanceDB** [[lancedb-vector-indexes]](#ref-lancedb-vector-indexes) | ✅ | ✅ | ✅ | — | — | — | — |
 | **pgvector (PostgreSQL)** [[pgvector-github]](#ref-pgvector-github) | ✅ | ✅ | — | — | — | — | ✅ |
 
-*✅ = Supported, (opaque) = Not publicly specified, — = Not available or not documented.*
+*✅ = Supported, ✅ᵀ = Tree-based ANN, ✅ˢ = ScaNN, (opaque) = Not publicly specified, — = Not available or not documented.*
 
 {{< alert "circle-info" >}}
 **Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with broad portfolios of algorithm choices. Dedicated vector stores like **Qdrant** (which uses a custom native HNSW implementation) and **ChromaDB** (which wraps a fork of `hnswlib`) are excellent for many workloads but don't expose the breadth of disparate indexing strategies (like IVF-PQ or DiskANN) compared above. Similarly, **Faiss** is a *library*, not a managed service—it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
