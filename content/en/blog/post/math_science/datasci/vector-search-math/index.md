@@ -50,12 +50,12 @@ To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navi
 
 ## TL;DR: The 60-Second Summary
 - **The Problem**: High-dimensional math breaks traditional spatial trees (like KD-Trees). Distances "concentrate", making everything look equidistant, meaning you have to scan the whole database anyway.
-- **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the undisputed champion for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
+- **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the common default for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
 - **The Scaling Challenge**: HNSW uses massive amounts of RAM (often costing hundreds of bytes to a couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is often cost-prohibitive to keep entirely in memory.
 - **The Solutions**: 
     - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., 384 floats into 48 bytes) to fit them in RAM, at the cost of slight recall loss.
     - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, typically reducing RAM needs by ~10x-100x vs naive in-memory graphs, depending on PQ and caching.
-- **Sparse Vectors**: Lexical vectors (like BM25 or SPLADE) are 99% zeros and run on entirely different infrastructure (Inverted Indexes) rather than the ANN pipelines described here.
+- **Sparse Vectors**: Lexical vectors (like BM25 or SPLADE) are 99% zeros and run on entirely different infrastructure (Inverted Indexes) rather than the ANN pipelines described here. Sparse vectors have different failure modes; inverted indexes avoid the same geometry-driven pruning collapse.
 
 ## Choose Your Path
 Depending on your intent, feel free to jump directly to:
@@ -442,10 +442,9 @@ func calculateRatio(rng *rand.Rand, dim, numPoints int) float64 {
 
 func main() {
 	rng := rand.New(rand.NewSource(42))
-	dims := []int{10, 50, 100, 200, 500, 1000, 2000, 3000}
-	for _, dim := range dims {
+	for dim := 10; dim <= 3000; dim += 50 {
 		ratio := calculateRatio(rng, dim, 1000)
-		fmt.Printf("Dim: %4d | Min/Max Ratio: %.4f\n", dim, ratio)
+		fmt.Printf("%d,%.4f\n", dim, ratio)
 	}
 }
 ```
@@ -786,19 +785,21 @@ type HNSWGraph struct {
 	M        int
 	MaxLevel int
 	mL       float64
+	rng      *rand.Rand
 }
 
-func NewHNSWGraph(m int, maxLevel int) *HNSWGraph {
+func NewHNSWGraph(m int, maxLevel int, seed int64) *HNSWGraph {
 	return &HNSWGraph{
 		M:        m,
 		MaxLevel: maxLevel,
 		mL:       1.0 / math.Log(float64(m)),
+		rng:      rand.New(rand.NewSource(seed)),
 	}
 }
 
 func (g *HNSWGraph) RandomLevel() int {
 	// Exponential distribution scaled by 1/ln(M)
-	f := rand.Float64()
+	f := g.rng.Float64()
 	if f == 0.0 {
 		f = 1e-10
 	}
@@ -1610,8 +1611,7 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 
 Most modern production systems use a hybrid approach: **HNSW** for the hot, recent data, and **DiskANN** or **IVF-PQ** for the massive historical archive.
 
-<a id="algorithm-selection--production-realities"></a>
-## Algorithm Selection & Production Realities
+## Algorithm Selection & Production Realities {#algorithm-selection--production-realities}
 Before leaving the algorithms behind, it is crucial to acknowledge three operational realities that drastically impact vector search in production:
 
 1.  **Filtered ANN**: Real systems almost always include metadata filters (e.g., `"only docs from user X"`, `"only last 30 days"`). Applying these filters breaks the core assumptions of ANN graphs. Naively pre-filtering or constraining the traversal can fragment the graph and crater recall. Some systems mitigate this with bitset-aware traversal algorithms or filtered vector indexes (storing attributes on the index side, e.g., Spanner's `STORING` clause) [[spanner-vector-indexes]](#ref-spanner-vector-indexes).
