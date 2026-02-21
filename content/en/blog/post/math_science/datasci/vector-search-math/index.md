@@ -49,7 +49,7 @@ Intuitively this makes sense, but intuition isn't good enough for computation. S
 To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navigate high-dimensional spaces efficiently. This post provides an introduction to the core algorithms that empower embedding vector searching at scale.
 
 ## Out of Scope: Dense vs. Sparse Vectors
-Before diving into the math, we must define our terms. This post exclusively covers the mathematics of **Dense Vector Search**. 
+This post exclusively covers the mathematics of **Dense Vector Search**. 
 
 Dense vectors (like embeddings from OpenAI or CLIP) are relatively low-dimensional (e.g., 384 to 3072 dimensions) but *every dimension has a non-zero floating-point value*. This geometric "denseness" is what triggers the algorithmic complexities (like the Curse of Dimensionality) discussed in the rest of this post.
 
@@ -324,6 +324,9 @@ Mathematically, as dimension $d$ increases:
 Think of 1 dimension as rolling a single die. You can easily get a 1 (min) or a 6 (max). The "contrast" is high.
 Now, think of 1,000 dimensions as summing 1,000 independent dice. According to the **Central Limit Theorem**, the sum of independent random variables tends toward a **Normal Distribution (Gaussian)**. The result will cluster tightly around the mean (3,500). It is effectively statistically impossible to roll all 1s (1,000) or all 6s (6,000).
 In high dimensions, every vector is effectively a "sum of many dice." Its length (norm) and distance to others converge to a statistical mean. The "spikes" (unique features) get washed out in the law of large numbers.
+
+**The Saving Grace: Intrinsic Dimension**
+While the math above assumes embeddings are perfectly uniform across all dimensions, real-world data is inherently structured. Embeddings typically lie on much lower-dimensional manifolds (their *intrinsic dimension* is much smaller than their raw dimension $d$). This clustered, non-uniform structure is the saving grace that allows ANN algorithms to successfully partition and navigate the space despite the raw geometric curse.
 
 ![Curse of Dimensionality Graph](curse_of_dimensionality.png)
 
@@ -603,13 +606,11 @@ double cosine_similarity(const std::vector<double>& v1, const std::vector<double
 {{% /tab %}}
 {{% /tabs %}}
 
-> **Note on Normalization:** A vector is L2-normalized (unit normalized) when its length equals exactly 1. CLIP models often do this by default.
->
-> When all vectors live on the unit sphere, these metrics collapse into equivalent rankings:
-> *   **Cosine similarity** becomes identical to **Inner Product**.
-> *   **Euclidean distance** becomes a function of Inner Product: $L2^2(\mathbf{x}, \mathbf{y}) = 2 - 2 \cdot \text{IP}(\mathbf{x}, \mathbf{y})$.
->
-> This means you can often use the simpler Inner Product for calculation efficiency without changing the search results.
+> **MIPS vs Distance Cheat Sheet:** 
+> When working with Maximum Inner Product Search (MIPS) and distances, practitioners rely on these canonical reductions:
+> *   **L2 to Dot Product Equivalency**: If you unit-normalize your vectors ($||x|| = 1$), calculating the Dot Product yields the exact same ranking as computing Cosine Similarity or Euclidean (L2) distance.
+> *   **MIPS to L2 Reduction**: For unnormalized vectors, MIPS can be converted into an L2 search problem by augmenting the vectors with an extra dimension $\sqrt{M^2 - ||x||^2}$ (where $M$ is the maximum possible norm). This guarantees $O(1)$ length for all vectors, making L2 distance mathematically equivalent to finding the maximum inner product.
+> *   **Norm Drift Failures**: Many vector databases optimize for Dot Product because it requires fewer FLOPs. If your embedding model's vectors "drift" from unit length (e.g., norms become $0.98$ or $1.05$), the ranking equivalence fails, and dense clusters will be retrieved incorrectly.
 
 ---
 
@@ -1159,6 +1160,8 @@ std::vector<uint8_t> encode_pq(const Vector& vector, const std::vector<Codebook>
 {{% /tab %}}
 {{% /tabs %}}
 
+> **Note on PQ Distances:** PQ returns an *approximation* of the true distance. In practice, systems usually fetch a larger pool of candidates (e.g., $k \times 10$) using the fast compressed index, and then **re-rank** them by calculating exact distances against the uncompressed vectors in memory to restore the final, accurate ordering.
+
 {{< mermaid >}}
 graph TD
     subgraph Original ["Original Vector (768d)"]
@@ -1553,6 +1556,7 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 > $\text{Total RAM} \approx \text{Dataset Size} + \text{Graph Overhead}$  
 > $\text{Dataset Size} = N \times d \times \text{bytes\_per\_dim}$  
 > $\text{Graph Overhead} \approx N \times \left(M_0 + \frac{M}{M-1}\right) \times \text{bytes\_per\_link}$
+> *(Where $M_0 + \frac{M}{M-1}$ represents the expected adjacency count under the level distribution, not a hard guarantee).*
 > 
 > *Example:* 1 Million 768-dimensional float32 vectors with $M=16, M_0=32$ (using 8-byte pointers):
 > *   Data: $10^6 \times 768 \times 4 \approx 3.07 \text{ GB}$
@@ -1560,6 +1564,12 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 > *   Here, the graph overhead is ~8-9%. (Note: Layer 0 often uses $M_0=2M$, which roughly doubles adjacency memory vs $N \times M$). However, for 128-dimensional int8 vectors, the graph footprint eclipses the data payload, pushing overhead to 100-200%!
 
 Most modern production systems use a hybrid approach: **HNSW** for the hot, recent data, and **DiskANN** or **IVF-PQ** for the massive historical archive.
+
+## Production Realities: Filtering and Hybrid Search
+Before leaving the algorithms behind, it is crucial to acknowledge two operational realities that drastically impact vector search in production:
+
+1.  **Filtered ANN**: Real systems almost always include metadata filters (e.g., `"only docs from user X"`, `"only last 30 days"`). Applying these filters breaks the core assumptions of ANN graphs. If you pre-filter before searching the vector index, you destroy the navigability of the HNSW graph (creating disconnected islands). If you post-filter after the ANN search, your recall craters because you might filter out all $k$ retrieved results. Production-robust systems require distinct strategies (like bitset-aware traversals, oversampling, or per-partition indexes) to handle filtered ANN without tanking recall.
+2.  **Hybrid Search (BM25 + Vectors)**: Dense vectors are excellent for semantic meaning but terrible for exact keyword matching (like searching for a specific product ID or an obscure acronym). The industry standard approach is **Hybrid Search**: running a dense vector search concurrently with a sparse lexical search (like BM25), and then fusing the results together using an algorithm like **Reciprocal Rank Fusion (RRF)** for optimal relevance.
 
 
 
@@ -1580,7 +1590,7 @@ graph TD
 {{< /mermaid >}}
 
 > **Note on Algorithms vs. Services:**
-> *   **Google Cloud Spanner** supports **exact KNN** (distance functions with `ORDER BY … LIMIT`) and **approximate NN (ANN)** accelerated by **tree-based vector indexes** that leverage Google Research's **ScaNN**. ANN queries use Spanner's `APPROX_*` distance functions and trade a small amount of recall for lower latency/cost <a id="cite-27"></a>[[27]](#ref-27). (Note: **AlloyDB** natively supports both HNSW via pgvector <a id="cite-13"></a>[[13]](#ref-13) and its own integrated ScaNN index <a id="cite-14"></a>[[14]](#ref-14)).
+> *   **Google Cloud Spanner** supports **exact kNN** vector similarity search directly in SQL using distance functions like `COSINE_DISTANCE()`, `EUCLIDEAN_DISTANCE()`, and `DOT_PRODUCT()` via `ORDER BY … LIMIT k` (works in both GoogleSQL- and PostgreSQL-dialect databases) <a id="cite-16"></a>[[16]](#ref-16). For lower-latency **approximate nearest neighbor (ANN)** search at larger scales, Spanner can build **tree-based vector indexes** that leverage Google Research’s **ScaNN** (configurable as two-level or three-level trees). ANN queries use the `APPROX_*` distance functions (for example `APPROX_COSINE_DISTANCE`) and expose tuning knobs such as `num_leaves_to_search` to trade recall for latency/cost <a id="cite-33"></a>[[33]](#ref-33). *Note:* Spanner’s ANN vector indexes are **GoogleSQL-only** and availability depends on edition/interface; see the Spanner docs for the current constraints <a id="cite-27"></a>[[27]](#ref-27). (Note: **AlloyDB** natively supports both HNSW via pgvector <a id="cite-13"></a>[[13]](#ref-13) and its own integrated ScaNN index <a id="cite-14"></a>[[14]](#ref-14)).
 > *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search** <a id="cite-6"></a>[[6]](#ref-6).
 > *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-26"></a>[[26]](#ref-26).
 > *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search <a id="cite-9"></a>[[9]](#ref-9).
@@ -1602,8 +1612,8 @@ graph TD
 | **Azure Cosmos DB** <a id="cite-18"></a>[[18]](#ref-18) | — | — | — | — | ✅ | — | ✅ |
 | **SQL Server** <a id="cite-7"></a>[[7]](#ref-7) | — | — | — | — | ✅ | — | — |
 | **Elasticsearch** <a id="cite-28"></a>[[28]](#ref-28) | ✅ | — | — | — | — | — | ✅ |
-| **Databricks** <a id="cite-30"></a>[[30]](#ref-30) | ✅ | — | — | — | — | — | ✅ |
-| **MongoDB Atlas** <a id="cite-29"></a>[[29]](#ref-29) | ✅ | — | — | — | — | — | ✅ |
+| **Databricks** <a id="cite-30"></a>[[30]](#ref-30) | ✅ <a id="cite-30"></a>[[30]](#ref-30) | — | — | — | — | — | ✅ |
+| **MongoDB Atlas** <a id="cite-29"></a>[[29]](#ref-29) | ✅ <a id="cite-29"></a>[[29]](#ref-29) | — | — | — | — | — | ✅ |
 | **Milvus / Zilliz** <a id="cite-19"></a>[[19]](#ref-19) <a id="cite-20"></a>[[20]](#ref-20) | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ |
 | **Pinecone** <a id="cite-21"></a>[[21]](#ref-21) | *(opaque)* | — | — | — | — | — | — |
 | **Weaviate** <a id="cite-22"></a>[[22]](#ref-22) | ✅ | — | — | — | — | — | ✅ |
@@ -1651,3 +1661,4 @@ graph TD
 30. **<a id="ref-30"></a>Databricks.** *[Mosaic AI Vector Search | Databricks Documentation](https://docs.databricks.com/en/generative-ai/vector-search.html).* [↩](#cite-30)
 31. **<a id="ref-31"></a>Elasticsearch.** *[Vector search in Elasticsearch | Elastic Docs](https://www.elastic.co/docs/solutions/search/vector).* [↩](#cite-31)
 32. **<a id="ref-32"></a>Formal, T., et al. (2021).** *[SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking](https://arxiv.org/abs/2107.05720).* SIGIR. [↩](#cite-32)
+33. **<a id="ref-33"></a>Google Cloud.** *[Vector indexes | Spanner](https://docs.cloud.google.com/spanner/docs/vector-indexes).* [↩](#cite-33)
