@@ -53,7 +53,7 @@ To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navi
 - **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the common default for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
 - **The Scaling Challenge**: HNSW uses massive amounts of RAM (often costing hundreds of bytes to a couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is often cost-prohibitive to keep entirely in memory.
 - **The Solutions**: 
-    - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., 384 floats into 48 bytes) to fit them in RAM, at the cost of slight recall loss.
+    - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., **PQ**: 384 float32 → 48 bytes) to fit them in RAM, at the cost of slight recall loss.
     - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, typically reducing RAM needs by ~10x-100x vs naive in-memory graphs, depending on PQ and caching.
 - **Sparse Vectors**: Lexical vectors (like BM25 or SPLADE) are 99% zeros and run on entirely different infrastructure (Inverted Indexes) rather than the ANN pipelines described here. Sparse vectors have different failure modes; inverted indexes avoid the same geometry-driven pruning collapse.
 
@@ -82,6 +82,8 @@ A **KD-Tree** is a binary tree that splits the data space into two halves at eve
 1.  **Root**: Split the data along the X-axis (dimension 0) at the median. Points with $x < median$ go left; points with $x \ge median$ go right.
 2.  **Level 1**: Split each child node along the Y-axis (dimension 1). Notice in the diagram below that the split values (e.g., $Y < 30$ vs $Y < 80$) are different for each branch because they are the **local medians** for that specific subset of points.
 3.  **Level 2**: Split along the Z-axis (dimension 2), and so on, cycling through dimensions.
+
+> **Note:** Code blocks are minimal for clarity; some omit imports, memory management, and boilerplate.
 
 {{% tabs "kdtree-implementation" %}}
 {{% tab "Python" %}}
@@ -380,7 +382,7 @@ def calculate_ratio(dim, num_points=1000):
     
     return np.min(dists) / np.max(dists)
 
-dims = range(10, 3000, 50)
+dims = range(10, 3001, 50)
 ratios = [calculate_ratio(d) for d in dims]
 
 plt.figure(figsize=(10, 6))
@@ -712,9 +714,6 @@ graph TD
 
     style N3 fill:#f9f,stroke:#333,stroke-width:4px
     style N5 fill:#f9f,stroke:#333,stroke-width:4px
-    
-    click N3 "Step 1 Winner"
-    click N5 "Step 2 Winner"
 {{< /mermaid >}}
 
 #### The Algorithm Steps:
