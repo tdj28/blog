@@ -48,10 +48,27 @@ Intuitively this makes sense, but intuition isn't good enough for computation. S
 
 To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navigate high-dimensional spaces efficiently. This post provides an introduction to the core algorithms that empower embedding vector searching at scale.
 
+## TL;DR: The 60-Second Summary
+- **The Problem**: High-dimensional math breaks traditional spatial trees (like KD-Trees or B-Trees). Distances "concentrate", making everything look equidistant, meaning you have to scan the whole database anyway.
+- **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the undisputed champion for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
+- **The Scaling Challenge**: HNSW uses massive amounts of RAM (adding $\approx$ 1-1.5KB of graph links per vector). At billion-scale, this is financially impossible to keep entirely in memory.
+- **The Solutions**: 
+    - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., 384 floats into 48 bytes) to fit them in RAM, at the cost of slight recall loss.
+    - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, shrinking the memory footprint by $\approx 64\times$ while maintaining high recall.
+- **Sparse Vectors**: Lexical vectors (like BM25 or SPLADE) are 99% zeros and run on entirely different infrastructure (Inverted Indexes) rather than the ANN pipelines described here.
+
+## Choose Your Path
+Depending on your intent, feel free to jump directly to:
+- 📖 **"I want the pure theory"** &rarr; [The Curse of Dimensionality](#the-challenge-the-curse-of-dimensionality)
+- 🏗️ **"I want to understand how the algorithms work"** &rarr; [Graph-Based Indexing: HNSW](#graph-based-indexing-hnsw)
+- 🚀 **"I just need to pick an index for my database"** &rarr; [Algorithm Selection & Production Realities](#algorithm-selection--production-realities)
+
+---
+
 ## Out of Scope: Dense vs. Sparse Vectors
 This post exclusively covers the mathematics of **Dense Vector Search**. 
 
-Dense vectors (like embeddings from OpenAI or CLIP) are relatively low-dimensional (e.g., 384 to 3072 dimensions). Dense embeddings require evaluating similarity across (nearly) all dimensions, so high-dimensional geometry and distance concentration matter operationally.
+Dense vectors (like embeddings from OpenAI or CLIP) have hundreds to a few thousand dimensions (far lower than sparse vocab-scale vectors). Dense embeddings require evaluating similarity across (nearly) all dimensions, so high-dimensional geometry and distance concentration matter operationally.
 
 By contrast, **Sparse Vectors** (such as traditional TF-IDF/BM25 profiles, or modern neural representations like **SPLADE** [[splade-paper]](#ref-splade-paper) and Elastic's ELSER) have massive dimensionality (often corresponding to the entire English vocabulary, e.g., 30,000+ dimensions), but they are 99% zeros. Sparse retrieval typically exploits **Inverted Indexes** (data structures that map terms directly to the list of documents containing them) so scoring touches only non-zero coordinates, changing both the cost model and failure modes. Therefore, sparse vectors do not suffer from the same geometric curse, and algorithms like HNSW or IVF are not the primary mechanisms for scaling them.
 
@@ -1561,6 +1578,8 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 
 ## Summary Table
 
+*Note: Latency ranges below are typical order-of-magnitude estimates on modern hardware. Tail latencies depend heavily on `ef_search`, cache hit rates, array structure, and SSD random read performance.*
+
 | Algorithm | Search Complexity | Typical Memory | Latency | Use Case |
 |:---|:---|:---|:---|:---|
 | **Exact k-NN** | $O(N \cdot d)$ | 100% (High) | Seconds | Ground truth, small data |
@@ -1625,7 +1644,7 @@ graph TD
 
 ### Algorithm Support by Service
 
-| Service | HNSW | IVF-Flat | IVF-PQ | IVF-PQFS | DiskANN | ScaNN | Flat / Brute-Force |
+| Service | HNSW | IVF-Flat | IVF-PQ | IVF-PQFS | DiskANN | ScaNN / Tree-ANN | Flat / Brute-Force |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **Google Vertex AI** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search) | — | — | — | — | — | ✅ | — |
 | **Google AlloyDB** [[alloydb-ivfflat]](#ref-alloydb-ivfflat) [[alloydb-scann]](#ref-alloydb-scann) | ✅ | ✅ | — | — | — | ✅ | ✅ |
@@ -1648,6 +1667,11 @@ graph TD
 {{< alert "circle-info" >}}
 **Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with broad portfolios of algorithm choices. Dedicated vector stores like **Qdrant** (which uses a custom native HNSW implementation) and **ChromaDB** (which wraps a fork of `hnswlib`) are excellent for many workloads but don't expose the breadth of disparate indexing strategies (like IVF-PQ or DiskANN) compared above. Similarly, **Faiss** is a *library*, not a managed service—it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
 {{< /alert >}}
+
+## Further Reading & Benchmarks
+If you're selecting an algorithm for a production system, pure theory only goes so far. Hardware architecture, compiler optimizations, and dataset distribution heavily dictate real-world performance.
+*   **[ANN-Benchmarks](https://github.com/erikbern/ann-benchmarks)**: The definitive open-source empirical leaderboard for approximate nearest neighbor algorithms. Highly recommended to observe how recall curves degrade against QPS.
+*   **[VectorDBBench](https://github.com/zilliztech/VectorDBBench)**: An open-source benchmark tool focused specifically on managed and open-source vector databases.
 
 ## References
 
