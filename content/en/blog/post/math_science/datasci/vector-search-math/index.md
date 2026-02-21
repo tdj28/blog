@@ -1578,7 +1578,8 @@ graph TD
 > *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-26"></a>[[26]](#ref-26).
 > *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search <a id="cite-9"></a>[[9]](#ref-9).
 > *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging <a id="cite-10"></a>[[10]](#ref-10) (check current docs/releases for the latest).
-> *   **HNSW** is the primary or default in-memory engine across the vast majority of the ecosystem, including **Milvus**, **Weaviate**, **Elasticsearch** (via Lucene) <a id="cite-28"></a>[[28]](#ref-28), **MongoDB Atlas Vector Search** <a id="cite-29"></a>[[29]](#ref-29), and **Databricks Vector Search** (Mosaic AI) <a id="cite-30"></a>[[30]](#ref-30). **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
+> *   **HNSW** is the primary or default in-memory engine across the vast majority of the ecosystem, including **Milvus**, **Weaviate**, **MongoDB Atlas Vector Search** <a id="cite-29"></a>[[29]](#ref-29), and **Databricks Vector Search** (Mosaic AI) <a id="cite-30"></a>[[30]](#ref-30). **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
+> *   **Elasticsearch** comprehensively supports vector search by leveraging Lucene's native **HNSW** for dense vector similarity, while also offering **sparse vector search** (via its ELSER model for semantic expansion) and higher-level workflow abstractions like `semantic_text` <a id="cite-28"></a>[[28]](#ref-28) <a id="cite-31"></a>[[31]](#ref-31).
 > *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration <a id="cite-11"></a>[[11]](#ref-11) <a id="cite-12"></a>[[12]](#ref-12).
 
 > **Service capabilities change frequently; verified against vendor docs as of 2026-02.** Cells without direct citations are best-effort and may change; check vendor docs for your region/SKU.
@@ -1641,3 +1642,4 @@ graph TD
 28. **<a id="ref-28"></a>Elasticsearch.** *[k-nearest neighbor (kNN) search | Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html).* [↩](#cite-28)
 29. **<a id="ref-29"></a>MongoDB.** *[Atlas Vector Search Overview | MongoDB Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/).* [↩](#cite-29)
 30. **<a id="ref-30"></a>Databricks.** *[Mosaic AI Vector Search | Databricks Documentation](https://docs.databricks.com/en/generative-ai/vector-search.html).* [↩](#cite-30)
+31. **<a id="ref-31"></a>Elasticsearch.** *[Vector search in Elasticsearch | Elastic Docs](https://www.elastic.co/docs/solutions/search/vector).* [↩](#cite-31)
