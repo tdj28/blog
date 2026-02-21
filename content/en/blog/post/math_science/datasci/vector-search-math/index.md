@@ -50,12 +50,13 @@ To do this, we rely on **Approximate Nearest Neighbor (ANN)** algorithms to navi
 
 ## TL;DR: The 60-Second Summary
 - **The Problem**: High-dimensional math breaks traditional spatial trees (like KD-Trees). Distances "concentrate", making everything look equidistant, meaning you have to scan the whole database anyway.
-- **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the common default for in-memory search, using a multi-layered proximity graph (think Skip Lists but in a graph) to route queries in expected $O(\log N)$ time.
-- **The Scaling Challenge**: HNSW uses massive amounts of RAM (often costing hundreds of bytes to a couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is often cost-prohibitive to keep entirely in memory.
-- **The Solutions**: 
+- **The Engine**: **HNSW (Hierarchical Navigable Small World)** is the common default for in-memory search, using a multi-layered proximBuilding and maintaining an HNSW index is mathematically intense. The algorithmic complexity for searching is expected $O(\log N)$, but construction is roughly $O\!\left(C_{\text{dist}} \cdot ef_{\text{construction}} \cdot M \cdot N \log N\right)$. Therefore, understanding the practical memory blueprint is critical: couple KB/vector depending on ID width, $M$, and implementation). At billion-scale, this is often cost-prohibitive to keep entirely in memory.
+- **The Solutions**:
     - **Quantization (PQ/SQ)**: Compress the vectors severely (e.g., **PQ**: 384 float32 → 48 bytes) to fit them in RAM, at the cost of slight recall loss.
     - **DiskANN**: A graph designed explicitly for fast NVMe SSD reads, typically reducing RAM needs by ~10x-100x vs naive in-memory graphs, depending on PQ and caching.
 - **Sparse Vectors**: Lexical vectors (like BM25 or SPLADE) are 99% zeros and run on entirely different infrastructure (Inverted Indexes) rather than the ANN pipelines described here. Sparse vectors have different failure modes; inverted indexes avoid the same geometry-driven pruning collapse.
+
+> **Note:** Code blocks in this document are minimal for conceptual clarity; some explicitly omit imports, memory management, and structural boilerplate.
 
 ## Choose Your Path
 Depending on your intent, feel free to jump directly to:
@@ -66,7 +67,7 @@ Depending on your intent, feel free to jump directly to:
 ---
 
 ## Out of Scope: Dense vs. Sparse Vectors
-This post exclusively covers the mathematics of **Dense Vector Search**. 
+This post exclusively covers the mathematics of **Dense Vector Search**.
 
 Dense vectors (like embeddings from OpenAI or CLIP) have hundreds to a few thousand dimensions (far lower than sparse vocab-scale vectors). Dense embeddings require evaluating similarity across (nearly) all dimensions, so high-dimensional geometry and distance concentration matter operationally.
 
@@ -83,8 +84,6 @@ A **KD-Tree** is a binary tree that splits the data space into two halves at eve
 2.  **Level 1**: Split each child node along the Y-axis (dimension 1). Notice in the diagram below that the split values (e.g., $Y < 30$ vs $Y < 80$) are different for each branch because they are the **local medians** for that specific subset of points.
 3.  **Level 2**: Split along the Z-axis (dimension 2), and so on, cycling through dimensions.
 
-> **Note:** Code blocks are minimal for clarity; some omit imports, memory management, and boilerplate.
-
 {{% tabs "kdtree-implementation" %}}
 {{% tab "Python" %}}
 ```python
@@ -98,16 +97,16 @@ class Node:
 def build_kdtree(points, depth=0):
     if not points:
         return None
-    
+
     k = len(points[0])  # dimensionality
     axis = depth % k    # cycle through axes
-    
+
     # Sort points and choose median (we copy to avoid mutating the input array)
     points = points.copy()
     points.sort(key=lambda x: x[axis])
     median = len(points) // 2
-    
-    # Note: For production, prefer `nth_element`/partition selection and 
+
+    # Note: For production, prefer `nth_element`/partition selection and
     # operate on index ranges to avoid repeated sorts (which push toward O(N log^2 N)) and avoid copying slices (which causes heavy memory churn).
     return Node(
         point=points[median],
@@ -171,7 +170,7 @@ Node* buildKDTree(std::vector<std::vector<double>>& points, int depth) {
         [axis](const auto& a, const auto& b) { return a[axis] < b[axis]; });
 
     Node* node = new Node(points[median], axis);
-    
+
     std::vector<std::vector<double>> leftPoints(points.begin(), points.begin() + median);
     std::vector<std::vector<double>> rightPoints(points.begin() + median + 1, points.end());
 
@@ -373,13 +372,13 @@ def calculate_ratio(dim, num_points=1000):
     # Generate random points on unit sphere
     points = np.random.randn(num_points, dim)
     points /= np.linalg.norm(points, axis=1)[:, np.newaxis]
-    
+
     # Calculate min/max pairwise distances
-    # (Approximation: compare 1st point to all others to save time; 
+    # (Approximation: compare 1st point to all others to save time;
     # the true min/max would check all pairs, but this serves the intuition)
     diff = points[1:] - points[0]
     dists = np.linalg.norm(diff, axis=1)
-    
+
     return np.min(dists) / np.max(dists)
 
 dims = range(10, 3001, 50)
@@ -527,13 +526,13 @@ import numpy as np
 def linear_search(query, dataset):
     best_dist = float('inf')
     best_item = None
-    
+
     for item in dataset:
         dist = np.linalg.norm(query - item)
         if dist < best_dist:
             best_dist = dist
             best_item = item
-            
+
     return best_item, best_dist
 ```
 {{% /tab %}}
@@ -641,10 +640,10 @@ double cosine_similarity(const std::vector<double>& v1, const std::vector<double
 {{% /tab %}}
 {{% /tabs %}}
 
-> **MIPS vs Distance Cheat Sheet:** 
+> **MIPS vs Distance Cheat Sheet:**
 > When working with Maximum Inner Product Search (MIPS) and distances, practitioners rely on these canonical reductions:
 > *   **L2 to Dot Product Equivalency**: If you unit-normalize your vectors ($||x|| = 1$), calculating the Dot Product yields the exact same ranking as computing Cosine Similarity or Euclidean (L2) distance.
-> *   **MIPS to L2 Reduction**: For unnormalized vectors, MIPS can be converted into an L2 search problem by augmenting the *data* vectors with an extra dimension $x' = [x; \sqrt{M^2 - ||x||^2}]$ (where $M \ge \max_x ||x||$). The *query* gets padded with a zero: $q' = [q; 0]$. This ensures $||x'||$ is constant, making finding the minimum L2 distance mathematically equivalent to finding the maximum inner product: $||q' - x'||^2 = ||q||^2 + M^2 - 2(q \cdot x)$.
+> *   **MIPS to L2 Reduction**: For unnormalized vectors, MIPS can be converted into an L2 search problem by augmenting the *data* vectors with an extra dimension $x' = [x; \sqrt{R^2 - ||x||^2}]$ (where $R \ge \max_x ||x||$). The *query* gets padded with a zero: $q' = [q; 0]$. This ensures $||x'||$ is constant, making finding the minimum L2 distance mathematically equivalent to finding the maximum inner product: $||q' - x'||^2 = ||q||^2 + R^2 - 2(q \cdot x)$.
 > *   **Norm Drift**: If you rely on dot product as a proxy for cosine, you must enforce normalization; otherwise ranking differences emerge as norms vary, sometimes materially.
 
 ---
@@ -670,14 +669,14 @@ graph TD
         E((Entry)) -- 100km --> H((Hub))
         H -- 200km --> F((Far))
     end
-    
+
     subgraph L0 ["Layer 0: Local Roads"]
         H_L0((Hub)) -- 5km --> N1((Node A))
         N1 -- 1km --> T((Target))
     end
-    
+
     H -. "Exit Highway" .-> H_L0
-    
+
     style T fill:#f96,stroke:#333,stroke-width:4px
     style H fill:#f9f,stroke:#333
     style H_L0 fill:#f9f,stroke:#333
@@ -753,7 +752,7 @@ class HNSWGraph:
         self.max_level = max_level
         # The normalization factor
         self.m_L = 1.0 / math.log(M)
-    
+
     def random_level(self):
         # HNSW layer assignment follows an exponential distribution.
         # This ensures the probability of reaching layer L decays by 1/M at each step.
@@ -761,7 +760,7 @@ class HNSWGraph:
         # Avoid log(0) edge case
         if f == 0.0:
             f = 1e-10
-            
+
         level = int(-math.log(f) * self.m_L)
         return min(level, self.max_level)
 ```
@@ -802,9 +801,9 @@ func (g *HNSWGraph) RandomLevel() int {
 	if f == 0.0 {
 		f = 1e-10
 	}
-	
+
 	level := int(-math.Log(f) * g.mL)
-	
+
 	if level > g.MaxLevel {
 		return g.MaxLevel
 	}
@@ -822,7 +821,7 @@ func (g *HNSWGraph) RandomLevel() int {
 struct HNSWNode {
     int value;
     std::vector<std::vector<int>> neighbors; // Neighbors for each layer
-    
+
     HNSWNode(int v, int level) : value(v), neighbors(level + 1) {}
 };
 
@@ -834,15 +833,15 @@ class HNSWGraph {
     std::uniform_real_distribution<double> dist;
 
 public:
-    HNSWGraph(int m, int max_lvl) 
+    HNSWGraph(int m, int max_lvl)
         : M(m), max_level(max_lvl), m_L(1.0 / std::log(m)), gen(42), dist(0.0, 1.0) {}
 
     int randomLevel() {
         // Sample from uniform(0,1), take -ln(), scale by m_L
         double f = dist(gen);
         // Avoid log(0)
-        if (f == 0.0) f = 1e-10; 
-        
+        if (f == 0.0) f = 1e-10;
+
         int lvl = static_cast<int>(-std::log(f) * m_L);
         return std::min(lvl, max_level);
     }
@@ -876,13 +875,13 @@ graph TD
     subgraph L2 ["Layer 2 (Express)"]
         A2((Node A)) --- B2((Node B))
     end
-    
+
     subgraph L1 ["Layer 1 (Regional)"]
         A1((Node A)) --- B1((Node B))
         A1 --- C1((Node C))
         B1 --- D1((Node D))
     end
-    
+
     subgraph L0 ["Layer 0 (All Nodes)"]
         A0((Node A)) --- B0((Node B))
         A0 --- C0((Node C))
@@ -890,7 +889,7 @@ graph TD
         C0 --- E0((Node E))
         D0 --- E0((Node E))
     end
-    
+
     %% Conceptual links showing it's the same node
     A2 -.-> A1
     A1 -.-> A0
@@ -898,7 +897,7 @@ graph TD
     B1 -.-> B0
     C1 -.-> C0
     D1 -.-> D0
-    
+
     style A2 fill:#f9f,stroke:#333
     style A1 fill:#f9f,stroke:#333
     style A0 fill:#f9f,stroke:#333
@@ -945,9 +944,9 @@ where:
 *   $M$: The maximum number of neighbors evaluated per candidate
 
 **Key Tuning Parameters**:
-*   **$M$**: Max links per node. Higher $M$ = better recall, higher memory.
-*   **$ef\_{construction}$** (Exploration Factor): "Beam width" during build. Higher = better quality graph, slower build.
-*   **$ef\_{search}$** (Exploration Factor): "Beam width" during search. Higher = better recall, slower search.
+*   **$M$** (Max Neighbors): The maximum number of connections per node.
+*   **$ef_{\text{construction}}$** (Exploration Factor during build): How hard to try to find the *best* neighbors when adding a new node. Higher = better quality index, slower build time.
+*   **$ef_{\text{search}}$** (Exploration Factor): "Beam width" during search. Higher = better recall, slower search.
 
 > **Why keep `ef` candidates instead of just 1?**
 >
@@ -972,7 +971,7 @@ Unlike HNSW's multi-layer structure, Vamana builds a **single flat graph** but e
 
 **$\alpha$-Robust Pruning**:
 When connecting a node $p$ to neighbors, we don't just pick the closest ones. We pick neighbors that are close *and* in different directions.
-Rule: If a neighbor $c'$ is reachable via another neighbor $c$ that is closer, we prune $c'$. This forces edges to spread out like a compass, ensuring the graph doesn't get stuck in local cul-de-sacs.
+Rule: During pruning, a candidate neighbor $v$ is discarded if there exists an already-kept neighbor $u$ such that $d(u,v) \le \alpha \cdot d(p,v)$. This acts as a spatial gate, forcing edges to spread out like a compass and ensuring the graph doesn't get stuck in local cul-de-sacs.
 
 {{< mermaid >}}
 graph TD
