@@ -939,8 +939,9 @@ This precisely matches our requirement! The probability of reaching level $l$ de
 2.  **Complexity**: Total hops = (Layers) $\times$ (Hops/Layer) $\approx \log_M N \times M$. This is very efficient for large $M$.
 
 3.  **Total Complexity**:
-While graph height adds small terms, search in Layer 0 dominates. Since we evaluate $\sim M$ neighbors for each of the $ef\_{search}$ candidates in our beam, the primary cost is:
-$$ Cost \approx O(C_{dist} \cdot ef\_{search} \cdot M) + \text{smaller terms} $$
+While mathematically the search depth adds logarithmic scaling, empirically the search within Layer 0 heavily dominates the constant factors. The *per-expansion* cost evaluates $\sim M$ neighbors. The number of expansions grows with the search budget ($ef\_{search}$) and the depth of the graph. The primary cost is:
+$$ \text{Distance Evals} \approx O(M \cdot ef\_{search} \cdot L) \quad\text{with}\quad L \approx \log_M(N) $$
+$$ \text{Total Cost} \approx O(\text{Distance Evals} \cdot C_{dist}) $$
 where:
 *   $C_{dist}$: Cost of a single distance calculation
 *   $ef\_{search}$: The beam width (number of candidates explored)
@@ -1642,7 +1643,7 @@ graph TD
 
 > **Note on Algorithms vs. Services:**
 > *   **Google Cloud Spanner** supports **exact kNN** vector similarity search by ordering on vector distance functions (GoogleSQL: `COSINE_DISTANCE`, `EUCLIDEAN_DISTANCE`, `DOT_PRODUCT`; PostgreSQL: `spanner.cosine_distance`, `spanner.euclidean_distance`, `spanner.dot_product`). If embeddings are normalized, using dot product is a valid ranking-equivalent choice [[spanner-knn]](#ref-spanner-knn). For lower-latency **approximate nearest neighbor (ANN)** search at larger scales, Spanner supports **tree-based VECTOR INDEXes** queried via `APPROX_*` distance functions (for example `APPROX_COSINE_DISTANCE`) with tuning options such as `num_leaves_to_search` to trade recall for latency/cost. ANN vector search requires Enterprise / Enterprise Plus and **does not support the PostgreSQL interface** [[spanner-ann]](#ref-spanner-ann). Spanner also supports **filtered vector indexes** by storing selected non-vector columns in the vector index to enable index-side filtering [[spanner-vector-indexes]](#ref-spanner-vector-indexes).
-> *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search).
+> *   **Google Vertex AI Vector Search** uses an ANN index; Google has published **ScaNN** (leveraging anisotropic quantization and partitioning), which is closely related to the family of techniques used in large-scale Google production systems [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search).
 > *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes [[sql-server-vector]](#ref-sql-server-vector); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes [[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index).
 > *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search [[milvus-disk-index]](#ref-milvus-disk-index).
 > *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging [[lancedb-issue-220]](#ref-lancedb-issue-220) (check current docs/releases for the latest).
@@ -1650,21 +1651,21 @@ graph TD
 > *   **Elasticsearch** comprehensively supports vector search by leveraging Lucene's native **HNSW** for dense vector similarity, while also offering **sparse vector search** (via its ELSER model for semantic expansion) and higher-level workflow abstractions like `semantic_text` [[elasticsearch-knn]](#ref-elasticsearch-knn) [[elasticsearch-vector]](#ref-elasticsearch-vector).
 > *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration [[singlestore-indexed-ann]](#ref-singlestore-indexed-ann) [[singlestore-tuning]](#ref-singlestore-tuning).
 
-> **Service capabilities change frequently; verified against vendor docs as of 2026-02.** Cells without direct citations are best-effort and may change; check vendor docs for your region/SKU.
+> **Service capabilities change frequently; verified against vendor docs as of 2026-02.** Cells without direct citations are best-effort and may change; some vendors do not disclose the exact algorithm, so those entries are marked inferred or opaque.
 
 ### Algorithm Support by Service
 
 | Service | HNSW | IVF-Flat | IVF-PQ | IVF-PQFS | DiskANN | ScaNN / Tree-ANN | Flat / Brute-Force |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Google Vertex AI** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search) | — | — | — | — | — | ✅ˢ | — |
+| **Google Vertex AI** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search) | — | — | — | — | — | ⚠️ˢ | — |
 | **Google AlloyDB** [[alloydb-ivfflat]](#ref-alloydb-ivfflat) [[alloydb-scann]](#ref-alloydb-scann) | ✅ | ✅ | — | — | — | ✅ˢ | ✅ |
 | **Google Cloud Spanner** [[spanner-vector-indexes]](#ref-spanner-vector-indexes) [[spanner-ann]](#ref-spanner-ann) | — | — | — | — | — | ✅ᵀ | ✅ |
 | **Azure AI Search** [[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index) | ✅ | — | — | — | — | — | ✅ |
 | **Azure Cosmos DB** [[cosmos-db-vector]](#ref-cosmos-db-vector) | — | — | — | — | ✅ | — | ✅ |
 | **SQL Server** [[sql-server-vector]](#ref-sql-server-vector) | — | — | — | — | ✅ | — | — |
 | **Elasticsearch** [[elasticsearch-knn]](#ref-elasticsearch-knn) | ✅ | — | — | — | — | — | ✅ |
-| **Databricks** [[databricks-mosaic-ai]](#ref-databricks-mosaic-ai) | ✅  | — | — | — | — | — | ✅ |
-| **MongoDB Atlas** [[mongodb-atlas-vector]](#ref-mongodb-atlas-vector) | ✅  | — | — | — | — | — | ✅ |
+| **Databricks** [[databricks-mosaic-ai]](#ref-databricks-mosaic-ai) | ⚠️ | — | — | — | — | — | ✅ |
+| **MongoDB Atlas** [[mongodb-atlas-vector]](#ref-mongodb-atlas-vector) | ⚠️ | — | — | — | — | — | ✅ |
 | **Milvus / Zilliz** [[milvus-in-memory]](#ref-milvus-in-memory) [[milvus-disk-index]](#ref-milvus-disk-index) [[milvus-scann]](#ref-milvus-scann) | ✅ | ✅ | ✅ | — | ✅ | ✅ˢ | ✅ |
 | **Pinecone** [[pinecone-nearest-neighbor]](#ref-pinecone-nearest-neighbor) | *(opaque)* | — | — | — | — | — | — |
 | **Weaviate** [[weaviate-vector-index]](#ref-weaviate-vector-index) | ✅ | — | — | — | — | — | ✅ |
@@ -1672,7 +1673,7 @@ graph TD
 | **LanceDB** [[lancedb-vector-indexes]](#ref-lancedb-vector-indexes) | ✅ | ✅ | ✅ | — | — | — | — |
 | **pgvector (PostgreSQL)** [[pgvector-github]](#ref-pgvector-github) | ✅ | ✅ | — | — | — | — | ✅ |
 
-*✅ = Supported, ✅ᵀ = Tree-based ANN, ✅ˢ = ScaNN, (opaque) = Not publicly specified, — = Not available or not documented.*
+*✅ = Explicitly Documented, ⚠️ = Inferred / Community Knowledge, ⚠️ˢ = ScaNN Family / Inferred, ✅ᵀ = Tree-based ANN, ✅ˢ = ScaNN, (opaque) = Not publicly specified, — = Not available or not documented.*
 
 {{< alert "circle-info" >}}
 **Why no Chroma, Qdrant, or raw Faiss?** This table focuses on **production-scale managed services and databases** with broad portfolios of algorithm choices. Dedicated vector stores like **Qdrant** (which uses a custom native HNSW implementation) and **ChromaDB** (which wraps a fork of `hnswlib`) are excellent for many workloads but don't expose the breadth of disparate indexing strategies (like IVF-PQ or DiskANN) compared above. Similarly, **Faiss** is a *library*, not a managed service—it supports nearly every algorithm in this table (HNSW, IVF-Flat, IVF-PQ, IVF-PQFS, Flat) and is the engine *behind* several services listed here (e.g., SingleStore, Milvus).
