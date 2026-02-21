@@ -53,7 +53,7 @@ This post exclusively covers the mathematics of **Dense Vector Search**.
 
 Dense vectors (like embeddings from OpenAI or CLIP) are relatively low-dimensional (e.g., 384 to 3072 dimensions). Dense embeddings require evaluating similarity across (nearly) all dimensions, so high-dimensional geometry and distance concentration matter operationally.
 
-By contrast, **Sparse Vectors** (such as traditional TF-IDF/BM25 profiles, or modern neural representations like **SPLADE** <a id="cite-splade-paper"></a>[[splade-paper]](#ref-splade-paper) and Elastic's ELSER) have massive dimensionality (often corresponding to the entire English vocabulary, e.g., 30,000+ dimensions), but they are 99% zeros. Sparse retrieval typically exploits **Inverted Indexes** (data structures that map terms directly to the list of documents containing them) so scoring touches only non-zero coordinates, changing both the cost model and failure modes. Therefore, sparse vectors do not suffer from the same geometric curse, and algorithms like HNSW or IVF are not the primary mechanisms for scaling them.
+By contrast, **Sparse Vectors** (such as traditional TF-IDF/BM25 profiles, or modern neural representations like **SPLADE** [[splade-paper]](#ref-splade-paper) and Elastic's ELSER) have massive dimensionality (often corresponding to the entire English vocabulary, e.g., 30,000+ dimensions), but they are 99% zeros. Sparse retrieval typically exploits **Inverted Indexes** (data structures that map terms directly to the list of documents containing them) so scoring touches only non-zero coordinates, changing both the cost model and failure modes. Therefore, sparse vectors do not suffer from the same geometric curse, and algorithms like HNSW or IVF are not the primary mechanisms for scaling them.
 
 ## The Classical Approach: Space Partitioning
 
@@ -294,15 +294,15 @@ graph TD
 In a search tree, "pruning" means safely ignoring an entire branch of the tree. If you know for a fact that the closest point in a branch is 10 units away, but you've already found a neighbor that is 5 units away, you don't need to enter that branch at all. You "prune" it. This is what gives trees their expected $O(\log N)$ speed—you skip most of the data since it isn't relevant to your search (though worst-case can degrade depending on parameters).
 
 ### A Classical High-Dimensional Attempt: Locality Sensitive Hashing (LSH)
-As practitioners realized trees failed in high dimensions, the classical "theory-first" approach shifted to **Locality Sensitive Hashing (LSH)**. Rooted in the Johnson-Lindenstrauss lemma (which provides the intuition that random projections approximately preserve pairwise distances <a id="cite-jl-lemma-proof"></a>[[jl-lemma-proof]](#ref-jl-lemma-proof)), LSH uses random hyperplanes to hash vectors into buckets.
+As practitioners realized trees failed in high dimensions, the classical "theory-first" approach shifted to **Locality Sensitive Hashing (LSH)**. Rooted in the Johnson-Lindenstrauss lemma (which provides the intuition that random projections approximately preserve pairwise distances [[jl-lemma-proof]](#ref-jl-lemma-proof)), LSH uses random hyperplanes to hash vectors into buckets.
 
-If two vectors are close in space, they are highly likely to fall on the same side of a random hyperplane, and thus land in the same hash bucket. Random hyperplane LSH specifically targets cosine (angular) distance <a id="cite-charikar-simhash"></a>[[charikar-simhash]](#ref-charikar-simhash). While mathematically elegant, LSH requires many parallel hash tables to achieve good recall and struggles with precision compared to the modern graph-based methods we use today.
+If two vectors are close in space, they are highly likely to fall on the same side of a random hyperplane, and thus land in the same hash bucket. Random hyperplane LSH specifically targets cosine (angular) distance [[charikar-simhash]](#ref-charikar-simhash). While mathematically elegant, LSH requires many parallel hash tables to achieve good recall and struggles with precision compared to the modern graph-based methods we use today.
 
 **The "High-Dimensional" Problem**
 In 2D or 3D, space is "crowded" and data points are distinct. If you are in one quadrant, you are far from the others.
-However, as dimensions increase ($d > 10$), a strange geometric phenomenon occurs: **points move to the edges <a id="cite-aggarwal-surprising"></a>[[aggarwal-surprising]](#ref-aggarwal-surprising).**
+However, as dimensions increase ($D > 10$), a strange geometric phenomenon occurs: **points move to the edges [[aggarwal-surprising]](#ref-aggarwal-surprising).**
 
-Imagine a high-dimensional hypercube. The volume of the cube is $1^d$. The volume of a slightly smaller inscribed cube (say, 90% size) is $0.9^d$.
+Imagine a high-dimensional hypercube. The volume of the cube is $1^D$. The volume of a slightly smaller inscribed cube (say, 90% size) is $0.9^D$.
 *   In 2D: $0.9^2 = 0.81$ (81% of volume is in the center).
 *   In 100D: $0.9^{100} \approx 0.00002$ (Almost 0% of volume is in the center!).
 
@@ -323,7 +323,7 @@ In low-dimensional spaces (like 2D or 3D geographical data), structures like **K
 However, modern embedding models (like CLIP or OpenAI's text-embedding-3) output vectors with hundreds or thousands of dimensions (e.g., 512, 768, 1536, or 3072). In these high-dimensional spaces, a phenomenon known as the **Curse of Dimensionality** renders traditional spatial partitioning ineffective.
 
 Mathematically, as dimension $D$ increases:
-1.  **Distance Concentration <a id="cite-aggarwal-surprising-2"></a>[[aggarwal-surprising]](#ref-aggarwal-surprising)**: The ratio of the distance to the nearest neighbor vs. the farthest neighbor approaches 1. **Relative distance contrast collapses** (nearest and farthest distances concentrate), so 'close vs far' becomes hard to separate, making it impossible for the algorithm to distinguish a "clear" winner.
+1.  **Distance Concentration [[aggarwal-surprising]](#ref-aggarwal-surprising)**: The ratio of the distance to the nearest neighbor vs. the farthest neighbor approaches 1. **Relative distance contrast collapses** (nearest and farthest distances concentrate), so 'close vs far' becomes hard to separate, making it impossible for the algorithm to distinguish a "clear" winner.
 2.  **Empty Space**: As discussed in the **[Failure Mode](#the-failure-mode-why-pruning-fails-in-high-dimensions)** section above, volume expands exponentially, pushing all data points to the surface.
 
 **The "Dice Roll" Intuition**:
@@ -335,7 +335,7 @@ In high dimensions, every vector is effectively a "sum of many dice." Its length
 While the math above assumes embeddings are perfectly uniform across all dimensions, real-world data is inherently structured. Embeddings typically lie on much lower-dimensional manifolds (their *intrinsic dimension* is much smaller than their raw dimension $D$). This clustered, non-uniform structure is the saving grace that allows ANN algorithms to successfully partition and navigate the space despite the raw geometric curse.
 
 **The Hubness Phenomenon**
-Because of that same high-dimensional concentration, embedding spaces also exhibit "Hubness." A very small subset of dense vectors (the "hubs") end up appearing as the nearest neighbors for a large fraction of uncorrelated queries <a id="cite-hubness-radovanovic"></a>[[hubness-radovanovic]](#ref-hubness-radovanovic), which requires careful algorithm tuning to avoid retrieving the same dominant hubs over and over.
+Because of that same high-dimensional concentration, embedding spaces also exhibit "Hubness." A very small subset of dense vectors (the "hubs") end up appearing as the nearest neighbors for a large fraction of uncorrelated queries [[hubness-radovanovic]](#ref-hubness-radovanovic), which requires careful algorithm tuning to avoid retrieving the same dominant hubs over and over.
 
 ![Curse of Dimensionality Graph](curse_of_dimensionality.png)
 
@@ -346,6 +346,9 @@ To visualize this, here is a script to generate the "Ratio of Distances" graph s
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
+
+# Seed RNG for deterministic notebook reproducibility
+np.random.seed(42)
 
 def calculate_ratio(dim, num_points=1000):
     # Generate random points on unit sphere
@@ -491,7 +494,7 @@ This forces us to compromise: we trade **exactness** for **speed**, accepting "a
 
 Before optimizing, it's useful to know the baseline. This is the $O(N)$ approach.
 
-> **Production Context:** While too slow for billion-scale data, this brute-force approach guarantees 100% recall. Providers often expose this explicitly (e.g., Azure AI Search calls its brute-force algorithm `exhaustiveKnn` <a id="cite-azure-ai-search-vector-index"></a>[[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index)) for use cases requiring absolute precision on small, pre-filtered datasets, or to generate a gold-standard ground truth for evaluating ANN recall.
+> **Production Context:** While too slow for billion-scale data, this brute-force approach guarantees 100% recall. Providers often expose this explicitly (e.g., Azure AI Search calls its brute-force algorithm `exhaustiveKnn` [[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index)) for use cases requiring absolute precision on small, pre-filtered datasets, or to generate a gold-standard ground truth for evaluating ANN recall.
 
 {{% tabs "linear-search" %}}
 {{% tab "Python" %}}
@@ -625,7 +628,7 @@ double cosine_similarity(const std::vector<double>& v1, const std::vector<double
 
 ## Graph-Based Indexing: HNSW
 
-**HNSW (Hierarchical Navigable Small World) <a id="cite-malkov-hnsw"></a>[[malkov-hnsw]](#ref-malkov-hnsw)** is currently the industry standard for in-memory vector search. It works by constructing a **multi-layered proximity graph**.
+**HNSW (Hierarchical Navigable Small World) [[malkov-hnsw]](#ref-malkov-hnsw)** is currently a de facto default for in-memory vector search. It works by constructing a **multi-layered proximity graph**.
 
 ### The Small World Phenomenon
 A **navigable small world** graph has a special property: even though each node connects to only a few neighbors (low degree), the graph is structured so that you can hop between any two nodes in very few steps (empirically near $O(\log N)$ for typical data distributions).
@@ -913,7 +916,7 @@ This precisely matches our requirement! The probability of reaching level $l$ de
 
 3.  **Total Complexity**:
 While graph height adds small terms, search in Layer 0 dominates. Since we evaluate $\sim M$ neighbors for each of the $ef\_{search}$ candidates in our beam, the primary cost is:
-$$ Cost \approx O(d \cdot ef\_{search} \cdot M) + \text{smaller terms} $$
+$$ Cost \approx O(C_{dist} \cdot ef\_{search} \cdot M) + \text{smaller terms} $$
 where:
 *   $C_{dist}$: Cost of a single distance calculation
 *   $ef\_{search}$: The beam width (number of candidates explored)
@@ -940,7 +943,7 @@ where:
 
 ## Disk-Based Indexing: DiskANN & Vamana
 
-To break the "RAM Wall," Microsoft Research introduced **DiskANN <a id="cite-diskann-neurips"></a>[[diskann-neurips]](#ref-diskann-neurips)** and the **Vamana** graph. The goal: store the massive vector data on cheap NVMe SSDs while keeping search fast.
+To break the "RAM Wall," Microsoft Research introduced **DiskANN [[diskann-neurips]](#ref-diskann-neurips)** and the **Vamana** graph. The goal: store the massive vector data on cheap NVMe SSDs while keeping search fast.
 
 ### The Vamana Graph
 Unlike HNSW's multi-layer structure, Vamana builds a **single flat graph** but essentially "bakes" the shortcuts into it. It uses **$\alpha$-robust pruning** to ensure angular diversity.
@@ -985,7 +988,7 @@ During search, the system uses the compressed vectors in RAM to navigate "roughl
 
 ## Partitioning: IVF (Inverted File Index)
 
-Index partitioning algorithms like **IVF** rely on clustering to divide the dataset into manageable chunks. This approach was popularized by the **Faiss <a id="cite-faiss-paper"></a>[[faiss-paper]](#ref-faiss-paper)** library.
+Index partitioning algorithms like **IVF** rely on clustering to divide the dataset into manageable chunks. This approach was popularized by the **Faiss [[faiss-paper]](#ref-faiss-paper)** library.
 
 ### Voronoi Cells
 The algorithm runs **k-means clustering** to find $K$ centroids. These centroids define **Voronoi cells**, regions of space where every point is closer to that centroid than any other.
@@ -1432,12 +1435,16 @@ def hamming_distance(bq1, bq2):
 ```go
 import "math/bits"
 
-func BinaryQuantize(vector []float64) uint64 {
-    // Example for 64-dim vector packing into a single uint64
+func BinaryQuantize64(vector []float64) uint64 {
+    // Pack up to 64 dimensions into a single uint64
     var mask uint64 = 0
-    for i, v := range vector {
-        if v > 0 {
-            mask |= (1 << i)
+    n := len(vector)
+    if n > 64 {
+        n = 64
+    }
+    for i := 0; i < n; i++ {
+        if vector[i] > 0 {
+            mask |= (uint64(1) << uint(i))
         }
     }
     return mask
@@ -1478,7 +1485,7 @@ int hamming_distance(uint64_t a, uint64_t b) {
 **Cons**: Significant accuracy loss unless dimensions are very high. Often used with a Re-ranking step.
 
 ### Anisotropic Quantization (ScaNN)
-Google's **ScaNN <a id="cite-scann-icml"></a>[[scann-icml]](#ref-scann-icml)** (Scalable Nearest Neighbors) improves on PQ.
+Google's **ScaNN [[scann-icml]](#ref-scann-icml)** (Scalable Nearest Neighbors) improves on PQ.
 Standard PQ minimizes the overall error $||\mathbf{x} - q(\mathbf{x})||^2$ (Euclidean distance). It treats error in all directions equally.
 
 ScaNN realizes that for **Maximum Inner Product Search (MIPS)**, only the component of the error that aligns with the query vector matters. Error perpendicular to the query barely changes the dot product.
@@ -1582,8 +1589,8 @@ Most modern production systems use a hybrid approach: **HNSW** for the hot, rece
 ## Production Realities: Filtering and Hybrid Search
 Before leaving the algorithms behind, it is crucial to acknowledge three operational realities that drastically impact vector search in production:
 
-1.  **Filtered ANN**: Real systems almost always include metadata filters (e.g., `"only docs from user X"`, `"only last 30 days"`). Applying these filters breaks the core assumptions of ANN graphs. Naively pre-filtering or constraining the traversal can fragment the graph and crater recall. Some systems mitigate this with bitset-aware traversal algorithms or filtered vector indexes (storing attributes on the index side, e.g., Spanner's `STORING` clause) <a id="cite-spanner-vector-indexes"></a>[[spanner-vector-indexes]](#ref-spanner-vector-indexes).
-2.  **Hybrid Search (BM25 + Vectors)**: Dense vectors are excellent for semantic meaning but terrible for exact keyword matching (like searching for a specific product ID or an obscure acronym). The industry standard approach is **Hybrid Search**: running a dense vector search concurrently with a sparse lexical search (like BM25), and then fusing the results together using an algorithm like **Reciprocal Rank Fusion (RRF)** <a id="cite-rrf-paper"></a>[[rrf-paper]](#ref-rrf-paper) for optimal relevance.
+1.  **Filtered ANN**: Real systems almost always include metadata filters (e.g., `"only docs from user X"`, `"only last 30 days"`). Applying these filters breaks the core assumptions of ANN graphs. Naively pre-filtering or constraining the traversal can fragment the graph and crater recall. Some systems mitigate this with bitset-aware traversal algorithms or filtered vector indexes (storing attributes on the index side, e.g., Spanner's `STORING` clause) [[spanner-vector-indexes]](#ref-spanner-vector-indexes).
+2.  **Hybrid Search (BM25 + Vectors)**: Dense vectors are excellent for semantic meaning but terrible for exact keyword matching (like searching for a specific product ID or an obscure acronym). The industry standard approach is **Hybrid Search**: running a dense vector search concurrently with a sparse lexical search (like BM25), and then fusing the results together using an algorithm like **Reciprocal Rank Fusion (RRF)** [[rrf-paper]](#ref-rrf-paper) for optimal relevance.
 3.  **Dynamic Index Maintenance**: Vector indices aren't static. In production, updating and deleting vectors usually relies on soft-deletes (tombstones) because surgically removing nodes from a highly connected HNSW graph is mathematically destructive. This requires background graph repair, periodic segment-based merging/rebuilds, and introduces write-amplification tradeoffs (especially for on-disk indices).
 
 
@@ -1605,14 +1612,14 @@ graph TD
 {{< /mermaid >}}
 
 > **Note on Algorithms vs. Services:**
-> *   **Google Cloud Spanner** supports **exact kNN** vector similarity search by ordering on vector distance functions (GoogleSQL: `COSINE_DISTANCE`, `EUCLIDEAN_DISTANCE`, `DOT_PRODUCT`; PostgreSQL: `spanner.cosine_distance`, `spanner.euclidean_distance`, `spanner.dot_product`). If embeddings are normalized, using dot product is a valid ranking-equivalent choice <a id="cite-spanner-knn"></a>[[spanner-knn]](#ref-spanner-knn). For lower-latency **approximate nearest neighbor (ANN)** search at larger scales, Spanner supports **tree-based VECTOR INDEXes** queried via `APPROX_*` distance functions (for example `APPROX_COSINE_DISTANCE`) with tuning options such as `num_leaves_to_search` to trade recall for latency/cost. ANN vector search requires Enterprise / Enterprise Plus and **does not support the PostgreSQL interface** <a id="cite-spanner-ann"></a>[[spanner-ann]](#ref-spanner-ann). Spanner also supports **filtered vector indexes** by storing selected non-vector columns in the vector index to enable index-side filtering <a id="cite-spanner-vector-indexes"></a>[[spanner-vector-indexes]](#ref-spanner-vector-indexes).
-> *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search** <a id="cite-vertex-ai-vector-search"></a>[[vertex-ai-vector-search]](#ref-vertex-ai-vector-search).
-> *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-sql-server-vector"></a>[[sql-server-vector]](#ref-sql-server-vector); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-azure-ai-search-vector-index"></a>[[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index).
-> *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search <a id="cite-milvus-disk-index"></a>[[milvus-disk-index]](#ref-milvus-disk-index).
-> *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging <a id="cite-lancedb-issue-220"></a>[[lancedb-issue-220]](#ref-lancedb-issue-220) (check current docs/releases for the latest).
-> *   **HNSW** is the primary or default in-memory engine across the vast majority of the ecosystem, including **Milvus**, **Weaviate**, **MongoDB Atlas Vector Search** <a id="cite-mongodb-atlas-vector"></a>[[mongodb-atlas-vector]](#ref-mongodb-atlas-vector), and **Databricks Vector Search** (Mosaic AI) <a id="cite-databricks-mosaic-ai"></a>[[databricks-mosaic-ai]](#ref-databricks-mosaic-ai). **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
-> *   **Elasticsearch** comprehensively supports vector search by leveraging Lucene's native **HNSW** for dense vector similarity, while also offering **sparse vector search** (via its ELSER model for semantic expansion) and higher-level workflow abstractions like `semantic_text` <a id="cite-elasticsearch-knn"></a>[[elasticsearch-knn]](#ref-elasticsearch-knn) <a id="cite-elasticsearch-vector"></a>[[elasticsearch-vector]](#ref-elasticsearch-vector).
-> *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration <a id="cite-singlestore-indexed-ann"></a>[[singlestore-indexed-ann]](#ref-singlestore-indexed-ann) <a id="cite-singlestore-tuning"></a>[[singlestore-tuning]](#ref-singlestore-tuning).
+> *   **Google Cloud Spanner** supports **exact kNN** vector similarity search by ordering on vector distance functions (GoogleSQL: `COSINE_DISTANCE`, `EUCLIDEAN_DISTANCE`, `DOT_PRODUCT`; PostgreSQL: `spanner.cosine_distance`, `spanner.euclidean_distance`, `spanner.dot_product`). If embeddings are normalized, using dot product is a valid ranking-equivalent choice [[spanner-knn]](#ref-spanner-knn). For lower-latency **approximate nearest neighbor (ANN)** search at larger scales, Spanner supports **tree-based VECTOR INDEXes** queried via `APPROX_*` distance functions (for example `APPROX_COSINE_DISTANCE`) with tuning options such as `num_leaves_to_search` to trade recall for latency/cost. ANN vector search requires Enterprise / Enterprise Plus and **does not support the PostgreSQL interface** [[spanner-ann]](#ref-spanner-ann). Spanner also supports **filtered vector indexes** by storing selected non-vector columns in the vector index to enable index-side filtering [[spanner-vector-indexes]](#ref-spanner-vector-indexes).
+> *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search).
+> *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes [[sql-server-vector]](#ref-sql-server-vector); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes [[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index).
+> *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search [[milvus-disk-index]](#ref-milvus-disk-index).
+> *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging [[lancedb-issue-220]](#ref-lancedb-issue-220) (check current docs/releases for the latest).
+> *   **HNSW** is the primary or default in-memory engine across the vast majority of the ecosystem, including **Milvus**, **Weaviate**, **MongoDB Atlas Vector Search** [[mongodb-atlas-vector]](#ref-mongodb-atlas-vector), and **Databricks Vector Search** (Mosaic AI) [[databricks-mosaic-ai]](#ref-databricks-mosaic-ai). **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
+> *   **Elasticsearch** comprehensively supports vector search by leveraging Lucene's native **HNSW** for dense vector similarity, while also offering **sparse vector search** (via its ELSER model for semantic expansion) and higher-level workflow abstractions like `semantic_text` [[elasticsearch-knn]](#ref-elasticsearch-knn) [[elasticsearch-vector]](#ref-elasticsearch-vector).
+> *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration [[singlestore-indexed-ann]](#ref-singlestore-indexed-ann) [[singlestore-tuning]](#ref-singlestore-tuning).
 
 > **Service capabilities change frequently; verified against vendor docs as of 2026-02.** Cells without direct citations are best-effort and may change; check vendor docs for your region/SKU.
 
@@ -1620,21 +1627,21 @@ graph TD
 
 | Service | HNSW | IVF-Flat | IVF-PQ | IVF-PQFS | DiskANN | ScaNN | Flat / Brute-Force |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Google Vertex AI** <a id="cite-vertex-ai-vector-search"></a>[[vertex-ai-vector-search]](#ref-vertex-ai-vector-search) | — | — | — | — | — | ✅ | — |
-| **Google AlloyDB** <a id="cite-alloydb-ivfflat"></a>[[alloydb-ivfflat]](#ref-alloydb-ivfflat) <a id="cite-alloydb-scann"></a>[[alloydb-scann]](#ref-alloydb-scann) | ✅ | ✅ | — | — | — | ✅ | ✅ |
-| **Google Cloud Spanner** <a id="cite-spanner-vector-indexes"></a>[[spanner-vector-indexes]](#ref-spanner-vector-indexes) <a id="cite-spanner-ann"></a>[[spanner-ann]](#ref-spanner-ann) | — | — | — | — | — | ✅ | ✅ |
-| **Azure AI Search** <a id="cite-azure-ai-search-vector-index"></a>[[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index) | ✅ | — | — | — | — | — | ✅ |
-| **Azure Cosmos DB** <a id="cite-cosmos-db-vector"></a>[[cosmos-db-vector]](#ref-cosmos-db-vector) | — | — | — | — | ✅ | — | ✅ |
-| **SQL Server** <a id="cite-sql-server-vector"></a>[[sql-server-vector]](#ref-sql-server-vector) | — | — | — | — | ✅ | — | — |
-| **Elasticsearch** <a id="cite-elasticsearch-knn"></a>[[elasticsearch-knn]](#ref-elasticsearch-knn) | ✅ | — | — | — | — | — | ✅ |
-| **Databricks** <a id="cite-databricks-mosaic-ai"></a>[[databricks-mosaic-ai]](#ref-databricks-mosaic-ai) | ✅  | — | — | — | — | — | ✅ |
-| **MongoDB Atlas** <a id="cite-mongodb-atlas-vector"></a>[[mongodb-atlas-vector]](#ref-mongodb-atlas-vector) | ✅  | — | — | — | — | — | ✅ |
-| **Milvus / Zilliz** <a id="cite-cosmos-db-vector"></a>[[cosmos-db-vector]](#ref-cosmos-db-vector) <a id="cite-milvus-in-memory"></a>[[milvus-in-memory]](#ref-milvus-in-memory) | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ |
-| **Pinecone** <a id="cite-milvus-scann"></a>[[milvus-scann]](#ref-milvus-scann) | *(opaque)* | — | — | — | — | — | — |
-| **Weaviate** <a id="cite-pinecone-nearest-neighbor"></a>[[pinecone-nearest-neighbor]](#ref-pinecone-nearest-neighbor) | ✅ | — | — | — | — | — | ✅ |
-| **SingleStore** <a id="cite-singlestore-indexed-ann"></a>[[singlestore-indexed-ann]](#ref-singlestore-indexed-ann) <a id="cite-weaviate-vector-index"></a>[[weaviate-vector-index]](#ref-weaviate-vector-index) | ✅ | ✅ | ✅ | ✅ | — | — | — |
-| **LanceDB** <a id="cite-singlestore-vector-indexing"></a>[[singlestore-vector-indexing]](#ref-singlestore-vector-indexing) | ✅ | ✅ | ✅ | — | — | — | — |
-| **pgvector (PostgreSQL)** <a id="cite-pgvector-github"></a>[[pgvector-github]](#ref-pgvector-github) | ✅ | ✅ | — | — | — | — | ✅ |
+| **Google Vertex AI** [[vertex-ai-vector-search]](#ref-vertex-ai-vector-search) | — | — | — | — | — | ✅ | — |
+| **Google AlloyDB** [[alloydb-ivfflat]](#ref-alloydb-ivfflat) [[alloydb-scann]](#ref-alloydb-scann) | ✅ | ✅ | — | — | — | ✅ | ✅ |
+| **Google Cloud Spanner** [[spanner-vector-indexes]](#ref-spanner-vector-indexes) [[spanner-ann]](#ref-spanner-ann) | — | — | — | — | — | ✅ | ✅ |
+| **Azure AI Search** [[azure-ai-search-vector-index]](#ref-azure-ai-search-vector-index) | ✅ | — | — | — | — | — | ✅ |
+| **Azure Cosmos DB** [[cosmos-db-vector]](#ref-cosmos-db-vector) | — | — | — | — | ✅ | — | ✅ |
+| **SQL Server** [[sql-server-vector]](#ref-sql-server-vector) | — | — | — | — | ✅ | — | — |
+| **Elasticsearch** [[elasticsearch-knn]](#ref-elasticsearch-knn) | ✅ | — | — | — | — | — | ✅ |
+| **Databricks** [[databricks-mosaic-ai]](#ref-databricks-mosaic-ai) | ✅  | — | — | — | — | — | ✅ |
+| **MongoDB Atlas** [[mongodb-atlas-vector]](#ref-mongodb-atlas-vector) | ✅  | — | — | — | — | — | ✅ |
+| **Milvus / Zilliz** [[milvus-in-memory]](#ref-milvus-in-memory) [[milvus-disk-index]](#ref-milvus-disk-index) | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ |
+| **Pinecone** [[pinecone-nearest-neighbor]](#ref-pinecone-nearest-neighbor) | *(opaque)* | — | — | — | — | — | — |
+| **Weaviate** [[weaviate-vector-index]](#ref-weaviate-vector-index) | ✅ | — | — | — | — | — | ✅ |
+| **SingleStore** [[singlestore-vector-indexing]](#ref-singlestore-vector-indexing) | ✅ | ✅ | ✅ | ✅ | — | — | — |
+| **LanceDB** [[lancedb-vector-indexes]](#ref-lancedb-vector-indexes) | ✅ | ✅ | ✅ | — | — | — | — |
+| **pgvector (PostgreSQL)** [[pgvector-github]](#ref-pgvector-github) | ✅ | ✅ | — | — | — | — | ✅ |
 
 *✅ = Supported, (opaque) = Not publicly specified, — = Not available or not documented.*
 
@@ -1644,38 +1651,38 @@ graph TD
 
 ## References
 
-- **[malkov-hnsw]** **<a id="ref-malkov-hnsw"></a>Malkov, Y. A., & Yashunin, D. A. (2018).** *[Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs](https://arxiv.org/abs/1603.09320).* IEEE TPAMI. [↩](#cite-malkov-hnsw)
-- **[diskann-neurips]** **<a id="ref-diskann-neurips"></a>Subramanya, S. J., et al. (2019).** *[DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node](https://www.microsoft.com/en-us/research/publication/diskann-fast-accurate-billion-point-nearest-neighbor-search-on-a-single-node/).* NeurIPS. [↩](#cite-diskann-neurips)
-- **[scann-icml]** **<a id="ref-scann-icml"></a>Guo, R., et al. (2020).** *[Accelerating Large-Scale Inference with Anisotropic Vector Quantization (ScaNN)](https://arxiv.org/abs/1908.10396).* ICML. [↩](#cite-scann-icml)
-- **[faiss-paper]** **<a id="ref-faiss-paper"></a>Johnson, J., et al. (2019).** *[Billion-scale similarity search with GPUs (Faiss)](https://arxiv.org/abs/1702.08734).* IEEE Transactions on Big Data. [↩](#cite-faiss-paper)
-- **[aggarwal-surprising]** **<a id="ref-aggarwal-surprising"></a>Aggarwal, C. C., Hinneburg, A., & Keim, D. A. (2001).** *[On the Surprising Behavior of Distance Metrics in High Dimensional Space](https://bib.dbvis.de/uploadedFiles/155.pdf).* ICDT 2001. [↩](#cite-aggarwal-surprising)
-- **[vertex-ai-vector-search]** **<a id="ref-vertex-ai-vector-search"></a>Google Cloud.** *[Vector Search overview | Vertex AI](https://docs.cloud.google.com/vertex-ai/docs/vector-search/overview).* [↩](#cite-vertex-ai-vector-search)
-- **[sql-server-vector]** **<a id="ref-sql-server-vector"></a>Microsoft.** *[Vector Search & Vector Index - SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/ai/vectors?view=sql-server-ver17).* [↩](#cite-sql-server-vector)
-- **[azure-ai-search-store]** **<a id="ref-azure-ai-search-store"></a>Microsoft.** *[Vector indexes in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-store).* [↩](#cite-azure-ai-search-store)
-- **[milvus-disk-index]** **<a id="ref-milvus-disk-index"></a>Milvus.** *[On-disk Index | Milvus Documentation](https://milvus.io/docs/disk_index.md).* [↩](#cite-milvus-disk-index)
-- **[lancedb-issue-220]** **<a id="ref-lancedb-issue-220"></a>LanceDB.** *[Add LanceDB to ANN benchmarks · Issue #220](https://github.com/lancedb/lancedb/issues/220).* GitHub. [↩](#cite-lancedb-issue-220)
-- **[singlestore-indexed-ann]** **<a id="ref-singlestore-indexed-ann"></a>SingleStore.** *[Announcing SingleStore Indexed ANN Vector Search](https://www.singlestore.com/blog/singlestore-indexed-ann-vector-search/).* [↩](#cite-singlestore-indexed-ann)
-- **[singlestore-tuning]** **<a id="ref-singlestore-tuning"></a>SingleStore.** *[Tuning Vector Indexes and Queries](https://docs.singlestore.com/cloud/developer-resources/functional-extensions/tuning-vector-indexes-and-queries/).* [↩](#cite-singlestore-tuning)
-- **[alloydb-ivfflat]** **<a id="ref-alloydb-ivfflat"></a>Google Cloud.** *[Create an IVFFlat index | AlloyDB for PostgreSQL](https://docs.cloud.google.com/alloydb/docs/ai/create-ivfflat-index).* [↩](#cite-alloydb-ivfflat)
-- **[alloydb-scann]** **<a id="ref-alloydb-scann"></a>Google Cloud.** *[ScaNN for AlloyDB: How it compares to pgvector HNSW](https://cloud.google.com/blog/products/databases/how-scann-for-alloydb-vector-search-compares-to-pgvector-hnsw).* [↩](#cite-alloydb-scann)
-- **[spanner-vector-indexes]** **<a id="ref-spanner-vector-indexes"></a>Google Cloud.** *[Create and manage vector indexes | Spanner](https://docs.cloud.google.com/spanner/docs/vector-indexes).* [↩](#cite-spanner-vector-indexes)
-- **[spanner-knn]** **<a id="ref-spanner-knn"></a>Google Cloud.** *[Perform vector similarity search in Spanner by finding the K-nearest neighbors](https://docs.cloud.google.com/spanner/docs/find-k-nearest-neighbors).* [↩](#cite-spanner-knn)
-- **[spanner-ann]** **<a id="ref-spanner-ann"></a>Google Cloud.** *[Find approximate nearest neighbors (ANN) and query vector embeddings | Spanner](https://docs.cloud.google.com/spanner/docs/find-approximate-nearest-neighbors).* [↩](#cite-spanner-ann)
-- **[azure-ai-search-vector-index]** **<a id="ref-azure-ai-search-vector-index"></a>Microsoft.** *[Create a Vector Index - Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-create-index).* [↩](#cite-azure-ai-search-vector-index)
-- **[cosmos-db-vector]** **<a id="ref-cosmos-db-vector"></a>Microsoft.** *[Vector search in Azure Cosmos DB for NoSQL](https://learn.microsoft.com/en-us/azure/cosmos-db/vector-search).* [↩](#cite-cosmos-db-vector)
-- **[milvus-in-memory]** **<a id="ref-milvus-in-memory"></a>Milvus.** *[In-memory Index | Milvus Documentation](https://milvus.io/docs/index.md).* [↩](#cite-milvus-in-memory)
-- **[milvus-scann]** **<a id="ref-milvus-scann"></a>Milvus.** *[SCANN | Milvus Documentation](https://milvus.io/docs/scann.md).* [↩](#cite-milvus-scann)
-- **[pinecone-nearest-neighbor]** **<a id="ref-pinecone-nearest-neighbor"></a>Pinecone.** *[Nearest Neighbor Indexes for Similarity Search](https://www.pinecone.io/learn/series/faiss/vector-indexes/).* [↩](#cite-pinecone-nearest-neighbor)
-- **[weaviate-vector-index]** **<a id="ref-weaviate-vector-index"></a>Weaviate.** *[Vector index | Weaviate Documentation](https://docs.weaviate.io/weaviate/config-refs/indexing/vector-index).* [↩](#cite-weaviate-vector-index)
-- **[singlestore-vector-indexing]** **<a id="ref-singlestore-vector-indexing"></a>SingleStore.** *[Vector Indexing | SingleStore Documentation](https://docs.singlestore.com/cloud/reference/sql-reference/vector-functions/vector-indexing/).* [↩](#cite-singlestore-vector-indexing)
-- **[lancedb-vector-indexes]** **<a id="ref-lancedb-vector-indexes"></a>LanceDB.** *[Vector Indexes | LanceDB Documentation](https://docs.lancedb.com/indexing/vector-index).* [↩](#cite-lancedb-vector-indexes)
-- **[pgvector-github]** **<a id="ref-pgvector-github"></a>pgvector.** *[pgvector: Open-source vector similarity search for PostgreSQL](https://github.com/pgvector/pgvector).* GitHub. [↩](#cite-pgvector-github)
-- **[hubness-radovanovic]** **<a id="ref-hubness-radovanovic"></a>Radovanović, M., Nanopoulos, A., & Ivanović, M. (2010).** *[Hubs in space: Popular nearest neighbors in high-dimensional data](https://www.jmlr.org/papers/volume11/radovanovic10a/radovanovic10a.pdf).* JMLR. [↩](#cite-hubness-radovanovic)
-- **[elasticsearch-knn]** **<a id="ref-elasticsearch-knn"></a>Elasticsearch.** *[k-nearest neighbor (kNN) search | Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html).* [↩](#cite-elasticsearch-knn)
-- **[mongodb-atlas-vector]** **<a id="ref-mongodb-atlas-vector"></a>MongoDB.** *[Atlas Vector Search Overview | MongoDB Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/).* [↩](#cite-mongodb-atlas-vector)
-- **[databricks-mosaic-ai]** **<a id="ref-databricks-mosaic-ai"></a>Databricks.** *[Mosaic AI Vector Search | Databricks Documentation](https://docs.databricks.com/en/generative-ai/vector-search.html).* [↩](#cite-databricks-mosaic-ai)
-- **[elasticsearch-vector]** **<a id="ref-elasticsearch-vector"></a>Elasticsearch.** *[Vector search in Elasticsearch | Elastic Docs](https://www.elastic.co/docs/solutions/search/vector).* [↩](#cite-elasticsearch-vector)
-- **[splade-paper]** **<a id="ref-splade-paper"></a>Formal, T., et al. (2021).** *[SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking](https://arxiv.org/abs/2107.05720).* SIGIR. [↩](#cite-splade-paper)
-- **[jl-lemma-proof]** **<a id="ref-jl-lemma-proof"></a>Dasgupta, S., & Gupta, A. (2003).** *[An elementary proof of a theorem of Johnson and Lindenstrauss](https://cseweb.ucsd.edu/~dasgupta/papers/jl.pdf).* Random Structures & Algorithms. [↩](#cite-jl-lemma-proof)
-- **[rrf-paper]** **<a id="ref-rrf-paper"></a>Cormack, G. V., Clarke, C. L. A., & Buettcher, S. (2009).** *[Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods](https://dl.acm.org/doi/10.1145/1571941.1572114).* SIGIR. [↩](#cite-rrf-paper)
-- **[charikar-simhash]** **<a id="ref-charikar-simhash"></a>Charikar, M. S. (2002).** *[Similarity estimation techniques from rounding algorithms](https://dl.acm.org/doi/10.1145/509907.509965).* STOC. [↩](#cite-charikar-simhash)
+- **[malkov-hnsw]** **<a id="ref-malkov-hnsw"></a>Malkov, Y. A., & Yashunin, D. A. (2018).** *[Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs](https://arxiv.org/abs/1603.09320).* IEEE TPAMI.
+- **[diskann-neurips]** **<a id="ref-diskann-neurips"></a>Subramanya, S. J., et al. (2019).** *[DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node](https://www.microsoft.com/en-us/research/publication/diskann-fast-accurate-billion-point-nearest-neighbor-search-on-a-single-node/).* NeurIPS.
+- **[scann-icml]** **<a id="ref-scann-icml"></a>Guo, R., et al. (2020).** *[Accelerating Large-Scale Inference with Anisotropic Vector Quantization (ScaNN)](https://arxiv.org/abs/1908.10396).* ICML.
+- **[faiss-paper]** **<a id="ref-faiss-paper"></a>Johnson, J., et al. (2019).** *[Billion-scale similarity search with GPUs (Faiss)](https://arxiv.org/abs/1702.08734).* IEEE Transactions on Big Data.
+- **[aggarwal-surprising]** **<a id="ref-aggarwal-surprising"></a>Aggarwal, C. C., Hinneburg, A., & Keim, D. A. (2001).** *[On the Surprising Behavior of Distance Metrics in High Dimensional Space](https://bib.dbvis.de/uploadedFiles/155.pdf).* ICDT 2001.
+- **[vertex-ai-vector-search]** **<a id="ref-vertex-ai-vector-search"></a>Google Cloud.** *[Vector Search overview | Vertex AI](https://docs.cloud.google.com/vertex-ai/docs/vector-search/overview).*
+- **[sql-server-vector]** **<a id="ref-sql-server-vector"></a>Microsoft.** *[Vector Search & Vector Index - SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/ai/vectors?view=sql-server-ver17).*
+- **[azure-ai-search-store]** **<a id="ref-azure-ai-search-store"></a>Microsoft.** *[Vector indexes in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-store).*
+- **[milvus-disk-index]** **<a id="ref-milvus-disk-index"></a>Milvus.** *[On-disk Index | Milvus Documentation](https://milvus.io/docs/disk_index.md).*
+- **[lancedb-issue-220]** **<a id="ref-lancedb-issue-220"></a>LanceDB.** *[Add LanceDB to ANN benchmarks · Issue #220](https://github.com/lancedb/lancedb/issues/220).* GitHub.
+- **[singlestore-indexed-ann]** **<a id="ref-singlestore-indexed-ann"></a>SingleStore.** *[Announcing SingleStore Indexed ANN Vector Search](https://www.singlestore.com/blog/singlestore-indexed-ann-vector-search/).*
+- **[singlestore-tuning]** **<a id="ref-singlestore-tuning"></a>SingleStore.** *[Tuning Vector Indexes and Queries](https://docs.singlestore.com/cloud/developer-resources/functional-extensions/tuning-vector-indexes-and-queries/).*
+- **[alloydb-ivfflat]** **<a id="ref-alloydb-ivfflat"></a>Google Cloud.** *[Create an IVFFlat index | AlloyDB for PostgreSQL](https://docs.cloud.google.com/alloydb/docs/ai/create-ivfflat-index).*
+- **[alloydb-scann]** **<a id="ref-alloydb-scann"></a>Google Cloud.** *[ScaNN for AlloyDB: How it compares to pgvector HNSW](https://cloud.google.com/blog/products/databases/how-scann-for-alloydb-vector-search-compares-to-pgvector-hnsw).*
+- **[spanner-vector-indexes]** **<a id="ref-spanner-vector-indexes"></a>Google Cloud.** *[Create and manage vector indexes | Spanner](https://docs.cloud.google.com/spanner/docs/vector-indexes).*
+- **[spanner-knn]** **<a id="ref-spanner-knn"></a>Google Cloud.** *[Perform vector similarity search in Spanner by finding the K-nearest neighbors](https://docs.cloud.google.com/spanner/docs/find-k-nearest-neighbors).*
+- **[spanner-ann]** **<a id="ref-spanner-ann"></a>Google Cloud.** *[Find approximate nearest neighbors (ANN) and query vector embeddings | Spanner](https://docs.cloud.google.com/spanner/docs/find-approximate-nearest-neighbors).*
+- **[azure-ai-search-vector-index]** **<a id="ref-azure-ai-search-vector-index"></a>Microsoft.** *[Create a Vector Index - Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-create-index).*
+- **[cosmos-db-vector]** **<a id="ref-cosmos-db-vector"></a>Microsoft.** *[Vector search in Azure Cosmos DB for NoSQL](https://learn.microsoft.com/en-us/azure/cosmos-db/vector-search).*
+- **[milvus-in-memory]** **<a id="ref-milvus-in-memory"></a>Milvus.** *[In-memory Index | Milvus Documentation](https://milvus.io/docs/index.md).*
+- **[milvus-scann]** **<a id="ref-milvus-scann"></a>Milvus.** *[SCANN | Milvus Documentation](https://milvus.io/docs/scann.md).*
+- **[pinecone-nearest-neighbor]** **<a id="ref-pinecone-nearest-neighbor"></a>Pinecone.** *[Nearest Neighbor Indexes for Similarity Search](https://www.pinecone.io/learn/series/faiss/vector-indexes/).*
+- **[weaviate-vector-index]** **<a id="ref-weaviate-vector-index"></a>Weaviate.** *[Vector index | Weaviate Documentation](https://docs.weaviate.io/weaviate/config-refs/indexing/vector-index).*
+- **[singlestore-vector-indexing]** **<a id="ref-singlestore-vector-indexing"></a>SingleStore.** *[Vector Indexing | SingleStore Documentation](https://docs.singlestore.com/cloud/reference/sql-reference/vector-functions/vector-indexing/).*
+- **[lancedb-vector-indexes]** **<a id="ref-lancedb-vector-indexes"></a>LanceDB.** *[Vector Indexes | LanceDB Documentation](https://docs.lancedb.com/indexing/vector-index).*
+- **[pgvector-github]** **<a id="ref-pgvector-github"></a>pgvector.** *[pgvector: Open-source vector similarity search for PostgreSQL](https://github.com/pgvector/pgvector).* GitHub.
+- **[hubness-radovanovic]** **<a id="ref-hubness-radovanovic"></a>Radovanović, M., Nanopoulos, A., & Ivanović, M. (2010).** *[Hubs in space: Popular nearest neighbors in high-dimensional data](https://www.jmlr.org/papers/volume11/radovanovic10a/radovanovic10a.pdf).* JMLR.
+- **[elasticsearch-knn]** **<a id="ref-elasticsearch-knn"></a>Elasticsearch.** *[k-nearest neighbor (kNN) search | Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html).*
+- **[mongodb-atlas-vector]** **<a id="ref-mongodb-atlas-vector"></a>MongoDB.** *[Atlas Vector Search Overview | MongoDB Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/).*
+- **[databricks-mosaic-ai]** **<a id="ref-databricks-mosaic-ai"></a>Databricks.** *[Mosaic AI Vector Search | Databricks Documentation](https://docs.databricks.com/en/generative-ai/vector-search.html).*
+- **[elasticsearch-vector]** **<a id="ref-elasticsearch-vector"></a>Elasticsearch.** *[Vector search in Elasticsearch | Elastic Docs](https://www.elastic.co/docs/solutions/search/vector).*
+- **[splade-paper]** **<a id="ref-splade-paper"></a>Formal, T., et al. (2021).** *[SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking](https://arxiv.org/abs/2107.05720).* SIGIR.
+- **[jl-lemma-proof]** **<a id="ref-jl-lemma-proof"></a>Dasgupta, S., & Gupta, A. (2003).** *[An elementary proof of a theorem of Johnson and Lindenstrauss](https://cseweb.ucsd.edu/~dasgupta/papers/jl.pdf).* Random Structures & Algorithms.
+- **[rrf-paper]** **<a id="ref-rrf-paper"></a>Cormack, G. V., Clarke, C. L. A., & Buettcher, S. (2009).** *[Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods](https://dl.acm.org/doi/10.1145/1571941.1572114).* SIGIR.
+- **[charikar-simhash]** **<a id="ref-charikar-simhash"></a>Charikar, M. S. (2002).** *[Similarity estimation techniques from rounding algorithms](https://dl.acm.org/doi/10.1145/509907.509965).* STOC.
