@@ -80,13 +80,14 @@ def build_kdtree(points, depth=0):
     points.sort(key=lambda x: x[axis])
     median = len(points) // 2
     
+    # Note: For production, prefer `nth_element`/partition selection and 
+    # operate on index ranges to avoid repeated sorts and O(N log^2 N) copies.
     return Node(
         point=points[median],
+        left=build_kdtree(points[:median], depth + 1),
         right=build_kdtree(points[median + 1:], depth + 1),
         axis=axis
     )
-    # Note: For production, prefer `nth_element`/partition selection and 
-    # operate on index ranges to avoid repeated sorts and O(N log^2 N) copies.
 ```
 {{% /tab %}}
 {{% tab "Go" %}}
@@ -812,7 +813,7 @@ You might wonder: *Why use a random coin flip? Shouldn't we pick nodes that are 
 If we knew the entire dataset in advance, we could indeed pick perfectly spaced "pillars" to form the upper layers. However, that requires expensive global analysis ($O(N)$ or $O(N^2)$) and makes adding new data difficult (you'd have to shift the pillars).
 
 Randomness is a powerful shortcut. By promoting nodes randomly:
-1.  **Distribution**: We statistically tend to ensure that the express nodes are roughly uniformly distributed across the space, without ever calculating a single distance.
+1.  **Distribution**: Promotion is independent of geometry, producing an *unbiased random sample of the inserted points* in higher layers. This typically yields good coverage without global optimization.
 2.  **Independence**: We can insert a new node without needing to "re-balance" the rest of the graph.
 3.  **Speed**: It takes $O(1)$ time to decide a node's level, versus $O(N)$ to find the "best" position.
 
@@ -1532,7 +1533,7 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 | **HNSW** | Emp. $O(\log N)$ | Formula (see below) | < 1 ms | Real-time, expensive |
 | **IVF-PQ** | $O(\text{nprobe} \cdot N/K)$ | 5-10% (Low) | 1-10 ms | Balanced, large scale |
 | **IVF-PQFS** | $O(\text{nprobe} \cdot N/K)$ (SIMD) | 2-5% (Very Low) | < 2 ms | High throughput, compressed |
-| **DiskANN** | Emp. $O(\log N)$ + Disk I/O | 5% (Avg RAM) | 2-10 ms | Massive scale, cost-effective |
+| **DiskANN** | Emp. $O(\log N)$ + Disk I/O | Low (PQ + cache), config-dependent | 2-10 ms | Massive scale, cost-effective |
 | **ScaNN** | Optimized IVF-PQ | 5-10% (Low) | < 5 ms | High accuracy / Google Cloud |
 | **SingleStore** | Hybrid (HNSW / IVF) | Config-dependent | 1-10 ms | HTAP (SQL + Vector) |
 
