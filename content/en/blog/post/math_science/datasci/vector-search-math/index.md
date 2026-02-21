@@ -76,7 +76,8 @@ def build_kdtree(points, depth=0):
     k = len(points[0])  # dimensionality
     axis = depth % k    # cycle through axes
     
-    # Sort points and choose median
+    # Sort points and choose median (we copy to avoid mutating the input array)
+    points = points.copy()
     points.sort(key=lambda x: x[axis])
     median = len(points) // 2
     
@@ -296,7 +297,7 @@ Imagine a high-dimensional hypercube. The volume of the cube is $1^d$. The volum
 Almost all data points sit on the "surface" or shell of the structure. When you query this space:
 1.  Your query point is almost always near a "boundary" of the partition.
 2.  The "search radius" effectively overlaps with *every* partition.
-3.  You cannot prove that a branch is "too far away" because in high dimensions, **everything is roughly equidistant** to everything else (relative to the vastness of the space).
+3.  You cannot prove that a branch is "too far away" because in high dimensions, **relative distance contrast collapses** (nearest and farthest distances concentrate), so 'close vs far' becomes hard to separate.
 
 Because you can't rule out any branches, you are forced to visit them all. The tree devolves into a complicated, slow linked list, often performing *worse* than a brute-force linear scan.
 
@@ -309,7 +310,7 @@ In low-dimensional spaces (like 2D or 3D geographical data), structures like **K
 However, modern embedding models (like CLIP or OpenAI's text-embedding-3) output vectors with hundreds or thousands of dimensions (e.g., 512, 768, 1536, or 3072). In these high-dimensional spaces, a phenomenon known as the **Curse of Dimensionality** renders traditional spatial partitioning ineffective.
 
 Mathematically, as dimension $d$ increases:
-1.  **Distance Concentration <a id="cite-5-2"></a>[[5]](#ref-5)**: The ratio of the distance to the nearest neighbor vs. the farthest neighbor approaches 1. The relative contrast between "close" and "far" vanishes. In other words, *everything becomes roughly equidistant* to everything else, making it impossible for the algorithm to distinguish a "clear" winner.
+1.  **Distance Concentration <a id="cite-5-2"></a>[[5]](#ref-5)**: The ratio of the distance to the nearest neighbor vs. the farthest neighbor approaches 1. **Relative distance contrast collapses** (nearest and farthest distances concentrate), so 'close vs far' becomes hard to separate, making it impossible for the algorithm to distinguish a "clear" winner.
 2.  **Empty Space**: As discussed in the **[Failure Mode](#the-failure-mode-why-pruning-fails-in-high-dimensions)** section above, volume expands exponentially, pushing all data points to the surface.
 
 **The "Dice Roll" Intuition**:
@@ -333,7 +334,8 @@ def calculate_ratio(dim, num_points=1000):
     points /= np.linalg.norm(points, axis=1)[:, np.newaxis]
     
     # Calculate min/max pairwise distances
-    # (Approximation: compare 1st point to all others to save time)
+    # (Approximation: compare 1st point to all others to save time; 
+    # the true min/max would check all pairs, but this serves the intuition)
     diff = points[1:] - points[0]
     dists = np.linalg.norm(diff, axis=1)
     
@@ -1042,6 +1044,7 @@ from sklearn.cluster import KMeans
 
 def train_pq(vectors, m=96):
     dim = vectors.shape[1]
+    assert dim % m == 0, "Dimension must be perfectly divisible by m"
     sub_dim = dim // m
     codebooks = []
     
@@ -1542,12 +1545,12 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 > 
 > $\text{Total RAM} \approx \text{Dataset Size} + \text{Graph Overhead}$  
 > $\text{Dataset Size} = N \times d \times \text{bytes\_per\_dim}$  
-> $\text{Graph Overhead} \approx N \times M \times \text{bytes\_per\_link}$
+> $\text{Graph Overhead} \approx N \times \left(M_0 + \frac{M}{M-1}\right) \times \text{bytes\_per\_link}$
 > 
-> *Example:* 1 Million 768-dimensional float32 vectors with $M=16$ (using 8-byte pointers):
+> *Example:* 1 Million 768-dimensional float32 vectors with $M=16, M_0=32$ (using 8-byte pointers):
 > *   Data: $10^6 \times 768 \times 4 \approx 3.07 \text{ GB}$
-> *   Graph: $10^6 \times 16 \times 8 \approx 0.128 \text{ GB}$ (plus allocator overhead)
-> *   Here, the graph overhead is only ~4%. But for 128-dimensional int8 vectors, the data is 0.128 GB and graph is 0.128 GB—an overhead of 100%!
+> *   Graph: $10^6 \times (32 + 16/15) \times 8 \approx 0.264 \text{ GB}$ (plus allocator overhead)
+> *   Here, the graph overhead is ~8-9%. (Note: Layer 0 often uses $M_0=2M$, which roughly doubles adjacency memory vs $N \times M$). However, for 128-dimensional int8 vectors, the graph footprint eclipses the data payload, pushing overhead to 100-200%!
 
 Most modern production systems use a hybrid approach: **HNSW** for the hot, recent data, and **DiskANN** or **IVF-PQ** for the massive historical archive.
 
@@ -1577,7 +1580,7 @@ graph TD
 > *   **HNSW** is the default in-memory engine for **Milvus** and **Weaviate**. **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
 > *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration <a id="cite-11"></a>[[11]](#ref-11) <a id="cite-12"></a>[[12]](#ref-12).
 
-> **Service capabilities change frequently; verified against vendor docs as of 2026-02.**
+> **Service capabilities change frequently; verified against vendor docs as of 2026-02.** Cells without direct citations are best-effort and may change; check vendor docs for your region/SKU.
 
 ### Algorithm Support by Service
 
@@ -1586,7 +1589,7 @@ graph TD
 | **Google Vertex AI** <a id="cite-6"></a>[[6]](#ref-6) | — | — | — | — | — | ✅ | — |
 | **Google AlloyDB** <a id="cite-13"></a>[[13]](#ref-13) <a id="cite-14"></a>[[14]](#ref-14) | ✅ | ✅ | — | — | — | ✅ | ✅ |
 | **Google Cloud Spanner** <a id="cite-15"></a>[[15]](#ref-15) <a id="cite-16"></a>[[16]](#ref-16) | — | — | — | — | — | ✅ | ✅ |
-| **Azure AI Search** <a id="cite-17"></a>[[17]](#ref-17) | ✅ | — | — | — | — | — | ✅ |
+| **Azure AI Search** <a id="cite-26"></a>[[26]](#ref-26) | ✅ | — | — | — | — | — | ✅ |
 | **Azure Cosmos DB** <a id="cite-18"></a>[[18]](#ref-18) | — | — | — | — | ✅ | — | ✅ |
 | **SQL Server** <a id="cite-7"></a>[[7]](#ref-7) | — | — | — | — | ✅ | — | — |
 | **Milvus / Zilliz** <a id="cite-19"></a>[[19]](#ref-19) <a id="cite-20"></a>[[20]](#ref-20) | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ |
@@ -1611,7 +1614,7 @@ graph TD
 5.  **<a id="ref-5"></a>Aggarwal, C. C., Hinneburg, A., & Keim, D. A. (2001).** *[On the Surprising Behavior of Distance Metrics in High Dimensional Space](https://bib.dbvis.de/uploadedFiles/155.pdf).* ICDT 2001. [↩](#cite-5)
 6.  **<a id="ref-6"></a>Google Cloud.** *[Vector Search overview | Vertex AI](https://docs.cloud.google.com/vertex-ai/docs/vector-search/overview).* [↩](#cite-6)
 7.  **<a id="ref-7"></a>Microsoft.** *[Vector Search & Vector Index - SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/ai/vectors?view=sql-server-ver17).* [↩](#cite-7)
-8.  **<a id="ref-8"></a>Microsoft.** *[Vector indexes in Azure AI Search](https://docs.azure.cn/en-us/search/vector-store).* [↩](#cite-8)
+8.  **<a id="ref-8"></a>Microsoft.** *[Vector indexes in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-store).* [↩](#cite-8)
 9.  **<a id="ref-9"></a>Milvus.** *[On-disk Index | Milvus Documentation](https://milvus.io/docs/disk_index.md).* [↩](#cite-9)
 10. **<a id="ref-10"></a>LanceDB.** *[Add LanceDB to ANN benchmarks · Issue #220](https://github.com/lancedb/lancedb/issues/220).* GitHub. [↩](#cite-10)
 11. **<a id="ref-11"></a>SingleStore.** *[Announcing SingleStore Indexed ANN Vector Search](https://www.singlestore.com/blog/singlestore-indexed-ann-vector-search/).* [↩](#cite-11)
