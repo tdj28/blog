@@ -1573,11 +1573,12 @@ graph TD
 {{< /mermaid >}}
 
 > **Note on Algorithms vs. Services:**
+> *   **Google Cloud Spanner** supports **exact KNN** (distance functions with `ORDER BY … LIMIT`) and **approximate NN (ANN)** accelerated by **tree-based vector indexes** that leverage Google Research's **ScaNN**. ANN queries use Spanner's `APPROX_*` distance functions and trade a small amount of recall for lower latency/cost <a id="cite-27"></a>[[27]](#ref-27). (Note: **AlloyDB** natively supports both HNSW via pgvector <a id="cite-13"></a>[[13]](#ref-13) and its own integrated ScaNN index <a id="cite-14"></a>[[14]](#ref-14)).
 > *   **ScaNN** is the proprietary algorithm powering **Google Vertex AI Vector Search** <a id="cite-6"></a>[[6]](#ref-6).
-> *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-8"></a>[[8]](#ref-8).
+> *   **DiskANN** is used across multiple Microsoft offerings (e.g., SQL Server vector indexes <a id="cite-7"></a>[[7]](#ref-7); Cosmos DB DiskANN features). **Azure AI Search** uses **HNSW** / exhaustive KNN for its vector indexes <a id="cite-26"></a>[[26]](#ref-26).
 > *   **Milvus** supports DiskANN-based on-disk indexing (Vamana graphs) and HNSW for in-memory search <a id="cite-9"></a>[[9]](#ref-9).
 > *   **LanceDB** supports IVF/PQ-style approaches today with DiskANN-related support emerging <a id="cite-10"></a>[[10]](#ref-10) (check current docs/releases for the latest).
-> *   **HNSW** is the default in-memory engine for **Milvus** and **Weaviate**. **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
+> *   **HNSW** is the primary or default in-memory engine across the vast majority of the ecosystem, including **Milvus**, **Weaviate**, **Elasticsearch** (via Lucene) <a id="cite-28"></a>[[28]](#ref-28), **MongoDB Atlas Vector Search** <a id="cite-29"></a>[[29]](#ref-29), and **Databricks Vector Search** (Mosaic AI) <a id="cite-30"></a>[[30]](#ref-30). **Pinecone** is often described as using proprietary HNSW-like or graph-based algorithms.
 > *   **SingleStore** supports **IVF**, **IVF-PQ**, and **HNSW** (Faiss-based), with PQ fast-scan-style optimizations depending on configuration <a id="cite-11"></a>[[11]](#ref-11) <a id="cite-12"></a>[[12]](#ref-12).
 
 > **Service capabilities change frequently; verified against vendor docs as of 2026-02.** Cells without direct citations are best-effort and may change; check vendor docs for your region/SKU.
@@ -1588,10 +1589,13 @@ graph TD
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **Google Vertex AI** <a id="cite-6"></a>[[6]](#ref-6) | — | — | — | — | — | ✅ | — |
 | **Google AlloyDB** <a id="cite-13"></a>[[13]](#ref-13) <a id="cite-14"></a>[[14]](#ref-14) | ✅ | ✅ | — | — | — | ✅ | ✅ |
-| **Google Cloud Spanner** <a id="cite-15"></a>[[15]](#ref-15) <a id="cite-16"></a>[[16]](#ref-16) | — | — | — | — | — | ✅ | ✅ |
+| **Google Cloud Spanner** <a id="cite-15"></a>[[15]](#ref-15) <a id="cite-27"></a>[[27]](#ref-27) | — | — | — | — | — | ✅ | ✅ |
 | **Azure AI Search** <a id="cite-26"></a>[[26]](#ref-26) | ✅ | — | — | — | — | — | ✅ |
 | **Azure Cosmos DB** <a id="cite-18"></a>[[18]](#ref-18) | — | — | — | — | ✅ | — | ✅ |
 | **SQL Server** <a id="cite-7"></a>[[7]](#ref-7) | — | — | — | — | ✅ | — | — |
+| **Elasticsearch** <a id="cite-28"></a>[[28]](#ref-28) | ✅ | — | — | — | — | — | ✅ |
+| **Databricks** <a id="cite-30"></a>[[30]](#ref-30) | ✅ | — | — | — | — | — | ✅ |
+| **MongoDB Atlas** <a id="cite-29"></a>[[29]](#ref-29) | ✅ | — | — | — | — | — | ✅ |
 | **Milvus / Zilliz** <a id="cite-19"></a>[[19]](#ref-19) <a id="cite-20"></a>[[20]](#ref-20) | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ |
 | **Pinecone** <a id="cite-21"></a>[[21]](#ref-21) | *(opaque)* | — | — | — | — | — | — |
 | **Weaviate** <a id="cite-22"></a>[[22]](#ref-22) | ✅ | — | — | — | — | — | ✅ |
@@ -1633,3 +1637,7 @@ graph TD
 24. **<a id="ref-24"></a>LanceDB.** *[Vector Indexes | LanceDB Documentation](https://docs.lancedb.com/indexing/vector-index).* [↩](#cite-24)
 25. **<a id="ref-25"></a>pgvector.** *[pgvector: Open-source vector similarity search for PostgreSQL](https://github.com/pgvector/pgvector).* GitHub. [↩](#cite-25)
 26. **<a id="ref-26"></a>Microsoft.** *[Create a vector index in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-create-index).* [↩](#cite-26)
+27. **<a id="ref-27"></a>Google Cloud.** *[Find approximate nearest neighbors (ANN) and query vector embeddings | Spanner](https://docs.cloud.google.com/spanner/docs/find-approximate-nearest-neighbors).* [↩](#cite-27)
+28. **<a id="ref-28"></a>Elasticsearch.** *[k-nearest neighbor (kNN) search | Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html).* [↩](#cite-28)
+29. **<a id="ref-29"></a>MongoDB.** *[Atlas Vector Search Overview | MongoDB Documentation](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/).* [↩](#cite-29)
+30. **<a id="ref-30"></a>Databricks.** *[Mosaic AI Vector Search | Databricks Documentation](https://docs.databricks.com/en/generative-ai/vector-search.html).* [↩](#cite-30)
