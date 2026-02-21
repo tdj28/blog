@@ -1604,8 +1604,8 @@ By plotting Recall on the X-axis and QPS on the Y-axis, you create a curve to vi
 > Saying HNSW takes "140% memory" is a rule-of-thumb that breaks down across different dimensions and ID widths. A more accurate memory formula for HNSW is:
 > 
 > $\text{Total RAM} \approx \text{Dataset Size} + \text{Graph Overhead}$  
-> $\text{Dataset Size} = N \times d \times \text{bytes\_per\_dim}$  
-> $\text{Graph Overhead} \approx N \times \left(M_0 + \frac{M}{M-1}\right) \times \text{bytes\_per\_link}$
+> $\text{Dataset Size} = N \times d \times \text{bytesPerDim}$  
+> $\text{Graph Overhead} \approx N \times \left(M_0 + \frac{M}{M-1}\right) \times \text{bytesPerLink}$
 > *(Where $M_0 + \frac{M}{M-1}$ represents the expected adjacency count under the level distribution, not a hard guarantee).*
 > 
 > *Example:* 1 Million 768-dimensional float32 vectors with $M=16, M_0=32$ (using 8-byte pointers):
