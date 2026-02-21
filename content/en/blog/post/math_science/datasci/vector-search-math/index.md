@@ -1685,6 +1685,23 @@ If you're selecting an algorithm for a production system, pure theory only goes 
 *   **[ANN-Benchmarks](https://ann-benchmarks.com/index.html)**: The definitive open-source empirical leaderboard for approximate nearest neighbor algorithms. Highly recommended to observe how recall curves degrade against QPS (and its corresponding [GitHub repository](https://github.com/erikbern/ann-benchmarks)).
 *   **[VectorDBBench](https://github.com/zilliztech/VectorDBBench)**: An open-source benchmark tool focused specifically on managed and open-source vector databases.
 
+## Leaderboards vs. Foundations: Other High-Performing ANN Systems You May See
+
+[ANN-Benchmarks](https://ann-benchmarks.com/index.html) and similar leaderboards compare *end-to-end implementations*, not just abstract algorithms. That means strong curves can come from:
+*   CPU/SIMD specialization (e.g., AVX-512)
+*   Cache-aware adjacency layouts
+*   Aggressive quantization implementations
+*   Dataset-specific build/pruning heuristics
+*   Different tuning/search budgets (beam widths, candidate limits)
+
+This post focuses on the *dominant mathematical families* used fundamentally across production systems (graph routing like HNSW/Vamana, partitioning like IVF, and compression like PQ/SQ/BQ).
+
+Still, a few notable leaderboard entries are worth being explicitly aware of:
+*   **Descartes (01.AI)**: An in-memory ANN engine built around a navigable graph + quantization, emphasizing modern CPU instruction sets and implementation-level efficiency.
+*   **QSGNGT**: A graph-based approach built on NGT-style graph search and a quantized search-graph pipeline (AKNNG &rarr; search graph &rarr; quantized search graph).
+
+Treat systems like these as optimized members of the broader "graph ANN + compression" design space: the *mathematics* rhyme heavily with HNSW/DiskANN/graph-pruning ideas, but the performance differences on a leaderboard graph are often dominated by intense systems engineering choices.
+
 ## References
 
 - **[malkov-hnsw]** **<a id="ref-malkov-hnsw"></a>Malkov, Y. A., & Yashunin, D. A. (2018).** *[Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs](https://arxiv.org/abs/1603.09320).* IEEE TPAMI.
@@ -1722,3 +1739,5 @@ If you're selecting an algorithm for a production system, pure theory only goes 
 - **[jl-lemma-proof]** **<a id="ref-jl-lemma-proof"></a>Dasgupta, S., & Gupta, A. (2003).** *[An elementary proof of a theorem of Johnson and Lindenstrauss](https://cseweb.ucsd.edu/~dasgupta/papers/jl.pdf).* Random Structures & Algorithms.
 - **[rrf-paper]** **<a id="ref-rrf-paper"></a>Cormack, G. V., Clarke, C. L. A., & Buettcher, S. (2009).** *[Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods](https://dl.acm.org/doi/10.1145/1571941.1572114).* SIGIR.
 - **[charikar-simhash]** **<a id="ref-charikar-simhash"></a>Charikar, M. S. (2002).** *[Similarity estimation techniques from rounding algorithms](https://dl.acm.org/doi/10.1145/509907.509965).* STOC.
+- **[descartes-01ai]** **<a id="ref-descartes-01ai"></a>01.AI.** *[Descartes (ANN engine / library)](https://github.com/01-ai/Descartes).* GitHub repository.
+- **[qsgngt]** **<a id="ref-qsgngt"></a>QSGNGT authors.** *[qsgngt (NGT-qg/Efanna/SSG-based ANN implementation)](https://github.com/WPJiang/HWTL_SDU-ANNS).* Project repository / documentation.
