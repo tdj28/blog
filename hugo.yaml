@@ -17,6 +17,15 @@ taxonomies:
   author: authors
   series: series
 
+menus:
+  main:
+    - name: Articles
+      pageRef: /blog
+      weight: 10
+    - name: Tags
+      pageRef: /tags
+      weight: 20
+
 author:
   name: "TJ"
   headline: "Data Science | Physics | Math | Engineering"
@@ -48,6 +57,7 @@ params:
   homepage:
     layout: profile # profile, page, hero, background, custom
     showRecent: true
+    showRecentItems: 6
     cardView: true
     cardViewScreenWidth: false
 
