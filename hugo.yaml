@@ -85,7 +85,7 @@ markup:
         block: true
         title: true
   highlight:
-    style: dracula
+    noClasses: false
     guessSyntax: true
   tableOfContents:
     endLevel: 2

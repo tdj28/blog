@@ -1,18 +1,35 @@
+:root {
+    --code-tabs-bg: #f9fafb;
+    --code-tabs-border: #e5e7eb;
+    --code-tabs-header-bg: #f3f4f6;
+    --code-tab-btn-text: #4b5563;
+    --code-tab-btn-active-bg: #ffffff;
+    --code-tab-btn-active-text: #111827;
+    --code-tab-btn-hover: #e5e7eb;
+}
+
+.dark {
+    --code-tabs-bg: #1f2937;
+    --code-tabs-border: #374151;
+    --code-tabs-header-bg: #111827;
+    --code-tab-btn-text: #d1d5db;
+    --code-tab-btn-active-bg: #1f2937;
+    --code-tab-btn-active-text: #ffffff;
+    --code-tab-btn-hover: #374151;
+}
+
 /* Code Tabs Styling */
 .code-tabs {
-    border: 1px solid #374151;
-    /* gray-700 */
+    border: 1px solid var(--code-tabs-border);
     border-radius: 0.5rem;
     margin-bottom: 1.5rem;
     overflow: hidden;
-    background-color: #1f2937;
-    /* gray-800 */
+    background-color: var(--code-tabs-bg);
 }
 
 .code-tabs-header {
-    background-color: #111827;
-    /* gray-900 */
-    border-bottom: 1px solid #374151;
+    background-color: var(--code-tabs-header-bg);
+    border-bottom: 1px solid var(--code-tabs-border);
     display: flex;
     overflow-x: auto;
 }
@@ -20,8 +37,7 @@
 .tab-button {
     background: none;
     border: none;
-    color: #d1d5db;
-    /* gray-300 */
+    color: var(--code-tab-btn-text);
     padding: 0.5rem 1rem;
     cursor: pointer;
     font-family: inherit;
@@ -30,14 +46,13 @@
 }
 
 .tab-button:hover {
-    background-color: #374151;
+    background-color: var(--code-tab-btn-hover);
 }
 
 .tab-button.active {
-    background-color: #1f2937;
-    color: #fff;
+    background-color: var(--code-tab-btn-active-bg);
+    color: var(--code-tab-btn-active-text);
     border-bottom: 2px solid #3b82f6;
-    /* blue-500 */
     font-weight: 600;
 }
 
