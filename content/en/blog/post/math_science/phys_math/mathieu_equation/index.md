@@ -44,7 +44,8 @@ We can satisfy this in more than one way. For the linear Paul trap, whose initia
 trap but as a focusing tunnel of sorts, but which can be turned into a 'race track' ion trap:
 
 {{< alert title="The Linear Paul Trap" color="primary" >}}
-$$\alpha = 1 = -\gamma, \beta = 0 \rightarrow \Phi = \frac{\Phi_0}{2r_0^2}(x^2 - z^2)$$
+$$\alpha = 1 = -\beta, \gamma = 0 \rightarrow \Phi = \frac{\Phi_0}{2r_0^2}(x^2 - y^2)$$
+(with the trap/transport axis along \\(z\\))
 {{< /alert >}}
 
 For the true 3D rf Paul trap (the "ionenkäfig" or chamber trap) that restrains ions in all three dimensions:
@@ -53,8 +54,7 @@ For the true 3D rf Paul trap (the "ionenkäfig" or chamber trap) that restrains 
 $$\alpha = \beta = 1, \gamma = -2 \rightarrow \Phi = \frac{\Phi_0}{2r_0^2}(x^2 + y^2 - 2z^2)$$
 {{< /alert >}}
 
-This figure (from reference <a id="cite-paul-1990"></a>[[paul-1990]](#ref-paul-1990)) shows a diagram of an idealized rf Paul trap (a) and the chamber rf Paul trap (b):
-
+This figure (from reference <a id="cite-paul-1990"></a>[[paul-1990]](#ref-paul-1990)) shows a diagram of an idealized rf Paul trap (a) and the chamber rf Paul trap (b). The foundational concept of this geometry was first introduced by Paul and Steinwedel <a id="cite-paul-steinwedel-1953"></a>[[paul-steinwedel-1953]](#ref-paul-steinwedel-1953), and an excellent operational textbook on its dynamics is provided by Ghosh <a id="cite-ghosh-1995"></a>[[ghosh-1995]](#ref-ghosh-1995):
 
 {{< figure src="rf_paul_trap_diagram.png" caption="The linear rf Paul trap (a) and the chamber rf Paul trap (b). Figure from ref. [[paul-1990]](#ref-paul-1990).">}}
 
@@ -62,24 +62,28 @@ Such potentials can be provided via hyperbolic-shaped electrodes. We can perform
 
 {{< figure  src="sor_diagram2.png" caption="SOR calculation for hyperbolic electrodes. The outer box is held at ground, the horizontal electrodes held at V and the vertical ones held at -V. The grid was 1000 by 1000, our tolerance was 0.0001.">}} 
 
-We have a repulsive force in the \\(z\\) direction which must be avoided. Unfortunately, [Earnshaw's theorem](https://en.wikipedia.org/wiki/Earnshaw%27s_theorem) tells us that it isn't possible to make an electric potential whose result is a stable equilibrium confining in all three dimensions of space using only *static* inverse-square forces. However, we can create a potential which results in an *average* confining force by using time-dependent fields. This can be done via the clever mechanism of rotating the field so that the focusing and defocusing is applied alternatively in each direction. If done at the right set of frequencies, the ion will maintain a stable orbit near the center of the ion trap.
+We have a repulsive force in the \\(z\\) direction which must be avoided. Unfortunately, Earnshaw's theorem <a id="cite-earnshaw-1842"></a>[[earnshaw-1842]](#ref-earnshaw-1842) tells us that it isn't possible to make an electric potential whose result is a stable equilibrium confining in all three dimensions of space using only *static* inverse-square forces. However, we can create a potential which results in an *average* confining force by using time-dependent fields. This can be done via the clever mechanism of alternating the focusing and defocusing fields in each direction. If done at the right set of frequencies, the ion will maintain a stable orbit near the center of the ion trap.
 
-{{< figure  src="hyperbolic_electrodes_with_field.gif" caption="Animation of field rotation.">}} 
+{{< figure  src="hyperbolic_electrodes_with_field.gif" caption="Animation of alternating focusing and defocusing fields.">}} 
 
 
-A way to visualize this is with W. Paul's mechanical analog <a id="cite-paul-1990"></a>[[paul-1990]](#ref-paul-1990), <a id="cite-thompson-2002"></a>[[thompson-2002]](#ref-thompson-2002). Paul made an equivalent potential as that described above by carving a hyperbolic saddle surface out of plexiglass. Placing a ball on top of this surface would result in the ball falling off, of course. But if the surface is rotated at a proper rate, the ball will stay on the surface.
+A way to visualize this is with W. Paul's mechanical analog <a id="cite-paul-1990"></a>[[paul-1990]](#ref-paul-1990), <a id="cite-thompson-2002"></a>[[thompson-2002]](#ref-thompson-2002). Paul made an equivalent potential as that described above by carving a hyperbolic saddle surface out of plexiglass. Placing a ball on top of this surface would result in the ball falling off, of course. But if the surface is rotated at a proper rate (which acts as an analogy for the alternating spatial confinement of the actual electric fields), the ball will stay on the surface.
 
 {{< figure src="saddle_figure.png" caption="The mechanical analog to the rf Paul trap; the ball will fall off unless the saddle rotates fast enough that in any given direction there is an alternation of force direction over the cycle of rotation.">}} 
 
 <!-- ![Figure 1.3: The mechanical analog to the rf Paul trap](saddle_figure.png) -->
 
 {{< alert title="A note on traps" color="warning" >}}
-This post will derive the Mathieu stability equations for a *pure 3D quadrupole rf field*. In a **linear trap** (often utilized for Quantum Computing hardware), the axial confinement along \\(z\\) is typically DC (static harmonic)—not Mathieu in the same way—and the Mathieu stability chart we derive predominantly governs only the radial \\(x,y\\) directions. Conversely, the classic 3D "chamber" trap relies upon true 3D rf confinement, which we model below.
+This post will derive the Mathieu stability equations for a *pure 3D quadrupole rf field* (the classic 3D "chamber" trap), which relies upon true 3D rf confinement. In a **linear trap** (often utilized for Quantum Computing hardware; see Cirac & Zoller <a id="cite-cirac-1995"></a>[[cirac-1995]](#ref-cirac-1995) or Häffner et al. <a id="cite-haffner-2008"></a>[[haffner-2008]](#ref-haffner-2008)), the axial confinement along \\(z\\) is typically DC (static harmonic) - not Mathieu in the same way - and the Mathieu stability chart we derive predominantly governs only the radial \\(x,y\\) directions. 
 {{< /alert >}}
 
 The applied oscillating potential can be written:
 
 $$\Phi_0 = U + V \cos \Omega t$$
+
+giving the full spatial potential for the chamber trap:
+
+$$\Phi(x,y,z,t) = \frac{U + V \cos \Omega t}{2r_0^2}(x^2 + y^2 - 2z^2)$$
 
 If the particle has a charge \\(e\\) and mass \\(m\\), the resulting electric field is \\( \mathbf{E} = -\nabla \Phi \\):
 
@@ -100,7 +104,7 @@ $$
 
 These equations can be cast as Mathieu's equation, which describes the parametric resonance driving the ion's stability:
 
-$$\ddot{\eta} + \left(a - 2q \cos(2\tau)\right)\eta = 0$$
+$$\frac{d^2u}{d\tau^2} + \left(a - 2q \cos(2\tau)\right)u = 0$$
 
 The variables are dimensionless for this equation, so we have a little work to do to massage our motion equations into this form.
 
@@ -108,7 +112,7 @@ The variables are dimensionless for this equation, so we have a little work to d
 
 Since we are removing dimensionality in the \\(t\\) variable by setting \\( \tau = \Omega t / 2\\),
 
-$$ \ddot{\eta} = \frac{\Omega^2}{4}\frac{d^2\eta}{d\tau^2} $$
+$$ \frac{d^2u}{dt^2} = \left(\frac{\Omega}{2}\right)^2\frac{d^2u}{d\tau^2} $$
 
 For the \\( x \\) and \\(y\\)-directions, the equation of motion:
 
@@ -142,8 +146,10 @@ Notice the critical relationship between the stability parameters:
 
 $$ a_z = -2a_x, \qquad q_z = -2q_x $$
 
+*(Note: sign conventions for \\(q\\) vary across the literature. Some texts define the equation with \\(+2q\cos(2\tau)\\) and yield the opposite sign. Stability depends on \\(|q|\\) since the stability diagram is symmetric under \\(q \rightarrow -q\\).)*
+
 As we will see, the general stability diagram for Mathieu's equation is symmetrical upon reflection around \\(q = 0 \\), but _not_ around \\(a = 0\\).
-Thus, to find regions of overall 3D stability where the ion is trapped in all directions simultaneously, we must find an operating point \\( (a_x, q_x) \\) such that both \\( (a_x, q_x) \\) and \\( (a_z, q_z) = (-2a_x, -2q_x) \\) lie within stable regions of the generic Mathieu chart.
+Thus, to find regions of overall 3D stability for the **chamber trap** where the ion is trapped in all directions simultaneously, we must pull the \\(z\\)-region back into the \\((a_x, q_x)\\)-space. We are explicitly intersecting the stable sets in the same parameter plane to find an operating point \\( (a_x, q_x) \\) such that both \\( (a_x, q_x) \\) and \\( (-2a_x, -2q_x) \\) lie within stable regions of the generic Mathieu chart.
 {{< /alert >}}
 
 ##  Mathieu's Equation, solution, and stability
@@ -153,30 +159,30 @@ Thus, to find regions of overall 3D stability where the ion is trapped in all di
 Our derivation below can be found in greater detail and better form in many references <a id="cite-arscott-1964"></a>[[arscott-1964]](#ref-arscott-1964), <a id="cite-mclachlan-1947"></a>[[mclachlan-1947]](#ref-mclachlan-1947), <a id="cite-strang-2005"></a>[[strang-2005]](#ref-strang-2005), and our derivation follows the spirit of these. An equation such as Mathieu's equation,
 
 {{< alert title="Mathieu's equation" color="secondary" >}}
-$$\ddot{\eta} + (a - 2q \cos(2\tau))\eta = 0     $$
+$$\frac{d^2u}{d\tau^2} + (a - 2q \cos(2\tau))u = 0     $$
 {{< /alert >}}
 
 is of a class of differential equations of the type <a id="cite-boyce-1996"></a>[[boyce-1996]](#ref-boyce-1996),
 
-$$L[y] = y^{\prime \prime} + p(t)y^{\prime} + s(t)y = 0     $$
+$$L[u] = u^{\prime \prime} + p(\tau)u^{\prime} + s(\tau)u = 0     $$
 
-Any two fundamental solutions to this equation, \\(y_1(t), y_2(t)\\), will satisfy the set of boundary value equations,
+Any two fundamental solutions to this equation, \\(u_1(\tau), u_2(\tau)\\), will satisfy the set of boundary value equations,
 
 $$
 \begin{align*}
-c_1 y_1(t_0) + c_2y_2(t_0) &= y_0 \\\\
-c_1 y^{\prime}_1(t_0) + c_2y^{\prime}_2(t_0) &= y^{\prime}_0 
+c_1 u_1(\tau_0) + c_2u_2(\tau_0) &= u_0 \\\\
+c_1 u^{\prime}_1(\tau_0) + c_2u^{\prime}_2(\tau_0) &= u^{\prime}_0 
 \end{align*}
 $$
 
-This equation can be summarized in the matrix equation \\(Y\mathbf{c} = \mathbf{y}\\). We thus require 
+This equation can be summarized in the matrix equation \\(Y\mathbf{c} = \mathbf{u}\\). We thus require 
 that the determinant of Y (called the Wronskian in this context) is not equal to zero (guarantees that the two solutions are linearly independent),
 
 {{< alert title="Wronskian" color="secondary" >}}
 $$
 W(Y) = \det(Y)  = \begin{vmatrix}
-y_1(t_0) & y_2(t_0)\\\\
-y^{\prime}_1(t_0) & y^{\prime}_2(t_0)
+u_1(\tau_0) & u_2(\tau_0)\\\\
+u^{\prime}_1(\tau_0) & u^{\prime}_2(\tau_0)
 \end{vmatrix} \neq 0
 $$
 {{< /alert >}}
@@ -185,8 +191,8 @@ The set of even/odd solutions:
 
 $$
 \begin{aligned}
-y_1 : & \quad y(t_0) = 1, \quad y^{\prime}(t_0) = 0 \\\\
-y_2 : & \quad y(t_0) = 0, \quad y^{\prime}(t_0) = 1 \\\\
+u_1 : & \quad u(\tau_0) = 1, \quad u^{\prime}(\tau_0) = 0 \\\\
+u_2 : & \quad u(\tau_0) = 0, \quad u^{\prime}(\tau_0) = 1 \\\\
 & \quad \Rightarrow \quad W(Y) = \begin{vmatrix} 1 & 0 \\\\ 0 & 1 \end{vmatrix} = 1
 \end{aligned}
 $$
@@ -196,19 +202,19 @@ are thus fundamental sets of solutions. We may follow Floquet's theorem <a id="c
 
 
 {{< alert title="Floquet's Theorem" color="secondary" >}}
-For a linear differential equation with periodic coefficients, such as \\( y^{\prime\prime} + p(\eta) y = 0 \\), where \\( p(\eta) \\) is periodic with period \\( T \\), the solutions can be written in the form:
+For a linear differential equation with periodic coefficients, such as \\( u^{\prime\prime}(\tau) + p(\tau) u(\tau) = 0 \\), where \\( p(\tau) \\) is periodic with period \\( T \\), there exist solutions of the form:
 
 $$
-y(\eta + T) = \sigma y(\eta)
+u(\tau + T) = \sigma u(\tau)
 $$
 
-and so generally:
+for a Floquet mode, and so generally:
 
 $$
-y(\eta) = e^{i\beta \eta} \phi(\eta), 
+u(\tau) = e^{i\beta \tau} \phi(\tau), 
 $$
 
-where \\( \beta \\) is a constant (often called the characteristic exponent) and \\( \phi(\eta) \\) is a periodic function with the same period \\( T \\) as the coefficients. This form decouples the exponential growth/decay or oscillation from the periodic behavior of the solution. Stable solutions correspond to a real-valued characteristic exponent \\( \beta \in \mathbb{R} \\).
+where \\( \beta \\) is a constant (often called the characteristic exponent) and \\( \phi(\tau) \\) is a periodic function with the same period \\( T \\) as the coefficients. This form decouples the exponential growth/decay or oscillation from the periodic behavior of the solution. Stable solutions correspond to a real-valued characteristic exponent \\( \beta \in \mathbb{R} \\).
 
 {{< /alert >}}
 
@@ -218,8 +224,8 @@ To help visualize how these mathematical components interconnect, here is an out
 flowchart TD
     A["Mathieu's Equation"] --> B["Floquet's Theorem<br>(Assumes quasi-periodic solution)"]
     B --> C["Hill's Method<br>(Fourier Series Expansion)"]
-    C --> D["Infinite Determinant Δ(iµ) = 0"]
-    D --> E["Whittaker's Approach<br>(Complex Analysis via Liouville's Theorem)"]
+    C --> D["Infinite Determinant Δ(β) = 0"]
+    D --> E["Characteristic Equation Mapping<br>(via DLMF & Sträng)"]
     E --> F["Isolates Characteristic Exponent (β)"]
     F --> G["Sträng's Recursion Formula<br>(Calculates Seed Determinant Δ(0))"]
     G --> H["Numerical Stability Diagram Map"]
@@ -233,80 +239,80 @@ To understand how the solutions behave after a shift by the period \\(\pi\\), we
 
 $$
 \begin{aligned}
-w_1(\eta + \pi) &= \alpha w_1(\eta) + \beta w_2(\eta) \\\\
-w_1^{\prime}(\eta + \pi) &= \alpha w_1^{\prime}(\eta) + \beta w_2^{\prime}(\eta)
+u_1(\tau + \pi) &= A u_1(\tau) + B u_2(\tau) \\\\
+u_1^{\prime}(\tau + \pi) &= A u_1^{\prime}(\tau) + B u_2^{\prime}(\tau)
 \end{aligned}
 $$
 
-where \\(\alpha\\) and \\(\beta\\) are constants determined by the specific solution.
+where \\(A\\) and \\(B\\) are constants determined by the specific solution.
 
-To facilitate this analysis, we choose the following initial conditions at \\(\eta = 0\\):
+To facilitate this analysis, we choose the following initial conditions at \\(\tau = 0\\):
 
 $$
 \begin{aligned}
-w_1(0) &= 1, \quad &w_2(0) = 0, \\\\
-w_1^{\prime}(0) &= 0, \quad &w_2^{\prime}(0) = 1
+u_1(0) &= 1, \quad &u_2(0) = 0, \\\\
+u_1^{\prime}(0) &= 0, \quad &u_2^{\prime}(0) = 1
 \end{aligned}
 $$
 
-These conditions normalize the solutions so that \\(w_1(\eta)\\) and \\(w_2(\eta)\\) resemble basic functions like cosine and sine, respectively.
+These conditions normalize the solutions so that \\(u_1(\tau)\\) and \\(u_2(\tau)\\) resemble basic functions like cosine and sine, respectively.
 
-After one period \\(\pi\\), the solution \\(w_1\\) takes the values:
+After one period \\(\pi\\), the solution \\(u_1\\) takes the values:
 
 $$
 \begin{aligned}
-w_1(\pi) &= \alpha, \quad &w_1^{\prime}(\pi) = \beta
+u_1(\pi) &= A, \quad &u_1^{\prime}(\pi) = B
 \end{aligned}
 $$
 
-Here, \\(\alpha\\) and \\(\beta\\) represent the values of \\(w_1(\eta)\\) and its derivative at the point \\(\eta = \pi\\).
+Here, \\(A\\) and \\(B\\) represent the values of \\(u_1(\tau)\\) and its derivative at the point \\(\tau = \pi\\).
 
-The evolution of the solutions after a shift by \\(\pi\\) can be analyzed rigorously using the fundamental matrix \\(Y(\eta)\\):
+The evolution of the solutions after a shift by \\(\pi\\) can be analyzed rigorously using the fundamental matrix \\(Y(\tau)\\):
 
 $$
-Y(\eta) = \begin{pmatrix} w_1(\eta) & w_2(\eta) \\\\ w_1^{\prime}(\eta) & w_2^{\prime}(\eta) \end{pmatrix}
+Y(\tau) = \begin{pmatrix} u_1(\tau) & u_2(\tau) \\\\ u_1^{\prime}(\tau) & u_2^{\prime}(\tau) \end{pmatrix}
 $$
 
 Because of our chosen initial conditions, \\(Y(0) = I\\) (the identity matrix). After one period \\(\pi\\), the solutions' state is captured entirely by the **Monodromy matrix** \\(M = Y(\pi)\\):
 
 $$
-M = \begin{pmatrix} w_1(\pi) & w_2(\pi) \\\\ w_1^{\prime}(\pi) & w_2^{\prime}(\pi) \end{pmatrix}
+M = \begin{pmatrix} u_1(\pi) & u_2(\pi) \\\\ u_1^{\prime}(\pi) & u_2^{\prime}(\pi) \end{pmatrix}
 $$
 
-This matrix relates the solution state vector \\(w(\eta)\\) to its state one period later:
+The fundamental matrix satisfies the standard periodic-system identity:
 
 $$
-w(\eta + \pi) = M^T w(\eta)
+Y(\tau + \pi) = Y(\tau) M
 $$
 
-Also, via Floquet's theorem, we know that for a fundamental solution:
+Also, from Floquet's theorem, we seek fundamental solutions that simply scale by a multiplier \\(\sigma\\) over one period:
 
 $$
-w(\eta + \pi) = \sigma w(\eta)
+u(\tau + \pi) = \sigma u(\tau)
 $$
 
-Thus, according to Floquet's theorem, the constant \\(\sigma\\) must be an eigenvalue of the monodromy matrix \\(M^T\\). To find \\(\sigma\\), we solve the characteristic equation:
+Thus, the Floquet multipliers \\(\sigma\\) correspond precisely to the eigenvalues of the monodromy matrix \\(M\\). Boundedness corresponds to \\(|\sigma|=1\\) (or equivalently \\(\beta \in \mathbb{R}\\)). To find \\(\sigma\\), we solve the characteristic equation:
 
 $$
-|M^T - \sigma I| = \text{det} \begin{pmatrix} w_1(\pi) - \sigma & w_1^{\prime}(\pi) \\\\ w_2(\pi) & w_2^{\prime}(\pi) - \sigma \end{pmatrix} = 0
+|M - \sigma I| = \text{det} \begin{pmatrix} u_1(\pi) - \sigma & u_2(\pi) \\\\ u_1^{\prime}(\pi) & u_2^{\prime}(\pi) - \sigma \end{pmatrix} = 0
 $$
 
 Expanding the determinant:
 
 $$
-(w_1(\pi) - \sigma)(w_2^{\prime}(\pi) - \sigma) - w_1^{\prime}(\pi)w_2(\pi) = 0
+(u_1(\pi) - \sigma)(u_2^{\prime}(\pi) - \sigma) - u_1^{\prime}(\pi)u_2(\pi) = 0
 $$
 
 This equation is quadratic in \\(\sigma\\), and solving it gives the eigenvalues \\(\sigma_1\\) and \\(\sigma_2\\):
 
 $$
-\sigma = \frac{(w_1(\pi) + w_2^{\prime}(\pi)) \pm \sqrt{(w_1(\pi) + w_2^{\prime}(\pi))^2 - 4(w_1(\pi)w_2^{\prime}(\pi) - w_1^{\prime}(\pi)w_2(\pi))}}{2}
+\sigma = \frac{(u_1(\pi) + u_2^{\prime}(\pi)) \pm \sqrt{(u_1(\pi) + u_2^{\prime}(\pi))^2 - 4(u_1(\pi)u_2^{\prime}(\pi) - u_1^{\prime}(\pi)u_2(\pi))}}{2}
 $$
 
-The solutions \\(\sigma_1\\) and \\(\sigma_2\\) describe how the original solution scales after one period \\(\pi\\).
+The solutions \\(\sigma_1\\) and \\(\sigma_2\\) describe how the original solution scales after one period \\(\pi\\). Additionally, since Mathieu's equation lacks a first-derivative drag term, the Wronskian is constant over time, meaning \\(\det M = 1\\), which enforces the constraint \\(\sigma_1\sigma_2 = 1\\).
 
 
-Also according to Floquet's theorem, Mathieu's equation will have a solution of the form \\(e^{i\beta \eta} \phi(\eta)\\), where:
+Also according to Floquet's theorem, Mathieu's equation will have a solution of the form \\(e^{i\beta \tau} \phi(\tau)\\), where:
 
 $$
 \sigma = e^{i\beta \pi},
@@ -315,39 +321,41 @@ $$
 and:
 
 $$
-\phi(\eta) = e^{-i\beta \eta} y(\eta).
+\phi(\tau) = e^{-i\beta \tau} u(\tau).
 $$
 
 This relationship arises because the Floquet multiplier \\(\sigma\\) can be expressed as an exponential term, with \\(\beta\\) being the characteristic exponent. Stable bounded solutions demand that \\(\sigma\\) lies on the complex unit circle, meaning \\(\beta\\) must strictly be a real number.
 
-Given this form, the function \\(\phi(\eta)\\) is periodic with period \\(\pi\\), ensuring:
+Given this form, the function \\(\phi(\tau)\\) is periodic with period \\(\pi\\), ensuring:
 
 $$
-\phi(\eta + \pi) = e^{-i\beta (\eta + \pi)} y(\eta + \pi) = e^{-i\beta \eta} y(\eta) = \phi(\eta).
+\phi(\tau + \pi) = e^{-i\beta (\tau + \pi)} u(\tau + \pi) = e^{-i\beta \tau} u(\tau) = \phi(\tau).
 $$
 
 This confirms that the solutions exhibit the quasi-periodic behavior predicted by Floquet's theorem, with the eigenvalue \\(\sigma\\) playing a central role in describing the solution's periodicity and scaling.
 
 ### 2.2. Hill's Method solution
 
-With Floquet's theorem we assume a series solution, due to G. W. Hill,
+With Floquet's theorem we assume a series solution, due to G. W. Hill (for authoritative expositions on Hill's equations, see Magnus & Winkler <a id="cite-magnus-1966"></a>[[magnus-1966]](#ref-magnus-1966) and the NIST DLMF <a id="cite-dlmf-mathieu"></a>[[dlmf-mathieu]](#ref-dlmf-mathieu)),
 
 {{< alert title="Series solution to Mathieu's equation" color="primary" >}}
-$$w = e^{i\beta\eta}\phi(\eta) = e^{i\beta\eta}\sum_{r=-\infty}^{\infty} c_{2r}e^{2ri\eta} = \sum_{r=-\infty}^{\infty} c_{2r}e^{i(\beta+2r)\eta}     $$
+$$u(\tau) = e^{i\beta\tau}\phi(\tau) = e^{i\beta\tau}\sum_{r=-\infty}^{\infty} c_{2r}e^{2ri\tau} = \sum_{r=-\infty}^{\infty} c_{2r}e^{i(\beta+2r)\tau}     $$
 (essentially a Fourier expansion, where we have the 2 multiplier since the original function is periodic in \\(\pi\\)).
 {{< /alert >}}
 
 When we put this into Mathieu's equation,
 
-$$\sum_{r=-\infty}^{\infty} c_{2r}\left(-(\beta + 2r)^2 + a - 2q\left(\frac{e^{2i\eta} + e^{-2i\eta}}{2}\right)\right)e^{i(\beta+2r)\eta} = 0$$
+$$\sum_{r=-\infty}^{\infty} c_{2r}\left(-(\beta + 2r)^2 + a - 2q\left(\frac{e^{2i\tau} + e^{-2i\tau}}{2}\right)\right)e^{i(\beta+2r)\tau} = 0$$
 
 matching terms in power of r, we get the equation
 
 $$-qc_{2r-2} + (a - (\beta + 2r)^2)c_{2r} - qc_{2r+2} = 0     $$
 
-Dividing by the middle term,
+Multiplying through by \\(-1\\) and then dividing by the middle term yields:
 
-$$\frac{q}{(\beta + 2r)^2 - a}c_{2r-2} - c_{2r} + \frac{q}{(\beta + 2r)^2 - a}c_{2r+2} = 0     $$
+$$
+\frac{q}{(\beta + 2r)^2 - a}c_{2r-2} + c_{2r} + \frac{q}{(\beta + 2r)^2 - a}c_{2r+2} = 0
+$$
 
 To simplify our discussion, let's write
 
@@ -363,45 +371,21 @@ $$\Delta(\beta) = \begin{vmatrix}
 & & & & \ddots
 \end{vmatrix} = 0     $$
 
-But of course, this is not a simple object to understand and solve. We can approach this problem from a rather clever angle introduced by E. T. Whittaker.
+### 2.2b. Characteristic Equation for \\(\beta\\)
 
-### 2.2b. Whittaker's approach
-
-Consider the function
-
-$$\lambda = \frac{1}{\cos \pi\beta - \cos \pi\sqrt{a}}$$
-
-Like our determinant, \\(\lambda\\) has a simple pole at \\(a = (\beta + 2r)^2\\), so that the function
-
-$$\zeta = \Delta(\beta) - \kappa\lambda$$
-
-has no singularities if \\(\kappa\\) is chosen properly and is bound at \\(\beta \rightarrow \infty\\), where \\(\Delta(\beta) = 1\\) since the \\(\gamma\\) functions all vanish and the diagonal term is all that remains, and \\(\lambda \rightarrow 0\\) since \\(\cosh(x)\\) in the denominator limits to infinity.
-
-$$\varpi = \Delta(\beta) - \kappa\lambda \rightarrow 1 - 0$$
-
-By Liouville's theorem (of complex calculus), since this limits to a constant, it is a constant always, so we have
-
-$$\kappa = (\Delta(\beta) - 1)\lambda^{-1}$$
-
-Next we consider the \\(\beta = 0\\) case and find,
+The expansion requires the infinite determinant \\(\Delta(\beta)\\) to vanish. With this specific normalization of \\(\Delta(\beta)\\), the literature yields an identity relating the infinite determinant directly to the characteristic Mathieu exponent \\(\beta\\) and the evaluated seed determinant at zero, \\(\Delta(0)\\). Following the established derivations in the literature (e.g. NIST DLMF <a id="cite-dlmf-mathieu"></a>[[dlmf-mathieu]](#ref-dlmf-mathieu) section 28.29, and Sträng <a id="cite-strang-2005"></a>[[strang-2005]](#ref-strang-2005)), the characteristic equation mapping is given by:
 
 $$
-\begin{aligned}
-\kappa &= (\Delta(0) - 1)(1 - \cos \pi\sqrt{a}) \\\\
-\Rightarrow \frac{\Delta(\beta) - 1}{\lambda} &= (\Delta(0) - 1)(1 - \cos \pi\sqrt{a})
-\end{aligned}
+\cos \pi \beta-\cos \pi\sqrt{a} = (1-\Delta(0))(1-\cos \pi\sqrt{a}) 
 $$
 
-Next we suppose that \\(\beta\\) is chosen to satisfy our requirement that the determinant vanish. We thus have
+From this, we trivially extract \\(\beta\\):
 
 $$
-\begin{aligned}
-\cos \pi \beta-\cos \pi\sqrt{a} &= (1-\Delta(0))(1-\cos \pi\sqrt{a}) \\\\
-\Rightarrow \beta &= \frac{1}{\pi}\cos^{-1}(1 - \Delta(0)(1 - \cos \pi\sqrt{a}))
-\end{aligned}
+\beta = \frac{1}{\pi}\cos^{-1}(1 - \Delta(0)(1 - \cos \pi\sqrt{a}))
 $$
 
-Recall that our stable solutions require \\(\beta \in \mathbb{R}\\). The mathematical boundary where stability switches to instability occurs when the argument sent to \\(\cos^{-1}\\) breaches the domain \\([-1, 1]\\), at which point \\(\beta\\) forces exponential divergence.
+Recall that our stable solutions require \\(\beta \in \mathbb{R}\\). The mathematical boundary where stability switches to instability occurs when the argument sent to \\(\cos^{-1}\\) breaches the domain \\([-1, 1]\\), at which point \\(\beta\\) becomes complex and forces exponential divergence.
 
 But first we must calculate \\(\Delta(0)\\). 
 This task has been made exceedingly simple by the work of J. E. Sträng <a id="cite-strang-2005"></a>[[strang-2005]](#ref-strang-2005) who has found an efficient recursion formula.
@@ -412,18 +396,18 @@ First we note that by the symmetry of \\(\Delta(0)\\), we have \\(\gamma_{-n} = 
 
 Sträng solved this elegantly by recognizing sub-patterns in the diagonal blocks of the Mathieu matrix, decomposing the nested subset matrix $A_i$ and utilizing recursive Laplace expansion relations.
 
-Without reproducing the full lengthy inductive steps (which trace the removal of matrix columns—right, left, up, and down borders—for nested sub-determinants), the result condenses marvelously. 
+Without reproducing the full lengthy inductive steps (which trace the removal of matrix columns - right, left, up, and down borders - for nested sub-determinants), the result condenses marvelously. 
 By defining successive determinants $\Delta_i$, as well as:
 
 $$\alpha_{2i} = \gamma_{2i}\gamma_{2(i-1)}$$ 
 
 and 
 
-$$\beta_{2i} = 1 - \alpha_{2i}$$
+$$b_{2i} = 1 - \alpha_{2i}$$
 
 Sträng derives the computationally trivial recursive state:
 
-$$\Delta_i = \beta_{2i}\Delta_{i-1} - \alpha_{2i}\beta_{2i}\Delta_{i-2} + \alpha_{2i}\alpha_{2(i-1)}^2\Delta_{i-3}     $$
+$$\Delta_i = b_{2i}\Delta_{i-1} - \alpha_{2i}b_{2i}\Delta_{i-2} + \alpha_{2i}\alpha_{2(i-1)}^2\Delta_{i-3}     $$
 
 We can recursively solve for \\(\Delta(0) = \lim_{i\to\infty} \Delta_i\\) to as much accuracy as necessary. We first must "seed" the recursion with the first three \\(\Delta_i\\). This can be done by hand, though we have deferred to the kindness of our computer algebraic program Maple instead.
 
@@ -456,7 +440,7 @@ db:=det(B);
 
 Any algebraic program can get these for us, and below we share python code given that Python is more widely available.
 
-Our program seeks to find regions where the bounded stable solutions of Mathieu's equations exist.
+Our program seeks to find regions where the bounded stable solutions of Mathieu's equations exist. Note that points where \\((2r)^2 \approx a\\) sit on the exact poles of the determinant formulation; the \\(10^{-12}\\) guard in the code loops below is purely a pragmatic scanning hack to keep the arrays stable, which will slightly blur calculations precisely on the boundaries.
 
 By computing \\(\Delta(0)\\), we construct a Boolean stability mask across the target variable ranges. We check the criteria:
 
@@ -471,21 +455,26 @@ Our code loops through the \\(a\\) and \\(q\\) parameter grid, outputting the st
 {{< figure src="mathieu_stability_diagram_01.png" caption="Stability diagram for Mathieu's general equation">}} 
 
 
-For the quadrupole field, the rf linear Paul trap, we have the following compound stability regime: the stable regions are those in which the fundamental $(a_x, q_x)$ stability diagrams intersect with the scaled mapping for the transverse $(a_z = -2a_x, q_z = -2q_x)$ axes:
+For the quadrupole field, we have the following compound stability regime: the stable regions are those in which the fundamental $(a_x, q_x)$ stability diagrams intersect with the scaled mapping for the transverse $(a_z = -2a_x, q_z = -2q_x)$ axes, dictating the operation of the **3D rf Paul trap (endcap/chamber)**:
 
-{{< figure src="mathieu_stability_diagram_rf_gpu.png" caption="Combined stability diagram bounded region; stable physical configurations must exist inside intersection spaces ensuring containment in all 3 spatial constraints.">}} 
+{{< figure src="mathieu_stability_diagram_rf_gpu.png" caption="Combined stability diagram bounded region; stable physical configurations must exist inside intersection spaces ensuring containment in all 3 spatial constraints for the 3D Chamber trap.">}} 
 
-To briefly connect this pure formalism back to standard trapped-ion physics terminology: these stable oscillatory orbits decompose neatly into two superposed elements—a very slow harmonic trap frequency oscillation often called the **secular motion**, riding atop a fast, micro-amplitude jitter occurring perfectly at the high radio drive frequency $\Omega$ called the **micromotion**.
+To briefly connect this pure formalism back to standard trapped-ion physics terminology: these stable oscillatory orbits decompose neatly into two superposed elements: a very slow harmonic trap frequency oscillation often called the **secular motion**, riding atop a fast, small-amplitude micromotion occurring perfectly at the high radio drive frequency $\Omega$.
+
+This yields the deeply useful **pseudopotential approximation** (often called the Dehmelt approximation <a id="cite-dehmelt-1968"></a>[[dehmelt-1968]](#ref-dehmelt-1968)). For \\(|q| \ll 1\\) (and \\(a\\) not too large), the rapidly oscillating micromotion effectively creates a time-averaged harmonic well (the pseudopotential). The ion behaves as if it's trapped in a static harmonic oscillator with secular frequency:
+$$\omega_{\text{sec}} \approx \frac{\beta\Omega}{2}$$
+where, for small driving amplitudes \\(|q| \ll 1\\), the characteristic exponent itself can be approximated as:
+$$\beta \approx \sqrt{a + \frac{q^2}{2}}$$
+(For a deeper dive into this secular motion + micromotion decomposition, see Leibfried et al. <a id="cite-leibfried-2003"></a>[[leibfried-2003]](#ref-leibfried-2003)).
 
 ## Synthesis
 
 * The stability diagram derived from Mathieu's equation can be mapped to the physics of keeping ions stably confined. 
 * The parameter \\(\beta\\), often referred to as the characteristic Mathieu exponent, corresponds physically to the stability of the ion's trajectory in the trap.
   * When \\(\beta\\) is strictly real, the ion oscillates within a bounded region around the center of the trap, representing an orbit comprised of slow harmonic secular motion coupled with fast driving micromotion.
-  * However, when \\(\beta\\) becomes complex, the motion becomes unstable, leading to unbounded oscillations and instantaneous escape from the trap.
+  * However, when \\(\beta\\) becomes complex, the motion becomes unstable, leading to unbounded oscillations and exponential growth out of the trap.
 * The stability diagram thus maps out regions in the parameter space (characterized by the parameters \\(a\\) and \\(q\\)) which we can map back to physical variables to design functional ion traps.
-* Importantly, we must find regions where both the \\(r\\) and the \\(z\\) equations of motion are stable, which corresponds to points on the combined Mathieu's stability diagram where there is an intersection of stability regions between them.
-* \\(\mu\\)'s magnitude determines frequency of oscillations of the ion orbits 
+* Importantly, we must find regions where both the radial (\\(x,y\\)) and the axial (\\(z\\)) equations of motion are stable, which corresponds to points on the combined Mathieu's stability diagram where there is an intersection of stability regions between them.
 
 ## Code calculating the stability regions of Mathieu's equation
 
@@ -862,9 +851,9 @@ def calculate_stability(q_range, a_range):
             # Sträng's iteration method
             for m in range(4, 101):
                 alpha = e[2*m] * e[2*(m-1)]
-                beta = 1 - alpha
+                b = 1 - alpha
                 alpha1 = e[2*(m-1)] * e[2*(m-2)]
-                d[m] = beta * d[m-1] - alpha * beta * d[m-2] + alpha * alpha1**2 * d[m-3]
+                d[m] = b * d[m-1] - alpha * b * d[m-2] + alpha * alpha1**2 * d[m-3]
             
             # Boolean stability test
             if a >= 0:
@@ -916,7 +905,7 @@ func main() {
     var m int
     var e [250]float64
     var d [101]float64
-    var alpha, beta, alpha1, arg, a, q float64
+    var alpha, b, alpha1, arg, a, q float64
     var stable int
     const pi = math.Pi
 
@@ -955,9 +944,9 @@ func main() {
             // Strang's iteration method
             for m = 4; m <= 100; m++ {
                 alpha = e[2*m] * e[2*(m-1)]
-                beta = 1 - alpha
+                b = 1 - alpha
                 alpha1 = e[2*(m-1)] * e[2*(m-2)]
-                d[m] = beta*d[m-1] - alpha*beta*d[m-2] + alpha*alpha1*alpha1*d[m-3]
+                d[m] = b*d[m-1] - alpha*b*d[m-2] + alpha*alpha1*alpha1*d[m-3]
             }
 
             // Boolean stability test
@@ -994,7 +983,7 @@ int main() {
     }
 
     int m, stable;
-    double e[250], d[101], alpha, beta, alpha1, arg, a, q, denom;
+    double e[250], d[101], alpha, b, alpha1, arg, a, q, denom;
     const double pi = 3.14159265358979323846;
 
     // Loop over the desired a-q region
@@ -1030,10 +1019,10 @@ int main() {
             // Strang's iteration method
             for (m = 4; m <= 100; m++) {
                 alpha = e[2 * m] * e[2 * (m - 1)];
-                beta = 1 - alpha;
+                b = 1 - alpha;
                 alpha1 = e[2 * (m - 1)] * e[2 * (m - 2)];
-                d[m] = beta * d[m - 1] 
-                       - alpha * beta * d[m - 2] 
+                d[m] = b * d[m - 1] 
+                       - alpha * b * d[m - 2] 
                        + alpha * alpha1 * alpha1 * d[m - 3];
             }
 
@@ -1066,11 +1055,21 @@ int main() {
 
 ## References
 
-- **[paul-1990]** **<a id="ref-paul-1990"></a>Paul, W. (1990).** *Electromagnetic traps for charged and neutral particles.* Reviews of Modern Physics. [↩](#cite-paul-1990)
+- **[paul-1990]** **<a id="ref-paul-1990"></a>Paul, W. (1990).** *[Electromagnetic traps for charged and neutral particles](https://link.aps.org/doi/10.1103/RevModPhys.62.531).* Reviews of Modern Physics. [↩](#cite-paul-1990)
+- **[paul-steinwedel-1953]** **<a id="ref-paul-steinwedel-1953"></a>Paul, W., Steinwedel, H. (1953).** *A New Mass Spectrometer without a Magnetic Field.* Z. Naturforsch. 8a, 448-450. [↩](#cite-paul-steinwedel-1953)
+- **[ghosh-1995]** **<a id="ref-ghosh-1995"></a>Ghosh, P. K. (1995).** *[Ion Traps](https://global.oup.com/academic/product/ion-traps-9780198539957).* Oxford University Press. [↩](#cite-ghosh-1995)
+- **[major-2005]** **<a id="ref-major-2005"></a>Major, F. G., Gheorghe, V. N., Werth, G. (2005).** *Charged Particle Traps.* Springer. [↩](#cite-major-2005)
+- **[march-2005]** **<a id="ref-march-2005"></a>March, R. E., Todd, J. F. J. (2005).** *Quadrupole Ion Trap Mass Spectrometry.* Wiley. [↩](#cite-march-2005)
+- **[cirac-1995]** **<a id="ref-cirac-1995"></a>Cirac, J. I., Zoller, P. (1995).** *[Quantum Computations with Cold Trapped Ions](https://link.aps.org/doi/10.1103/PhysRevLett.74.4091).* Physical Review Letters. [↩](#cite-cirac-1995)
+- **[haffner-2008]** **<a id="ref-haffner-2008"></a>Häffner, H., Roos, C. F., Blatt, R. (2008).** *[Quantum computing with trapped ions](https://www.sciencedirect.com/science/article/pii/S0370157308003463).* Physics Reports. [↩](#cite-haffner-2008)
+- **[dehmelt-1968]** **<a id="ref-dehmelt-1968"></a>Dehmelt, H. G. (1968).** *[Radiofrequency spectroscopy of stored ions I: Storage](https://doi.org/10.1016/S0065-2199(08)60170-0).* Advances in Atomic and Molecular Physics, Vol. 3, 53-72. [↩](#cite-dehmelt-1968)
+- **[leibfried-2003]** **<a id="ref-leibfried-2003"></a>Leibfried, D., et al. (2003).** *[Quantum dynamics of single trapped ions](https://link.aps.org/doi/10.1103/RevModPhys.75.281).* Rev. Mod. Phys. [↩](#cite-leibfried-2003)
 - **[thompson-2002]** **<a id="ref-thompson-2002"></a>Thompson, R.I., Harmon, T.J., Ball, M.G. (2002).** *The rotating-saddle trap: a mechanical analogy to RF-electric-quadrupole ion trapping?* Canadian Journal of Physics. [↩](#cite-thompson-2002)
 - **[arscott-1964]** **<a id="ref-arscott-1964"></a>Arscott, F. M. (1964).** *Periodic Differential Equations: An Introduction to Mathieu, Lamé, and Allied Functions.* The MacMillan Company, New York. [↩](#cite-arscott-1964)
 - **[mclachlan-1947]** **<a id="ref-mclachlan-1947"></a>McLachlan, N. W. (1947).** *Theory and Application of Mathieu Functions.* Oxford at the Clarendon Press. [↩](#cite-mclachlan-1947)
 - **[strang-2005]** **<a id="ref-strang-2005"></a>Sträng, J. E. (2005).** *[On the characteristic exponents of Floquet solutions to the Mathieu equation](http://www.citebase.org/cgi-bin/citations?id=oai:arXiv.org:math-ph/0510076).* Acad. Roy. Belg. Bull. Cl. Sci. [↩](#cite-strang-2005)
-- **[leibfried-2003]** **<a id="ref-leibfried-2003"></a>Leibfried, D., et al. (2003).** *Quantum dynamics of single trapped ions.* Rev. Mod. Phys. [↩](#cite-leibfried-2003)
 - **[boyce-1996]** **<a id="ref-boyce-1996"></a>Boyce, W. E., DiPrima, R. C. (1996).** *Elementary Differential Equations and Boundary Value Problems.* John Wiley & Sons, Inc. [↩](#cite-boyce-1996)
 - **[king-1999]** **<a id="ref-king-1999"></a>King, B. E. (1999).** *[Quantum State Engineering and Information Processing with Trapped Ions](http://jilawww.colorado.edu/www/pubs/thesis/king/).* Ph.D. Thesis. [↩](#cite-king-1999)
+- **[dlmf-mathieu]** **<a id="ref-dlmf-mathieu"></a>NIST.** *[DLMF: §28 Mathieu Functions and Hill’s Equation](https://dlmf.nist.gov/28).* NIST Digital Library of Mathematical Functions. [↩](#cite-dlmf-mathieu)
+- **[magnus-1966]** **<a id="ref-magnus-1966"></a>Magnus, W., Winkler, S. (1966).** *[Hill's Equation](https://books.google.com/books/about/Hill_s_Equation.html?id=gB0RpZOD-Y0C).* Interscience Publishers. [↩](#cite-magnus-1966)
+- **[earnshaw-1842]** **<a id="ref-earnshaw-1842"></a>Earnshaw, S. (1842).** *On the Nature of the Molecular Forces which Regulate the Constitution of the Luminiferous Ether.* Transactions of the Cambridge Philosophical Society, Vol. 7, 97-112. [↩](#cite-earnshaw-1842)
