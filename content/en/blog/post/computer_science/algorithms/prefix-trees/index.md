@@ -795,7 +795,7 @@ By throwing out pointers entirely, succinct structures map the topology directly
 
 ## Searching Without Being Searched: Data-Oblivious Tries
 
-{{< alert title="The &quot;Oblivious&quot; Nomenclature Collision" color="warning" >}}
+{{< alert title="The "Oblivious" Nomenclature Collision" color="warning" >}}
 In computer science, the prefix "oblivious" is heavily overloaded depending on the subfield:
 *   **Data-Oblivious (Security)**: Algorithms whose memory access patterns do not leak information about the underlying data or queries.
 *   **Cache-Oblivious (Performance)**: Algorithms that perform optimally across memory hierarchies without knowing the specific hardware cache line size $B$ (e.g., Cache-Oblivious search trees / van Emde Boas layouts).
