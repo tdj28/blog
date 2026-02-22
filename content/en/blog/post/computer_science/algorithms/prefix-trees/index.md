@@ -1,6 +1,6 @@
 ---
 title: "Searching Without Being Searched: The Architecture of Oblivious Prefix Trees"
-date: 2026-02-17
+date: 2026-02-21
 draft: false
 authors: ["t-jones", "gemini-3-pro"]
 comments: true
