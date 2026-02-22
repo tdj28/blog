@@ -5,13 +5,15 @@ draft: false
 authors: ["t-jones", "gemini-3-pro"]
 comments: true
 showMath: true
-summary: "A rigorous analysis of Prefix Trees (Tries) and Radix Trees, covering information-theoretic bounds, memory hierarchy implications, and compact implementation strategies."
+summary: "A rigorous analysis of Prefix Trees (Tries) and Radix Trees, evolving from memory hierarchy constraints to cryptographically secure Data-Oblivious architectures."
 tags:
   - algorithms
   - data-structures
   - tries
   - string-search
-  - computer-science
+  - security
+  - privacy
+  - oram
 categories:
   - computer-science
   - algorithms
@@ -25,6 +27,16 @@ in education. AI tooling was used to accelerate
 content creation and peer review the
 accuracy of the content.
 {{< /alert >}}
+
+Imagine querying a massive, highly sensitive database, such as a national genetic registry or a financial ledger hosted on **an AWS GovCloud**. You encrypt your query. The database is loaded into a Trusted Execution Environment (TEE) like Intel SGX, designed to reduce the trusted computing base and protect memory contents from the host OS. You execute the search. You think you're secure.
+
+But you're not.
+
+While TEEs protect against **privileged software attackers** (like a compromised hypervisor monitoring page faults or cache behavior) reading plaintext memory, they do not inherently defend against **physical attackers** probing the hardware. As the CPU processes your query, the motherboard's memory bus lights up. A physical attacker monitoring the memory address trace on the bus can track exactly which nodes in the index were accessed. By recording this *access pattern*, they can often fully reconstruct your query without ever breaking the cryptography. 
+
+To achieve true, zero-trust search capabilities on public infrastructure, we cannot merely encrypt the data; we must continuously and dynamically shuffle the structure itself during traversal, rendering the sequence of memory accesses **computationally indistinguishable** from random noise. This is the domain of **Oblivious RAM (ORAM)** and **Data-Oblivious Data Structures**.
+
+But before we can build an Oblivious Trie capable of hiding from the physical server hardware itself, we first need to master the topological foundations that make prefix searching possible at scale.
 
 ## Why Tries?
 
@@ -54,6 +66,10 @@ flowchart TD
 {{< /mermaid >}}
 
 Enter the **Prefix Tree**, or **Trie** (derived from *re**trie**val* <a id="cite-fredkin-1960"></a>[[fredkin-1960]](#ref-fredkin-1960)). It is a tree data structure that decomposes the key itself to structurally guide the search, shifting the complexity paradigm from **comparison-based** to **digital** (in the bit-wise sense) search.
+
+{{< alert title="Pronunciation" color="info" >}}
+Although Edward Fredkin originally intended for the term to be pronounced exactly like "tree" (derived from re**trie**val), the computer science community overwhelmingly pronounces it as "**try**" (rhyming with "pie") to auditorily distinguish the specific structure from a standard search "tree" during spoken conversation.
+{{< /alert >}}
 
 Let's look at a Trie containing the words: **"to", "tea", "ted", "ten", "A", "i", "in", "inn"**.
 
@@ -191,15 +207,13 @@ public:
 {{% /tab %}}
 {{% /tabs %}}
 
-### Insertion & Search Logic
+### Core Operations: Insertion
 
-Insertion is a simple pointer-chasing traversal using the characters of the key as instructions. We create nodes on demand.
+Insertion is a simple pointer-chasing traversal using the characters of the key as instructions. We create missing nodes on demand and flag the final node as a valid word.
 
-{{% tabs "trie-insert-search" %}}
+{{% tabs "trie-insert" %}}
 {{% tab "Python" %}}
 ```python
-from collections.abc import Iterator
-
 class Trie:
     def __init__(self):
         self.root = TrieNode()
@@ -211,6 +225,60 @@ class Trie:
                 node.children[char] = TrieNode()
             node = node.children[char]
         node.is_end_of_word = True
+```
+{{% /tab %}}
+{{% tab "Go" %}}
+```go
+func (t *Trie) Insert(word string) {
+    node := t.Root
+    for i := 0; i < len(word); i++ {
+        ch := word[i] // Byte indexing (bytewise UTF-8 traversal)
+        if node.Children[ch] == nil {
+            node.Children[ch] = NewTrieNode()
+        }
+        node = node.Children[ch]
+    }
+    node.IsEndOfWord = true
+}
+```
+{{% /tab %}}
+{{% tab "C++" %}}
+```cpp
+class Trie {
+    TrieNodePool pool_;
+    TrieNode* root_;
+public:
+    Trie() : root_(pool_.allocate()) {}
+
+    void insert(const std::string& word) {
+        TrieNode* node = root_;
+        for (char ch : word) {
+            if (node->children.find(ch) == node->children.end()) {
+                node->children[ch] = pool_.allocate();
+            }
+            node = node->children[ch];
+        }
+        node->is_end_of_word = true;
+    }
+// ...
+```
+{{% /tab %}}
+{{% /tabs %}}
+
+### Core Operations: Search & Navigation
+
+To search for an exact match or a prefix, we walk the tree following the characters. If a path breaks early, the word isn't in the tree. Because this traversal logic is shared, it's best to abstract it into a generic `navigate` helper.
+
+{{% tabs "trie-search" %}}
+{{% tab "Python" %}}
+```python
+    def _navigate(self, prefix: str) -> TrieNode | None:
+        node = self.root
+        for char in prefix:
+            if char not in node.children:
+                return None
+            node = node.children[char]
+        return node
 
     def search(self, word: str) -> bool:
         node = self._navigate(word)
@@ -218,6 +286,64 @@ class Trie:
 
     def starts_with(self, prefix: str) -> bool:
         return self._navigate(prefix) is not None
+```
+{{% /tab %}}
+{{% tab "Go" %}}
+```go
+func (t *Trie) navigate(prefix string) *TrieNode {
+    node := t.Root
+    for i := 0; i < len(prefix); i++ {
+        ch := prefix[i]
+        if node.Children[ch] == nil {
+            return nil
+        }
+        node = node.Children[ch]
+    }
+    return node
+}
+
+func (t *Trie) Search(word string) bool {
+    node := t.navigate(word)
+    return node != nil && node.IsEndOfWord
+}
+
+func (t *Trie) StartsWith(prefix string) bool {
+    return t.navigate(prefix) != nil
+}
+```
+{{% /tab %}}
+{{% tab "C++" %}}
+```cpp
+    bool search(const std::string& word) const {
+        const TrieNode* node = navigate(word);
+        return node != nullptr && node->is_end_of_word;
+    }
+
+private:
+    const TrieNode* navigate(const std::string& prefix) const {
+        const TrieNode* node = root_;
+        for (char ch : prefix) {
+            auto it = node->children.find(ch);
+            if (it == node->children.end()) return nullptr;
+            node = it->second;
+        }
+        return node;
+    }
+};
+```
+{{% /tab %}}
+{{% /tabs %}}
+
+### Advanced Operations: Autocomplete & Deletion
+
+Because a Trie groups common prefixes, **autocomplete** (finding all valid suffixes given a prefix) is naturally executed by navigating to the prefix's terminal node and initiating a Depth First Search (DFS) from there. 
+
+**Deletion** is slightly trickier: we must recursively prune nodes starting from the leaf working upward, but *stop* pruning if a node is shared by another word (i.e. has sibling branches) or is itself flagged as a valid word.
+
+{{% tabs "trie-advanced" %}}
+{{% tab "Python" %}}
+```python
+    from collections.abc import Iterator
 
     def complete(self, prefix: str, limit: int = 10) -> Iterator[str]:
         """Generator to find top-k autocomplete suggestions."""
@@ -263,87 +389,6 @@ class Trie:
 
         deleted, _ = rec(self.root, 0)
         return deleted
-        
-    def _navigate(self, prefix: str) -> TrieNode | None:
-        node = self.root
-        for char in prefix:
-            if char not in node.children:
-                return None
-            node = node.children[char]
-        return node
-```
-{{% /tab %}}
-{{% tab "Go" %}}
-```go
-func (t *Trie) Insert(word string) {
-    node := t.Root
-    for i := 0; i < len(word); i++ {
-        ch := word[i] // Byte indexing (bytewise UTF-8 traversal)
-        if node.Children[ch] == nil {
-            node.Children[ch] = NewTrieNode()
-        }
-        node = node.Children[ch]
-    }
-    node.IsEndOfWord = true
-}
-
-func (t *Trie) Search(word string) bool {
-    node := t.navigate(word)
-    return node != nil && node.IsEndOfWord
-}
-
-func (t *Trie) StartsWith(prefix string) bool {
-    return t.navigate(prefix) != nil
-}
-
-func (t *Trie) navigate(prefix string) *TrieNode {
-    node := t.Root
-    for i := 0; i < len(prefix); i++ {
-        ch := prefix[i]
-        if node.Children[ch] == nil {
-            return nil
-        }
-        node = node.Children[ch]
-    }
-    return node
-}
-```
-{{% /tab %}}
-{{% tab "C++" %}}
-```cpp
-class Trie {
-    TrieNodePool pool_;
-    TrieNode* root_;
-public:
-    Trie() : root_(pool_.allocate()) {}
-
-    void insert(const std::string& word) {
-        TrieNode* node = root_;
-        for (char ch : word) {
-            if (node->children.find(ch) == node->children.end()) {
-                node->children[ch] = pool_.allocate();
-            }
-            node = node->children[ch];
-        }
-        node->is_end_of_word = true;
-    }
-
-    bool search(const std::string& word) const {
-        const TrieNode* node = navigate(word);
-        return node != nullptr && node->is_end_of_word;
-    }
-
-private:
-    const TrieNode* navigate(const std::string& prefix) const {
-        const TrieNode* node = root_;
-        for (char ch : prefix) {
-            auto it = node->children.find(ch);
-            if (it == node->children.end()) return nullptr;
-            node = it->second;
-        }
-        return node;
-    }
-};
 ```
 {{% /tab %}}
 {{% /tabs %}}
@@ -395,7 +440,9 @@ $$ V_{\text{nodes}} = \left| \{\text{prefix}(x,i) \mid x \in D, 0 \le i \le |x|\
 
 If you model termination as an explicit $\text{EOS}$ edge, this formula counts every node strictly including the terminal leaves. If you instead model termination as an `is_end_of_word` Boolean flag, the prefix set is taken strictly over the raw key (excluding $\text{EOS}$) and the terminal states are absorbed into the existing nodes.
 
-This exposes the "Sparse Node" problem. If we insert "apple" and "application", the shared path `a-p-p-l` (4 nodes) is amortized. But if we insert "zenith" and no other word starts with 'z', we pay for 6 nodes, 5 of which have degree 1. It is exactly this sparse node waste that motivates advanced designs like the Adaptive Radix Tree (ART) and burst tries.
+{{< alert title="The Sparse Node Problem" color="warning" >}}
+If we insert "apple" and "application", the shared path `a-p-p-l` (4 nodes) is amortized. But if we insert "zenith" and no other word starts with 'z', we pay for 6 nodes, 5 of which have degree 1. It is exactly this sparse node waste that motivates advanced designs like the Adaptive Radix Tree (ART) and burst tries.
+{{< /alert >}}
 
 ### The Alphabet and Memory Blowups
 
@@ -411,7 +458,9 @@ To bridge the gap between hash maps and Tries, **Hash-Array Mapped Tries (HAMT)*
 
 When using strings, handling full Unicode is challenging. A naive array for 149,000+ characters will blow out cache lines. Real-world Tries almost always decompose strings into **bytes** (UTF-8 encoded), restricting the local alphabet to size 256.
 
+{{< alert title="Unicode Normalization" color="info" >}}
 You must also **normalize and case-fold** inputs before insertion to ensure equivalent strings follow the same path.
+{{< /alert >}}
 
 {{% tabs "unicode-norm" %}}
 {{% tab "Python" %}}
@@ -428,7 +477,7 @@ def normalize_key(s: str) -> str:
 
 ## Radix Trees (Patricia Tries)
 
-The **Radix Tree** (or Patricia Trie <a id="cite-morrison-1968"></a>[[morrison-1968]](#ref-morrison-1968)) explicitly attacks space inefficiency by compressing chains of single-child nodes.
+The **Radix Tree** (or Patricia Trie <a id="cite-morrison-1968"></a>[[morrison-1968]](#ref-morrison-1968)) solves this by compressing sequential chains of single-child nodes into labeled **edges**. By compressing runs of single-child nodes into labeled edges (e.g., `'r'` $\to$ `'oman'`), we reduce pointer overhead and depth. This aggressively bounds Trie depth by the *number of inserted strings $N$* rather than the maximum string length $L$.
 
 ### Visual Comparison
 
@@ -444,10 +493,13 @@ graph TD
     end
     
     subgraph Radix ["Radix Tree: 9 Nodes"]
-        Root2(( )) -- "rom" --> ROM(( ))
-        ROM -- "ane" --> ANE( )
-        ROM -- "ance" --> ANCE( )
-        Root2 -- "rubic" --> RUB(( ))
+        Root2(( )) -- "r" --> R(( ))
+        R -- "oman" --> OMAN(( ))
+        OMAN -- "e" --> ANE( )
+        OMAN -- "ce" --> ANCE( )
+        R -- "ubic" --> UBIC(( ))
+        UBIC -- "on" --> ON( )
+        UBIC -- "undus" --> UNDUS( )
     end
     
     style Standard fill:#fff,stroke:#333
@@ -474,10 +526,13 @@ graph TD
 {{< /mermaid >}}
 
 #### String Slicing Footguns
+
+{{< alert title="Memory Traps" color="warning" >}}
 Edge splitting relies heavily on string slicing, which behaves radically differently across languages:
 - **Python**: Slicing (`s[common:]`) creates a copy. Heavy splitting explodes memory allocations.
 - **Go**: Slicing (`s[common:]`) pins the backing array. Small radix slices can prevent Garbage Collection of massive original 1GB buffers.
 - **C++**: Using `std::string_view` for slices requires strict lifetime bounds tied to the root dictionary or arena.
+{{< /alert >}}
 
 ### Amortized Cost
 
@@ -486,7 +541,7 @@ Finding common prefix lengths and mapping children takes time bounded linearly b
 
 ## Cache and Disk-Conscious Tries
 
-Pointer-based Tries are hostile to modern CPUs. Traversing `node->children[char]` conceptually jumps across the heap. Searching a 10-byte string can incur up to ~10 Last-Level Cache (LLC) misses in the worst case.
+Pointer-based Tries are hostile to modern CPUs. Traversing `node->children[char]` conceptually jumps across the heap. Searching a 10-byte string can incur up to ~10 Last-Level Cache (LLC) misses in the worst case. *(Note: as we will see later, these same deterministic access patterns are exactly the footprint we must destroy in a data-oblivious setting).*
 
 {{< mermaid >}}
 flowchart LR
@@ -541,7 +596,7 @@ Evaluating `Node16` uses **SIMD** to evaluate all 16 child prefixes simultaneous
 {{% tabs "simd-art" %}}
 {{% tab "C++ (SIMD)" %}}
 ```cpp
-#include <emmintrin.h>
+#include <immintrin.h>
 
 struct Node16 {
     uint8_t count;         // Tracks populated slots
@@ -550,16 +605,17 @@ struct Node16 {
 
     int findChild(uint8_t key) const {
 #if defined(__AVX2__) || defined(__SSE2__)
-        __m128i key_vec = _mm_set1_epi8(key);
+        __m128i key_vec = _mm_set1_epi8((char)key);
         __m128i node_keys = _mm_loadu_si128((__m128i*)this->keys);
         __m128i cmp = _mm_cmpeq_epi8(key_vec, node_keys);
         
         // Note: Production ARTs mask the result with `count` to avoid matching
         // uninitialized garbage keys in the SIMD vector.
-        int mask = _mm_movemask_epi8(cmp) & ((1 << count) - 1);
+        unsigned live = (count == 16) ? 0xFFFFu : ((1u << count) - 1u);
+        unsigned mask = (unsigned)_mm_movemask_epi8(cmp) & live;
 
         if (mask != 0) {
-            return __builtin_ctz((unsigned)mask); // ctz = count trailing zeroes (finds the least-significant set bit)
+            return __builtin_ctz(mask); // ctz = count trailing zeroes (finds the least-significant set bit)
         }
         return -1;
 #else
@@ -588,7 +644,9 @@ Standard B-trees take $O(\log_B N)$ I/Os while Pointer tries take $O(L)$ I/Os. I
 
 ## Succinct Tries
 
-To push limits, we bypass pointers entirely. The information-theoretic bound to store any tree topology with $N$ nodes is $2N + o(N)$ bits. Heap-allocated pointer Tries over-allocate massively in comparison. 
+{{< alert title="Information-Theoretic Lower Bound" color="primary" >}}
+To push limits, we bypass pointers entirely. The information-theoretic bound to store any tree topology with $N$ nodes is $2N + o(N)$ bits. Heap-allocated pointer Tries over-allocate massively in comparison.
+{{< /alert >}}
 
 **Succinct Data Structures** close this gap.
 
@@ -618,15 +676,26 @@ To ensure calculation consistency, implementations must strictly define their co
 - `select0(k)` returns the index sequence of the $k$-th `0` (where $k$ is 1-based, $k=1, 2, \dots$).
 - Memoria's specific formulation prepends a `10` prefix to the overall unary degree string to align the root.
 
-By throwing out pointers entirely, succinct structures map the topology directly onto the bitvector, allowing vast string dictionaries (like massive web crawls) to load effortlessly into RAM.
+By throwing out pointers entirely, succinct structures map the topology directly onto the bitvector, allowing vast string dictionaries (like massive web crawls) to load effortlessly into RAM. However, succinct layouts improve storage locality but do not inherently hide their access patterns from physical observation.
 
-## Searching Without Being Searched: Oblivious Tries
+## Searching Without Being Searched: Data-Oblivious Tries
+
+{{< alert title="The &quot;Oblivious&quot; Nomenclature Collision" color="warning" >}}
+In computer science, the prefix "oblivious" is heavily overloaded depending on the subfield:
+*   **Data-Oblivious (Security)**: Algorithms whose memory access patterns do not leak information about the underlying data or queries.
+*   **Cache-Oblivious (Performance)**: Algorithms that perform optimally across memory hierarchies without knowing the specific hardware cache line size $B$ (e.g., Cache-Oblivious search trees / van Emde Boas layouts).
+*   **Oblivious Decision Trees (Machine Learning)**: Trees where all nodes at the same depth evaluate the identical feature, preventing inference attacks on the classification path.
+
+*This section strictly covers the cryptographic **Data-Oblivious** design.*
+{{< /alert >}}
 
 Up to this point, our optimizations have focused on making string searches fast and memory-efficient. But in cloud environments, *efficiency* often trades off directly with *privacy*. 
 
-When querying a remote server for a prefix (e.g., searching a medical database or a DNS resolver), the server can infer exactly what you are searching for just by observing the **memory access pattern**, even if the query string itself is encrypted. If you search for "HIV", the server sees memory block $A$, then $B$, then $C$. If you search for "HIV" again tomorrow, the server observes the exact same $A \to B \to C$ traversal and knows you repeated the query.
+When querying a remote server for a prefix (e.g., searching a medical database or a DNS resolver), the server can infer exactly what you are searching for just by observing the **memory access pattern**, even if the query string itself is encrypted. 
 
-To achieve true cryptographically secure privacy, the sequence of memory accesses must be statistically independent of the actual query string. We achieve this using **Oblivious RAM (ORAM)** applied to Tries <a id="cite-wang-2014"></a>[[wang-2014]](#ref-wang-2014).
+This security gap exists even at the silicon edge. When executing computations inside **Trusted Execution Environments (TEEs)** like Intel SGX or AMD SEV, the CPU state is heavily encrypted, but the motherboard memory bus is exposed. A privileged host can infer traversals via page-fault and cache side channels. A physical adversary can observe an address trace directly on the memory bus. If a physical attacker watches the address trace during a Trie traversal, they can fully deduce the query. If you search for "HIV", the bus observes memory block $A$, then $B$, then $C$. If you search for "HIV" again tomorrow, the bus observes the exact same $A \to B \to C$ traversal and knows you repeated the query.
+
+To achieve cryptographically secure privacy against hardware probing, the sequence of physical memory accesses must be **computationally indistinguishable from random, up to the leakage of query length**. We achieve this using **Oblivious RAM (ORAM)** applied to Tries <a id="cite-wang-2014"></a>[[wang-2014]](#ref-wang-2014). This directly inherits techniques from the foundational Path ORAM protocol <a id="cite-stefanov-2013"></a>[[stefanov-2013]](#ref-stefanov-2013).
 
 ### Path ORAM and the Oblivious Trie
 
@@ -666,7 +735,7 @@ graph TD
     style P_10 fill:#ccf,stroke:#333
 {{< /mermaid >}}
 
-If node 'H' is mapped to Path `10`, we download Buckets `Root`, `1`, and `10` (highlighted in blue). To the hosting server, an attacker merely sees a uniformly random path being downloaded, decrypted, and re-uploaded with fresh ciphertexts.
+If node 'H' is mapped to Path `10`, we download Buckets `Root`, `1`, and `10` (highlighted in blue). To the hosting server, an attacker merely sees a uniformly random path being downloaded and re-uploaded with fresh ciphertexts.
 
 ### The Mathematics of Oblivion
 
@@ -675,7 +744,7 @@ Let $N$ be the number of nodes in the Trie. The physical server tree has $O(N)$ 
 
 Reading a single logical trie node requires downloading and uploading an entire path of length $O(\log N)$, where each bucket contains $Z$ blocks. Thus, the bandwidth overhead to read a *single node* is $O(Z \log N)$. 
 
-If a query string has length $L$, searching a standard Trie takes $O(L)$ memory accesses. Searching an **Oblivious Trie** magnifies this to $O(L \cdot Z \log N)$ bandwidth. Because $Z$ is typically a very small constant (e.g., $Z=4$ or $Z=5$ ensures the probability of a bucket overflowing is cryptographically negligible), the overall asymptotic cost to search a string obliviously is bounded at $O(L \log N)$.
+If a query string has length $L$, searching a standard Trie takes $O(L)$ memory accesses. Searching an **Oblivious Trie** magnifies this to $O(L \cdot Z \log N)$ bandwidth. With $Z=4$ (a common choice), the stash overflow probability drops exponentially with the stash size; with appropriate client stash bounds, overflow becomes cryptographically negligible. The overall asymptotic cost to search a string obliviously is thus bounded at $O(L \log N)$.
 
 ### Practical Implementation
 
@@ -711,15 +780,18 @@ class ObliviousTrie:
                 
         # 4. Find our target node in the stash
         target_node = next((n for n in self.stash if n.id == node_id), None)
+        if target_node is None:
+            raise KeyError(f"Node {node_id} not found in path/stash. Integrity error!")
         
         # 5. Remap target to a NEW random path to decorrelate future accesses
         new_leaf = random.randint(0, self.num_leaves - 1)
         self.position_map[node_id] = new_leaf
         target_node.path_id = new_leaf
         
-        # 6. Oblivious Write: Re-encrypt and upload the path, packing it with
-        #    nodes from the stash that legally belong on this branch, 
-        #    filling any remaining empty slots with fresh cipher dummy blocks.
+        # 6. Oblivious Write: Re-encrypt and upload the path.
+        #    (Note: Write-back drains eligible blocks from the stash to prevent
+        #     it from growing unbounded, filling any remaining empty slots 
+        #     with fresh cipher dummy blocks.)
         new_path_blocks = self._build_writeback_path(leaf_id)
         self.server.write_path(leaf_id, new_path_blocks)
         
@@ -727,6 +799,10 @@ class ObliviousTrie:
 ```
 {{% /tab %}}
 {{% /tabs %}}
+
+{{< alert title="ORAM Isn't Free" color="warning" >}}
+While Path ORAM solves the access-pattern leakage, it introduces staggering systems overhead. The `position_map` itself requires $O(N)$ memory; to prevent storing *that* in plaintext, it must be recursively stored in smaller ORAM trees. Furthermore, data confidentiality is not enough—the client must apply Authenticated Encryption (AEAD/MACs) to every block to prevent the server from silently corrupting or replaying nodes. Finally, the $O(Z \log N)$ bandwidth amplification introduces massive latency round-trips for every single Trie hop.
+{{< /alert >}}
 
 By integrating ORAM directly into the Trie's pointer chasing, we securely decouple *what* we are querying from *how* the memory is accessed, proving that prefix structures can be adapted even for zero-trust environments.
 
@@ -797,5 +873,6 @@ Ternary Search Trees (TST) elegantly bridge comparison trees and Tries. Bentley 
 - **[devroye-1992]** **<a id="ref-devroye-1992"></a>Devroye, L. (1992).** *[A Note on the Height of Tries](https://luc.devroye.org/height-of-trie.pdf).* Acta Informatica. [↩](#cite-devroye-1992)
 - **[bentley-1997]** **<a id="ref-bentley-1997"></a>Bentley, J. L., & Sedgewick, R. (1997).** *[Fast algorithms for sorting and searching strings](https://www.cs.princeton.edu/~rs/strings/).* SODA. [↩](#cite-bentley-1997)
 - **[memoria-louds]** **<a id="ref-memoria-louds"></a>Memoria Framework.** *[Level Order Unary Degree Sequence (LOUDS)](https://memoria-framework.dev/docs/data-zoo/louds-tree/).* [↩](#cite-memoria-louds)
+- **[stefanov-2013]** **<a id="ref-stefanov-2013"></a>Stefanov, E., et al. (2013).** *[Path ORAM: An Extremely Simple Oblivious RAM Protocol](https://dl.acm.org/doi/10.1145/2508859.2516660).* CCS. [↩](#cite-stefanov-2013)
 - **[wang-2014]** **<a id="ref-wang-2014"></a>Wang, X. S., Nayak, K., Liu, C., et al. (2014).** *[Oblivious Data Structures](https://eprint.iacr.org/2014/185.pdf).* CCS. [↩](#cite-wang-2014)
 - **[ferragina-2000]** **<a id="ref-ferragina-2000"></a>Ferragina, P., & Manzini, G. (2000).** *[Opportunistic Data Structures with Applications](https://dl.acm.org/doi/10.1109/SFCS.2000.892127).* FOCS. [↩](#cite-ferragina-2000)
