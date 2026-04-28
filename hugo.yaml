@@ -26,19 +26,19 @@ menus:
       pageRef: /tags
       weight: 20
 
-author:
-  name: "TJ"
-  headline: "AI/ML | Physics | Math | Tech"
-  bio: "Technical notes and deep dives."
-  links:
-    - icon: github
-      link: "https://github.com/tdj28"
-    - icon: twitter
-      link: "https://x.com/tdj11100"
-    - icon: rss
-      link: "/index.xml"
-
 params:
+  author:
+    name: "TJ"
+    headline: "AI/ML | Physics | Math | Tech"
+    bio: "Technical notes and deep dives."
+    links:
+      - icon: github
+        link: "https://github.com/tdj28"
+      - icon: twitter
+        link: "https://x.com/tdj11100"
+      - icon: rss
+        link: "/index.xml"
+
   colorScheme: blowfish
   defaultAppearance: light # valid options: light, dark, auto
   autoSwitchAppearance: true

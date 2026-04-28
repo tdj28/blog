@@ -18,6 +18,34 @@
     --code-tab-btn-hover: #374151;
 }
 
+/* Alert shortcode spacing */
+.blog-alert {
+    align-items: flex-start;
+    gap: 0.85rem;
+}
+
+.blog-alert__icon {
+    flex: 0 0 auto;
+    line-height: 1;
+    margin-top: 0.2rem;
+}
+
+.blog-alert__icon svg {
+    display: block;
+}
+
+.blog-alert__body {
+    min-width: 0;
+}
+
+.blog-alert__body > :first-child {
+    margin-top: 0;
+}
+
+.blog-alert__body > :last-child {
+    margin-bottom: 0;
+}
+
 /* Code Tabs Styling */
 .code-tabs {
     border: 1px solid var(--code-tabs-border);
