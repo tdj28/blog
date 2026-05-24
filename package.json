@@ -5,7 +5,7 @@
   },
   "devDependencies": {
     "postcss": "^8.4.31",
-    "postcss-cli": "^10.1.0",
+    "postcss-cli": "^11.0.1",
     "sass-embedded": "^1.93.2"
   }
 }
