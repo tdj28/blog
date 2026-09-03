@@ -17,6 +17,8 @@ image: image.png
 summary: A look at how Bayesian statistics can help us understand ways to make decisions (in the context of COVID-19 rapid test accuracy). This post will introduce concepts related to Bayesian statistics, but may still be interesting to individuals already familiar with the topic.
 ---
 
+{{< katex >}}
+
 In this post, we explore Bayesian probabilities through the lens of the accuracies of medical tests. We show how Bayesian priors can
 help refine our projections, and how to do this accurately.
 
@@ -126,7 +128,7 @@ Conditional probability is defined as:
     <div class="venn-container">
       <div id="venn" class="venn-diagram"></div>
       <div class="equation">
-        $$ A \cap B = \{x \in \mathcal{U} \mid x \in A \text{ and } x \in B\}$$
+        $$ A \cap B = \left\lbrace x \in \mathcal{U} \mid x \in A \text{ and } x \in B \right\rbrace $$
         $$ P(B|A) = \frac{P(A \cap B)}{P(A)}$$
       </div>
     </div>
@@ -329,7 +331,7 @@ However, in the study cited, and a multitude of other studies, the results are s
 
 >Suppose the Person X we started this post with, who has symptoms consistent with cold/flu/COVID-19, took a rapid test and got a negative result. What are the chances that Person X got a false negative and is indeed infected with SARS-COV-2?
 
-In the following discussion, D is short for disease, such that \\( P(D) \\) is the probability that someone who exhibits certain symptoms has the disease in question, in this case, COVID-19, vs having some other disease \\(P(D')\\), say, a flu. 
+In the following discussion, D is short for disease, such that \\( P(D) \\) is the probability that someone who exhibits certain symptoms has the disease in question, in this case, COVID-19, vs having some other disease \\(P(D^{\prime})\\), say, a flu.
 
 Given the following assumptions and definitions:
 - Prevalence Rate of COVID-19 in the population of those currently exhibiting cold and flu symptoms (Prior Probability, P(D)): 35%. This means that of all the people displaying cold and flu symptoms, 35% will have COVID-19, the remainder will have some other virus. I've randomly selected the number 35% for the sake of this example, in reality this number will vary by region and current viral trends. It is also impossible to determine this number precisely since a number of individuals who are showing such symptoms do not get sick enough to enter the medical system for testing, and for many viruses people might get effected and have minimal or no symptoms (asymptomatic) and be missed entirely.

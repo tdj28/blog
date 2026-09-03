@@ -16,6 +16,8 @@ math: true
 authors: ["t-jones"]
 ---
 
+{{< katex >}}
+
 ## Introduction
 
 One of the most popular and widely known strange attractors is the Rössler strange attractor. We will explore
@@ -120,4 +122,3 @@ plt.title('Rössler')
 ```
 
 ![png](output_12_1.png)
-

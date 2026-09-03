@@ -18,6 +18,8 @@ categories:
 toc: true
 ---
 
+{{< katex >}}
+
 {{< alert "circle-info" >}}
 Creation of this blog post was driven by the 
 human author who has many years of experience 
@@ -598,7 +600,7 @@ $$d_{\text{L2}}(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{i=1}^{d} (x_i - y_i)^2}$$
 ### Cosine Similarity
 Measures the angle between two vectors, normalized to [-1, 1]. It effectively ignores the *magnitude* of the vectors, focusing only on their direction (semantic meaning).
 
-$$\text{cos}(\mathbf{x}, \mathbf{y}) = \frac{\mathbf{x} \cdot \mathbf{y}}{\|\mathbf{x}\| \cdot \|\mathbf{y}\|} = \frac{\sum_{i=1}^{d} x_i y_i}{\sqrt{\sum_{i=1}^{d} x_i^2} \cdot \sqrt{\sum_{i=1}^{d} y_i^2}}$$
+$$\text{cos}(\mathbf{x}, \mathbf{y}) = \frac{\mathbf{x} \cdot \mathbf{y}}{\lVert\mathbf{x}\rVert \cdot \lVert\mathbf{y}\rVert} = \frac{\sum_{i=1}^{d} x_i y_i}{\sqrt{\sum_{i=1}^{d} x_i^2} \cdot \sqrt{\sum_{i=1}^{d} y_i^2}}$$
 
 ### Inner Product (IP / Dot Product)
 Inner product (dot product) is used for Maximum Inner Product Search (MIPS). If vectors are unit-normalized, dot product ranking exactly matches cosine similarity:

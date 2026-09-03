@@ -15,6 +15,8 @@ authors: ["t-jones"]
 summary: In this first part in a multipart series, we build a little model LLM that can construct basic phrases and display the effects of temperature. This first version doesn't use neural networks but does demonstrate some fundamentals of LLM terminology.
 ---
 
+{{< katex >}}
+
 The topic of LLMs has become wildly popular in recent times with the advent of Chat GPT, Claude, Gemini, Llama, and other models.
 In this post, we construct a rudimentary tiny first pass LLM we call _Lil' LLM_. With each part in this series, we will increase
 the sophistication of _Lil' LLM_.

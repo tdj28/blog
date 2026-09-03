@@ -17,6 +17,7 @@ math: true
 authors: ["t-jones"]
 ---
 
+{{< katex >}}
 
 {{< note >}}
 UPDATE 2024-2026:

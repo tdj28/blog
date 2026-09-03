@@ -15,6 +15,8 @@ math: true
 authors: ["t-jones"]
 ---
 
+{{< katex >}}
+
 ![A picture of the kerbal apollo rocket](assets/index-02bb3.png)
 
 [Download](krpc_sanbox-into-orbit.ipynb) the corresponding notebook.

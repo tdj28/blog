@@ -16,6 +16,8 @@ resources:
     image: "sor_diagram.png"
 ---
 
+{{< katex >}}
+
 In order to conduct quantum-mechanics-oriented experiments or operate ion-trap-based quantum computers, 
 we need a way to manipulate small particles. For example, if we want to observe the 
 behavior of an ion when we hit it with lasers of a certain frequency, we will need to keep it confined in a small area. How can we do so?
